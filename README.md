@@ -2,6 +2,8 @@
 
 This is a place to discuss non-product issues in public.
 
+For product discussions, please see the [posthog/posthog](https://github.com/posthog/posthog) repo.
+
 For example:
 
 - marketing topics such as ideas for new content

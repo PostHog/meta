@@ -114,7 +114,7 @@ In-app, users will be able to do analytics by groups and filter by them.
 To give an example:
 
 - Throughout insights, we’ll allow filtering insights with group properties. This will be implemented as a new tab per group type in the filters modal.
-- In trends, users can also select “active organizations” after first capturing events for an “organization”
+- In trends, users can also select “unique organizations” after first capturing events for an “organization”
 - In funnels, users can select to analyze by a group type (e.g. “instance”). Different users within the group can have completed different steps of the funnel.
 - In retention, users can select “organization” over “user” for the unit to analyze retention by
 - And so on…
@@ -160,6 +160,8 @@ However feature flags will not be part of the initial scope of the project, see 
 ### What pricing tier this belongs to
 
 Does this sound like a collaboration-related feature we should immediately upsell? This is what mixpanel and amplitude do.
+
+Based on discussion on RFC we'll make this a paid feature.
 
 ### Feature flags and posthog-js timing
 

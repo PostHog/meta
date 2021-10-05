@@ -10,8 +10,6 @@
 
 This RFC proposes a solution which would allow PostHog users to leverage insights and feature flags not only by users but also by groups (e.g. organizations, projects).
 
-Let's make it possible 
-
 ## Background
 B2B products don’t deal directly with users, but with other companies and hence have more complicated needs around what kinds of metrics are most important for them.
 
@@ -42,6 +40,7 @@ Some examples:
 2. Billing happens on a different level (e.g. our projects vs organization)
 3. Users clients are global companies with a lot of local “branches” where execs need access to everything
 4. Internal users have access to debug issues on multiple accounts
+
 ### 2. User is active in only “group” at any point in time
 
 Whenever an event is made, we can (and should) make the assumption that it belongs to a single group (e.g. organization). This is needed to avoid “double-counting” in stats.
@@ -50,13 +49,13 @@ Example: If Yakko has been added to 20 different organizations and is active, we
 
 ### 3. Limited amount of groups
 
-From speaking with clients, their internal amount of different “groups” is limited. 
+From speaking with clients, their internal amount of different “groups” is limited.
 
 This constraint allows us to implement things slightly more efficiently and have a nicer UX compared to unbounded amount of groups.
 
 ### 4. Feature flags in groups should be consistent
 
-For the users who are using feature flags, they want to ensure a consistent experience within a group during rollout. 
+For the users who are using feature flags, they want to ensure a consistent experience within a group during rollout.
 
 This is to avoid situations where some users see a new feature and some do not.
 
@@ -68,9 +67,9 @@ This also factors into their later analysis - for example, they’d like to trea
 
 Users can define up to N (5?) group types. For us these would be `instance` , `project` and `organization`.
 
-Each event we ingest can have one group per group type associated. 
+Each event we ingest can have one group per group type associated.
 
-We will have N new columns in the `events` table, containing the group ids - first one for the first group type of the project, second for the second one etc. 
+We will have N new columns in the `events` table, containing the group ids - first one for the first group type of the project, second for the second one etc.
 
 ### Group properties API
 
@@ -78,7 +77,7 @@ We will expose a new API for creating and adding properties groups. This API can
 
 ```python
     import posthog
-    
+
     posthog.groups.add_properties('organization', 'org:5', { name: 'Swedish Bakery', subscription_level: 'gold' })
 ```
 
@@ -92,7 +91,7 @@ Here’s how it would look like in python:
 
 ```python
     import posthog
-    
+
     posthog.capture(
       user_id,
       'purchase'
@@ -115,7 +114,7 @@ In-app, users will be able to do analytics by groups and filter by them.
 To give an example:
 
 - Throughout insights, we’ll allow filtering insights with group properties. This will be implemented as a new tab per group type in the filters modal.
-- In trends, users can also select “active organizations” after first capturing events for an “organization” 
+- In trends, users can also select “active organizations” after first capturing events for an “organization”
 - In funnels, users can select to analyze by a group type (e.g. “instance”). Different users within the group can have completed different steps of the funnel.
 - In retention, users can select “organization” over “user” for the unit to analyze retention by
 - And so on…
@@ -194,3 +193,20 @@ The two approaches are different: Mixpanels groups are user-level, while Amplitu
 Other resources:
 
 - https://www.avo.app/docs/data-design/groups
+
+### Why groups on events not users?
+
+When initially thinking about groups, it's tempting to think of them being associated with users. After all, it's users who belong to various organizations and other things that can be considered groups.
+
+Worse, groups on events has some clear trade-offs involved:
+- It's "harder" to get started for our clients
+- More work for us building queries and feature flag support
+
+However during research we found that:
+- All B2B companies we spoke to had some form of "log in as user" functionality. This would cause issues when trying to figure out key metrics such as "is this group active".
+- All of the B2B companies we spoke to didn't have a strict hierarchy - even ignoring internal users, there were special cases where some users belonged to multiple companies. In the best case they were trying to move away from this model, but it was confusing nonetheless.
+- Data quality is integral - e.g. you want to avoid double-counting conversion/revenue because one user belongs to multiple groups or if an existing user got added to a new group. See also semantics/constraints above.
+
+This matches up with prior experience from @marcushyett-ph and @macobo doing data work at startups small (eAgronom) and big (facebook).
+
+In the end doing groups on events rather than users builds a baseline which can be trusted long-term without running into data trust issues or committing to a solution which does not solve the right problems..

@@ -8,7 +8,7 @@
 
 ## Overview
 
-This RFC proposes a solution which would allow PostHog users to do analysis not only by users but also by groups (e.g. organizations, projects).
+This RFC proposes a solution which would allow PostHog users to leverage insights and feature flags not only by users but also by groups (e.g. organizations, projects).
 
 Let's make it possible 
 

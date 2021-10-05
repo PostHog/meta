@@ -24,7 +24,7 @@ Lack of this feature has been a major driver for users wanting data exports in d
 - Have an overview of groups and their relations with users
 - Feature flags: roll out feature group-by-group
 
-For PostHog the product, the 3 groups we would use are:
+For PostHog the product, the 3 group types we would use are:
 
 - Instances (e.g. cloud, posthog.someproduct.org, …)
 - Organizations
@@ -47,9 +47,9 @@ Whenever an event is made, we can (and should) make the assumption that it belon
 
 Example: If Yakko has been added to 20 different organizations and is active, we don’t want to count all of them as active.
 
-### 3. Limited amount of groups
+### 3. Limited amount of group types
 
-From speaking with clients, their internal amount of different “groups” is limited.
+From speaking with clients, their internal amount of different “group types” (e.g. `organization`) is limited, though the number of groups under a group type is unlimited (e.g. Facebook if it was an organization).
 
 This constraint allows us to implement things slightly more efficiently and have a nicer UX compared to unbounded amount of groups.
 

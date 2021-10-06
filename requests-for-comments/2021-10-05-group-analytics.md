@@ -47,6 +47,10 @@ Whenever an event is made, we can (and should) make the assumption that it belon
 
 Example: If Yakko has been added to 20 different organizations and is active, we don’t want to count all of them as active.
 
+However users can be in a different "group type" at the same time.
+
+Example: Yakkos events can be counted to be both in Organization posthog as well as the cloud instance at the same time.
+
 ### 3. Limited amount of group types
 
 From speaking with clients, their internal amount of different “group types” (e.g. `organization`) is limited, though the number of groups under a group type is unlimited (e.g. Facebook if it was an organization).

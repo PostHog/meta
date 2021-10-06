@@ -67,7 +67,7 @@ This also factors into their later analysis - for example, they’d like to trea
 
 Users can define up to N (5?) group types. For us these would be `instance` , `project` and `organization`.
 
-Each event we ingest can have one group per group type associated.
+Each event we ingest can have one group per group type associated. Group types are created when events with that type are captured.
 
 We will have N new columns in the `events` table, containing the group ids - first one for the first group type of the project, second for the second one etc.
 

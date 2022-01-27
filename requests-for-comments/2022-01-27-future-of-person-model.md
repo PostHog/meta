@@ -34,6 +34,9 @@ Standard analysis such as events from paying users over time will stop yielding 
 
 
 #### 1. After the first session we will no longer merge events prior to login with the main person’s events.
+
+![image](https://user-images.githubusercontent.com/148820/151367498-39637fc6-27ef-4058-b479-1651a4121875.png)
+
 How we'll map persons to events going forward:
 1. On initial visit, users device gets assigned an an (anonymous) distinct id `anonid1`. Posthog internally associates person_id `p1` to `anonid1`, which is saved together with their events
 2. When after signing up `posthog.identify('userid')` is called, we associate the same person_id `p1` with the new distinct id `userid`

@@ -21,7 +21,6 @@ From a technical standpoint: Store `person_id` and `person_properties` on the ma
 
 From a product standpoint storing person_id and person_properties on events requires making the following changes:
 1. After the first session we will no longer merge events prior to login with the main person’s events.
-![image](https://user-images.githubusercontent.com/85295485/151368075-a7ab9dc7-ee8d-4cad-a454-2524161973f1.png)
 2. Person properties become immutable: Changing properties applies only on new events and past data is not updated.
 
 ### Customer Impact
@@ -35,7 +34,7 @@ Standard analysis such as events from paying users over time will stop yielding 
 
 #### 1. After the first session we will no longer merge events prior to login with the main person’s events.
 
-![image](https://user-images.githubusercontent.com/148820/151367498-39637fc6-27ef-4058-b479-1651a4121875.png)
+![image](https://user-images.githubusercontent.com/85295485/151368075-a7ab9dc7-ee8d-4cad-a454-2524161973f1.png)
 
 How we'll map persons to events going forward:
 1. On initial visit, users device gets assigned an an (anonymous) distinct id `anonid1`. Posthog internally associates person_id `p1` to `anonid1`, which is saved together with their events
@@ -43,7 +42,7 @@ How we'll map persons to events going forward:
 3. If the user later visits the site with a new device, a new anonymous distinct id `anonid2` is created. Posthog internally associates these events with a new person id `p2` as no mapping for that id exists.
 4. If after signing in `posthos.identify('userid')` is called, we associate events going forward with person_id `p1`
 
-As a result, events done between steps 1, 2 and 4 will be tracked as from person `p1` but events between steps 3 and 4 will be under person`p2`. As a result no events are lost but some will be considered as coming from a different (anonymous) person.
+As a result, events done between steps 1, 2 and 4 will be tracked as from person `p1` but events between steps 3 and 4 will be under person`p2`. As a result no events are lost but some will be considered as coming from a different (anonymous) person. In the above image this corresponds to the green period.
 
 This affects use cases where users access their product (Logged out) on multiple devices regularly. However, based on our analysis the impact is only on ~0.03% events, some marketing use-cases are more significantly affected.
 

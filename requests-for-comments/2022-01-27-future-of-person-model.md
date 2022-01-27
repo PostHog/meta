@@ -21,7 +21,7 @@ From a technical standpoint: Store `person_id` and `person_properties` on the ma
 
 From a product standpoint storing person_id and person_properties on events requires making the following changes:
 1. After the first session we will no longer merge events prior to login with the main person’s events.
-
+![image](https://user-images.githubusercontent.com/85295485/151368075-a7ab9dc7-ee8d-4cad-a454-2524161973f1.png)
 2. Person properties become immutable: Changing properties applies only on new events and past data is not updated.
 
 ### Customer Impact

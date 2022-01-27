@@ -104,5 +104,6 @@ This measurement was done on a dataset that would compress relatively well (few 
 Scalability of Posthog will be critical for our success, this project lays the foundation for high scalability, removes a critical scaling bottleneck and unblocks future improvements for even larger deployments. There are both technical and product risks associated with this project but they are far outweighed by the long-term benefits.
 
 ## Open questions
-How do we handle historical data imports?
-How do we implement the change on cloud in a cost-effective way?
+
+- How do we handle historical data imports?
+- How do we implement the change on cloud in a cost-effective way?

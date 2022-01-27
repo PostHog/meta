@@ -1,4 +1,4 @@
-# Request for Comments: *topic of the proposal*
+# Request for Comments: Future of person model
 
 - **Created:** 2022-01-27
 - **Owner:** @macobo, @marcushyett-ph 

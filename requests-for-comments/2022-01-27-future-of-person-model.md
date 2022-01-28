@@ -104,5 +104,5 @@ Scalability of Posthog will be critical for our success, this project lays the f
 
 ## Open questions
 
-- How do we handle historical data imports?
-- How do we implement the change on cloud in a cost-effective way?
+- How do we handle events coming in out of order (both short time differences from network etc and historical data imports)?
+- How do we implement the changeover on cloud and self-hosted instances?

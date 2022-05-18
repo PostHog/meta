@@ -2,7 +2,7 @@ _This template is a starting point for your weekly 1-1s, but feel free to edit a
 
 _The purpose of the first 2 sections is to make sure you are both aligned, and to let managers give as much context as possible. The third section is deliberately open-ended - sometimes you will want to work through a specific problem, other times you may have a proposal or idea you want to discuss, or feedback to share._
 
-_Every ~3 months, you should swap your regular 1-1 out for a career development check in._
+_Every ~3 months, you should swap your regular 1-1 out for a [career development check in](https://github.com/PostHog/meta/blob/main/.github/ISSUE_TEMPLATE/quarterly-1-1-career-checkin.md)._
 
 ### [INSERT DATE]
 

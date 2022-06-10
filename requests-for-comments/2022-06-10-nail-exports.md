@@ -61,8 +61,8 @@ Similar to SharedDashboards we currently have, it makes sense to have a unique r
 
 ---
 ### Images
-| insights ✅ | dashboards ✅ | person ❌ | cohorts ❌ | groups ❌ |
-|------------|--------------|----------|-----------|----------|
+| insights ✅ | dashboards ✅ | events ❌ | person ❌ | cohorts ❌ | groups ❌ |
+|------------|--------------|----------|-----------|-----------|----------|
 
 Images are important either for the user (e.g. to include in a powerpoint presentation) or for use by other export methods such as subscriptions
 
@@ -73,8 +73,8 @@ Images are important either for the user (e.g. to include in a powerpoint presen
 
 ---
 ### Subscriptions - email:
-| insights ✅ | dashboards ✅ | person ❌ | cohorts ❌ | groups ❌ |
-|------------|--------------|----------|-----------|----------|
+| insights ✅ | dashboards ✅ | events ❌ | person ❌ | cohorts ❌ | groups ❌ |
+|------------|--------------|----------|-----------|-----------|----------|
 
 Subscriptions via email are essentially Image exports but delivered via email
 
@@ -84,8 +84,8 @@ Subscriptions via email are essentially Image exports but delivered via email
 
 ---
 ### Subscriptions - slack:
-| insights ✅ | dashboards ✅ | person ❌ | cohorts ❌ | groups ❌ |
-|------------|--------------|----------|-----------|----------|
+| insights ✅ | dashboards ✅ | events ❌ | person ❌ | cohorts ❌ | groups ❌ |
+|------------|--------------|----------|-----------|-----------|----------|
 
 Subscriptions via slack are essentially Image exports but delivered via slack. We may want to consider additional information to be included
 
@@ -96,13 +96,14 @@ Subscriptions via slack are essentially Image exports but delivered via slack. W
 
 ---
 ### CSV / Excel:
-| insights ✅ | dashboards ✅ | person ✅ | cohorts ✅ | groups ✅ |
-|------------|--------------|----------|-----------|----------|
+| insights ✅ | dashboards ✅ | events ✅ | person ✅ | cohorts ✅ | groups ✅ |
+|------------|--------------|----------|-----------|-----------|----------|
 
-Resources can be exported directly to a CSV
+Resources can be exported directly to a CSV. This may be commonly done adhoc (e.g. from some in-memory filter configured on the frontend.
 
 #### Technical considerations
 - [ ] Exporting 10000s of rows can be costly or even impossible syncronously - it needs to be possible to do this in the background and send to the user when complete
+  - [ ] This could also incur very high costs. Perhaps we still need some upper bounds.
 - [ ] TTLs: Exported data can include very sensitive information. Ideally we should only keep the exported file for long enough to satisfy the user's request
 
 ---

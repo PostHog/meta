@@ -13,6 +13,9 @@ More context here https://github.com/PostHog/product-internal/pull/308/
 * Dashboards
   - Visualisation - web, image (or collection of images)
   - Data - API, csv
+* Events
+  - the actual underlying data 
+* Session Recordings
 * Persons, Cohorts, Groups
 
 ### How can they be Exported

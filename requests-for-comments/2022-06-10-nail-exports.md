@@ -41,8 +41,8 @@ More context here https://github.com/PostHog/product-internal/pull/308/
 ## Method breakdown
 
 ### Embeds
-| insights ✅ | dashboards ✅ | person ❌ | cohorts ❌ | groups ❌ |
-|------------|--------------|----------|-----------|----------|
+| insights ✅ | dashboards ✅ | events ❌ | person ❌ | cohorts ❌ | groups ❌ |
+|------------|--------------|----------|-----------|-----------|----------|
 
 Similar to SharedDashboards we currently have, it makes sense to have a unique rendering method for standalone visualisations that can either be accessed:
 1. Directly via an authenticated user
@@ -108,7 +108,7 @@ Resources can be exported directly to a CSV. This may be commonly done adhoc (e.
 
 ---
 ### API:
-| insights ✅ | dashboards ✅ | person ✅ | cohorts ✅ | groups ✅ |
-|------------|--------------|----------|-----------|----------|
+| insights ✅ | dashboards ✅ | events ✅ | person ✅ | cohorts ✅ | groups ✅ |
+|------------|--------------|----------|-----------|-----------|----------|
 
 The API should offer all of the same data access as the web app

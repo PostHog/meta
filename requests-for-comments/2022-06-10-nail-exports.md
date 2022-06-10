@@ -32,7 +32,7 @@ More context here https://github.com/PostHog/product-internal/pull/308/
   - Relevant data exported to a CSV / Spreadsheet
 * Custom Components (React)
   - Integrated directly into customer's code, calling Posthog API for the data 
-* Alerts (variation on subscriptions):
+* Alerts (variation on subscriptions): _(out of scope for current exporting work)_
   - When certain thresholds are crossed or changes happen, a user is notified with similar channels to that of Subscriptions
 * API:
   - Standard retrievel using public API

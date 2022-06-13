@@ -112,3 +112,17 @@ Resources can be exported directly to a CSV. This may be commonly done adhoc (e.
 |------------|--------------|----------|-----------|-----------|----------|
 
 The API should offer all of the same data access as the web app
+
+
+# Sprint breakdown
+## Sprint 1
+
+- [x] Subscriptions - Email - Insights
+- [ ] Subscriptions - Email - Dashboards
+- [ ] Image - Dashboards / Insights improvements
+
+## Sprint 2
+- [ ] Subscriptions - Slack - Insights
+- [ ] Subscriptions - Slack - Dashboards
+- [ ] CSV - everything
+- [ ] Embeds - single embed style for any export

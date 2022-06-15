@@ -90,8 +90,8 @@ Subscriptions via email are essentially Image exports but delivered via email
 Subscriptions via slack are essentially Image exports but delivered via slack. We may want to consider additional information to be included
 
 #### Technical considerations
-- [ ] The exported Image needs to be publicly accessible using some sort of token
-- [ ] Users need to be able to easily unsubscribe without needing to login
+- [ ] It may make sense to have support for multiple slack destinations
+  - [ ] e.g. Internal metrics to primary Slack, external metrics (e.g. pineapple dashboard to community slack to show off feature) to different Slack community
 
 
 ---

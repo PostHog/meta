@@ -59,6 +59,21 @@ Similar to SharedDashboards we currently have, it makes sense to have a unique r
 - 🤔 Dashboards are embeddable and shareable under a special `shared_dashboards` endpoint
 - 🤔 Exports are _almost_ embeddable via the `exporter` endpoint. Currently this is only used for image rendering
 - **PROPOSAL**: Merge these endpoints together to a unified endpoint for all standalone viewing of content
+  - **ExportedAsset**
+
+    | insight  | dashboard | content                   | content_source  | format        | expiration_date                               |
+    |----------|-----------|---------------------------|-----------------|---------------|-----------------------------------------------|
+    | relation | relation  | the actual binary content | file\|s3://link | png\|pdf\|csv | time by which the content should be accesible |
+  - **Subscription**
+    | insight  | dashboard | title                | target_type  | target_value   | {...rules}                              |
+    |----------|-----------|----------------------|--------------|----------------|-----------------------------------------|
+    | relation | relation  | name of subscription | email\|slack | a@b.co \| #dev | columns todo with subscription calendar |
+  
+  - **SharingConfiguration**
+    | insight  | dashboard | token                   | permissions                    | iframe_origins | deleted                            |
+    |----------|-----------|-------------------------|--------------------------------|----------------|------------------------------------|
+    | relation | relation  | unique short-ish string | list_of_emails\|password\|sso? | only-me.com    | soft delete (like enable/disabled) |
+
 
 ---
 ### Images

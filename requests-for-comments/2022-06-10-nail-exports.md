@@ -53,6 +53,7 @@ Similar to SharedDashboards we currently have, it makes sense to have a unique r
 ---
 #### Technical considerations
 - [ ] Embeds should allow customiseable options as query params for showing hiding different elements (e.g. readonly, whitelabel)
+- [ ] This could be shown immediately to the user when enabling the embed iframe link
 
 #### Current State
 - 🤔 Dashboards are embeddable and shareable under a special `shared_dashboards` endpoint

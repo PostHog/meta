@@ -134,11 +134,12 @@ The API should offer all of the same data access as the web app
 ## Sprint 1
 
 - [x] Subscriptions - Email - Insights
-- [ ] Subscriptions - Email - Dashboards
-- [ ] Image - Dashboards / Insights improvements
-
-## Sprint 2
+- [x] Subscriptions - Email - Dashboards
 - [ ] Subscriptions - Slack - Insights
 - [ ] Subscriptions - Slack - Dashboards
+- [ ] Image export renderer refactoring
+
+## Sprint 2
+- [ ] Subscriptions - Slack (finishing)
 - [ ] CSV - everything
-- [ ] Embeds - single embed style for any export
+- [ ] Embeds / Sharing

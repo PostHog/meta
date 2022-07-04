@@ -122,6 +122,16 @@ Resources can be exported directly to a CSV. This may be commonly done adhoc (e.
   - [ ] This could also incur very high costs. Perhaps we still need some upper bounds.
 - [ ] TTLs: Exported data can include very sensitive information. Ideally we should only keep the exported file for long enough to satisfy the user's request
 
+#### 💡 IDEA
+To make this scalable we could:
+- Create CSV exports like so `POST /exports { "format": "csv", "resource_uri": "/api/persons/funnel?filters=..." }`
+- CSV Exporting is now very simple - we use the given URI to iterate the resource_uri until the `next` response param is exhausted.
+- With each type of export (person/trend/event) we just need a transformer to map it to a csv-like structure
+- It is now trivial to add CSV exporting to any list based endpoint we expose 
+  - Hacky approach - call the actual API with a special JWT
+  - Less hacky approach - map the URLs to the ViewSets and use `as_view()` to call the appropriate method without using a network request
+  
+
 ---
 ### API:
 | insights ✅ | dashboards ✅ | events ✅ | person ✅ | cohorts ✅ | groups ✅ |

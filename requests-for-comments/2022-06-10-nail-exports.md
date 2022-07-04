@@ -126,7 +126,7 @@ Resources can be exported directly to a CSV. This may be commonly done adhoc (e.
 To make this scalable we could:
 - Create CSV exports like so `POST /exports { "format": "csv", "resource_uri": "/api/persons/funnel?filters=..." }`
 - CSV Exporting is now very simple - we use the given URI to iterate the resource_uri until the `next` response param is exhausted.
-- With each type of export (person/trend/event) we just need a transformer to map it to a csv-like structure
+- With each type of export (person/trend/event) we just need a transformer to map it to a csv-like structure and then we save the chunks to ObjectStorage
 - It is now trivial to add CSV exporting to any list based endpoint we expose 
   - Hacky approach - call the actual API with a special JWT
   - Less hacky approach - map the URLs to the ViewSets and use `as_view()` to call the appropriate method without using a network request

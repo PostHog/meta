@@ -8,33 +8,33 @@ More context here https://github.com/PostHog/product-internal/pull/308/
 ### What can be Exported
 
 * Insights
-  - Visualisation - web, image
-  - Data - API, csv
+  - ✅ Visualisation - web, image
+  - ✅ Data - API, csv
 * Dashboards
-  - Visualisation - web, image (or collection of images)
-  - Data - API, csv
+  - ✅ Visualisation - web, image (or collection of images)
+  - ✅ Data - API, csv
 * Events
-  - the actual underlying data 
-* Session Recordings
-* Persons, Cohorts, Groups
+  - ✅ the actual underlying data 
+* (🚫 out of scope) Session Recordings
+* ✅ Persons, Cohorts, Groups
 
 ### How can they be Exported
-* Embeds 
+* ✅ Embeds 
   - Via an iframe or directly linked to a dedicated webpage for viewing the element 
-* Images
+* ✅ Images
   - Server-side rendering of the shared webpage (using chromedriver) to an image (.png)
-  - Possibly needs multiple dimension options
-* Subscriptions - email:
+  - (🚫 out of scope) Possibly needs multiple dimension options
+* ✅ Subscriptions - email:
   - User configured regular reports via email including exported image of the relevant item
-* Subscriptions - slack:
+* ✅ Subscriptions - slack:
   - Slack notification including the exported image(s)
-* CSV / Spreadsheet:
+* ✅ CSV / (🚫) Spreadsheet:
   - Relevant data exported to a CSV / Spreadsheet
-* Custom Components (React)
+* (🚫 out of scope) Custom Components (React)
   - Integrated directly into customer's code, calling Posthog API for the data 
-* Alerts (variation on subscriptions): _(out of scope for current exporting work)_
+* (🚫 out of scope) Alerts (variation on subscriptions): _(out of scope for current exporting work)_
   - When certain thresholds are crossed or changes happen, a user is notified with similar channels to that of Subscriptions
-* API:
+* ✅ API:
   - Standard retrievel using public API
 
 

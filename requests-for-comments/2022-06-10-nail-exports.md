@@ -1,5 +1,11 @@
 # Request for comments: Nail Exports - Ben White
 
+## NOTE: This RFC was closed on 2022-07-14 with these agreed remaining follow up issues
+- [ ] Exporting CSVs is not enabled everywhere
+- [ ] Exporting large CSVs perhaps still doesn't work
+- [ ] Embedding / sharing of images
+- [ ] Using shared images in meta for Sharing html
+  
 ## Problem statement
 
 More context here https://github.com/PostHog/product-internal/pull/308/

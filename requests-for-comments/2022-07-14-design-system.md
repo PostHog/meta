@@ -29,6 +29,8 @@ A clear goal is that Designing and Developing the frontend should be faster, per
 
 ### Possible rules we could set (remember - this is a proposal to be commented on!)
 
+> Best case we "enforce" or strongly recommend these rules via eslint or otherwise
+
 * Components never layout themselves - no margin or padding
 * Components never expose hacks (e.g. style properties)
 * Anything that isn't a Lemon Component should be styled only with utility classes

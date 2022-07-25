@@ -87,8 +87,20 @@ Designing and Developing the frontend should be faster, perhaps through it being
   - Confirm our current multiple build systems is necessary
 * Integration of eslint / bot tooling for rules (even if the rules aren't there yet)
 * Setup Storybook to be the core documentation point for Design System
-* Core components implementation (in Storybook!!) - starting with Form Components
-
+* Core components implementation (in Storybook!!) - starting with Form Components (i.e. drop downs, buttons and form fields), examples of elements with custom styles:
+    * prop-val
+    * session-recordings-button
+    * date-filter
+    * trend-element-subject-0
+    * dashboard-name
+    * more-button
+    * password-login
+    * events-table
+    * insight-edit-button
+    * insight-save-button
+    * add-action-event-button
+    * math-selector-0
+    * property-filter-0
 
 ### Sprint 2
 * Roll out current System to all of Posthog...

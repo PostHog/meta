@@ -87,7 +87,7 @@ Designing and Developing the frontend should be faster, perhaps through it being
   - Confirm our current multiple build systems is necessary
 * Integration of eslint / bot tooling for rules (even if the rules aren't there yet)
 * Setup Storybook to be the core documentation point for Design System
-* Core components (to be specified here by @chris) implementation (in Storybook!!) 
+* Core components implementation (in Storybook!!) - starting with Form Components
 
 
 ### Sprint 2

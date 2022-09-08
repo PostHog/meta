@@ -1,4 +1,4 @@
-# Request for comments: TITLE & OWNER
+# Request for comments: Notifications & @pauldambra 
 
 ## Problem statement
 *Who are we building for, what are their needs (include example cases), why is this important?*

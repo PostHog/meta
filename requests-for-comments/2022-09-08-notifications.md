@@ -24,6 +24,8 @@ We can measure:
 
 ![system drawn as a flow chart](/images/notifications-system-flow.png)
 
+There are some designs in figma for comment https://www.figma.com/file/Y9G24U4r04nEjIDGIEGuKI/PostHog-Design-System-One?node-id=3112%3A1296
+
 ### user considerations
 
 * how to create the triggers for notifications

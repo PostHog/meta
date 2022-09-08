@@ -22,7 +22,19 @@ We can measure:
 ## Design 
 *What are the key user experience and technical design decisions / trade-offs?*
 
-![system drawn as a flow chart](/images/notifications-system-flow.png)
+```mermaid
+graph LR
+    A[Ingestion/Celery] -->|property seen| CS
+    A -->|read triggers| N
+    W-->|"create subscription (time-based trigger)"|N[("Trigger store (subscriptions)")]
+    W[Web] -->|create a trigger| N
+    Ac[Activity Log] -->|notable activity|CS
+    N ---|evaluate triggers| CS[Celery sender]
+    CS-->Slack
+    CS-->Email
+    Web ---|show notification list| NS
+    CS -->NS[(notification store)]
+```
 
 There are some designs in figma for comment https://www.figma.com/file/Y9G24U4r04nEjIDGIEGuKI/PostHog-Design-System-One?node-id=3112%3A1296
 
@@ -67,21 +79,3 @@ There are several discrete chunks
 * cohort entry and exit triggers
 * experiment status triggers
 
-## Appendix
-
-### Diagram Source
-
-```mermaid
-graph LR
-graph LR
-    A[Ingestion/Celery] -->|property seen| CS
-    A -->|read triggers| N
-    W-->|"create subscription (time-based trigger)"|N[("Trigger store (subscriptions)")]
-    W[Web] -->|create a trigger| N
-    Ac[Activity Log] -->|notable activity|CS
-    N ---|evaluate triggers| CS[Celery sender]
-    CS-->Slack
-    CS-->Email
-    Web ---|show notification list| NS
-    CS -->NS[(notification store)]
-```

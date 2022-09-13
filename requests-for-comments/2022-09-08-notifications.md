@@ -36,6 +36,10 @@ We can measure:
 ## Design 
 *What are the key user experience and technical design decisions / trade-offs?*
 
+The core here is re-using subscriptions infra to send notifications as well to slack, not only images?
+
+And adds a store of notifications. These can be filtered to create the in-app notification view.
+
 ```mermaid
 graph LR
     A[Ingestion/Celery] -->|property seen| CS
@@ -57,9 +61,21 @@ There are some designs in figma for comment https://www.figma.com/file/Y9G24U4r0
 * how to create the triggers for notifications
 * where to see configured triggers
 * linking from notification to appropriate onward journey
-
+* Scope - Users belong to organizations, organizations can have multiple projects, users can be at any level in the hierarchy at any given time - what's the appropriate scope of notifications based on what we know about the user? If the user is in a project, would we notify them of events from another project? Only a subset of users might get notifications about billing or org management level changes.
+* Establishing what all justifies a notification. There's a really broad area to cover with our product, not all things will be of equal importance to a user, not all things are available depending on your plan / payment status / org role / etc.
+* Nailing the preferences - getting enough configuration to cover the use cases discovered in interviews. This can be a really complex thing to figure out.
 * expectation of performance
   * e.g. evaluate whether insight series have crossed a threshold could be very expensive
+* when to send notifications? 
+  * See "Complexity in whether to send a message" below
+  * some users might want a particular trigger right away, others might want it in a roll-up email
+    * do we allow that complexity
+* where to show notifications?
+  * if we have both an in-app notification center for passive/low-urgency notifications do we also show active/high-urgency notifications there
+
+## Active/Urgent Notifications
+
+Sent to slack or email
 
 ### Notifications people mentioned
 
@@ -70,7 +86,19 @@ There are some designs in figma for comment https://www.figma.com/file/Y9G24U4r0
 * notification when same event occurs for a single user/group over time (cohort entry/exit?)
 * notification when experiment reaches significance
 
+## In-App notifications
+
+* what's new in PostHog https://github.com/PostHog/product-internal/pull/346
+* new version of PostHog released https://github.com/PostHog/product-internal/pull/346
+* all of the active notifications?
+
 ### Tech considerations
+
+#### Complexity in whether to send a message
+
+Whether to send a notification is not automatically straight-forward. There's [an internet famous example from Slack](https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/7/0_PV_09olld6K1l8jQ.png). 
+
+If you have configured a trigger to send a slack notification when a particular event is seen. Do you want 1000 notifications within a few seconds or minutes if you have a large burst of traffic? Or should we purposefully buffer notifications so we can roll-up notifications within a window?
 
 #### Celery
 

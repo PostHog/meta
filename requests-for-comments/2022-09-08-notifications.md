@@ -33,6 +33,12 @@ We can measure:
 ## Context
 *What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*
 
+* https://help.amplitude.com/hc/en-us/articles/115001764612-Insights-Spot-anomalies-in-your-metrics-quickly-with-alerts
+* https://help.mixpanel.com/hc/en-us/articles/360028142571-Custom-Alerts#:~:text=View%20%26%20Manage%20Custom%20Alerts&text=Click%20on%20the%20gear%20icon,custom%20alerts%20and%20automatic%20insights.
+* https://segment.com/docs/guides/how-to-guides/set-up-notifications-alerts/
+* https://help.heap.io/define-analyze/analysis-features/report-alerts/
+
+
 ## Design 
 *What are the key user experience and technical design decisions / trade-offs?*
 

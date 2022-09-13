@@ -5,6 +5,20 @@
 
 Users don't know when to come back to PostHog. Something important can happen and they might miss it. This can be important things in the data, or that another user has edited your insight.
 
+We could solve for this by extending the audit log. But you have to go check it to find new information. Where notifications can push important information directly to the user regardless of their context in the product. 
+
+Additionally notifications can span multiple contexts, so they can communicate a broader range of information in very specific contexts. Audit logs are often specific to a single feature, so they only cover that scope.
+
+Notifications can be split as active or passive. 
+
+1. Active notifications are sent to you. 
+2. Passive notifications are listed in the UI.
+
+Or they can be split by urgency:
+
+1. I want to know when something urgent has happened in slack / custom webhook so I can come to PostHog and investigate. 
+2. I want to know what all has changed since I last logged in. These are in-app notifications about things I care about.
+
 ## Success criteria
 *How do we know if this is successful (i.e. metrics, customer feedback), what's out of scope, whats makes this ambitious?*
 

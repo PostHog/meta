@@ -46,18 +46,66 @@ The core here is re-using subscriptions infra to send notifications as well to s
 
 And adds a store of notifications. These can be filtered to create the in-app notification view.
 
+### recurring subscriptions
+
+We already have subscriptions. Which is roughly:
+
 ```mermaid
 graph LR
-    A[Ingestion/Celery] -->|property seen| CS
-    A -->|read triggers| N
-    W-->|"create subscription (time-based trigger)"|N[("Trigger store (subscriptions)")]
-    W[Web] -->|create a trigger| N
-    Ac[Activity Log] -->|notable activity|CS
-    N ---|evaluate triggers| CS[Celery sender]
-    CS-->Slack
-    CS-->Email
-    Web ---|show notification list| NS
-    CS -->NS[(notification store)]
+    T[Schedule]-->|evaluated on|C[Timer]
+    C-->|causes|S[Email or Slack]
+```
+
+Users can create schedules for sending insights or dashboards to slack or email.
+
+On a timer we assess if any subscription should be sent and send it directly so there is no stored record (outside of logs) of whether the subscription was sent.
+
+### implicit subscriptions
+
+In user interviews it was mentioned that a notification when someone else edits an insight or flag you created would be useful.
+
+The activity log can be used to create an implicit subscription to items you created.
+
+```mermaid
+graph LR
+    IS[Implicit Subscription]-->|evaluated on|A[Activity]
+    A-->|show as|IAN[In-app notification]
+```
+
+See https://github.com/PostHog/posthog/pull/12037
+
+These notifications are still ephemeral. If someone views their in-app notifications 100 times. They must be generated 100 times.
+
+### notification store
+
+graph LR
+    IS[Implicit Subscription]-->|evaluated on|A[Activity]
+    T[Recurring Subscription]-->|evaluated on|C[Timer]
+    A-->|stores|N
+    C-->|stores|N[(Notification)]
+    N-->|might send|Email
+    N-->|might send|Slack
+    N-->|might show|IAN[In-app notification]
+
+Storing notifications before sending them separates the decision to send from the work of sending. And allows for manual edition of notifications e.g. for an in-app notification of a new release of PostHog
+
+This lets you add new sources of notifications easily
+
+For e.g. if you want to add notification when a particular property or value is seen
+
+```mermaid
+graph LR
+    PS[Property Seen Subscription]-->|evaluated on|Ingestion
+    style PS fill:#90EE90
+    style Ingestion fill:#90EE90
+    IS[Implicit Subscription]-->|evaluated on|A[Activity]
+    T[Recurring Subscription]-->|evaluated on|C[Timer]
+    A-->|stores|N
+    C-->|stores|N[(Notification)]
+    Ingestion-->|stores|N
+    N-->|might send|Email
+    N-->|might send|Slack
+    N-->|might show|IAN[In-app notification]
 ```
 
 There are some designs in figma for comment https://www.figma.com/file/Y9G24U4r04nEjIDGIEGuKI/PostHog-Design-System-One?node-id=3112%3A1296

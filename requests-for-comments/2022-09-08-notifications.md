@@ -78,6 +78,7 @@ These notifications are still ephemeral. If someone views their in-app notificat
 
 ### notification store
 
+```mermaid
 graph LR
     IS[Implicit Subscription]-->|evaluated on|A[Activity]
     T[Recurring Subscription]-->|evaluated on|C[Timer]
@@ -86,8 +87,11 @@ graph LR
     N-->|might send|Email
     N-->|might send|Slack
     N-->|might show|IAN[In-app notification]
+```
 
 Storing notifications before sending them separates the decision to send from the work of sending. And allows for manual edition of notifications e.g. for an in-app notification of a new release of PostHog
+
+### extending to new sources
 
 This lets you add new sources of notifications easily
 

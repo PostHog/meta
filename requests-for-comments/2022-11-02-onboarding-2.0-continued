@@ -44,7 +44,8 @@
 
 ## Context
 *What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*
-
+- According to the linked dashboard, those who get their events ingesting properly have a decent rate of activation (see [this insight](https://app.posthog.com/insights/yj7DIktG) and show conversion rate from Step 2 to Step 3)
+- People seem to struggle with getting their event ingested more (view above linked insight from Step 1 to Step 2)
 This is what Sentry currently does:
 TODO: add nice pictures here
 

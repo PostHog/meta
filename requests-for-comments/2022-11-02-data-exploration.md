@@ -1,153 +1,152 @@
 # Request for comments: Data Exploration - Marius Andra
 
-## Description
-
-### Why?
+## Why?
 
 We want to build a "data exploration" view, which lets users take any data for any insight, and explore it further.
 
-### What?
+Users have been asking for this for a while.
 
-This is a proposal to change the way we ask for data from PostHog. This will unblock the new "data exploration" view,
-and also:
+## What?
+
+This is a proposal to change the way we ask for data from PostHog. This will unblock the new "data exploration" view, and also:
 
 - let us embed anything on any dashboard (e.g. funnel correlation results, retention line graph, list of events)
-- let us link to any view (e.g. full screen persons modal with an extra breakdown applied)
+- let us link (via the URL) to any view (e.g. full screen persons modal with an extra breakdown applied)
 - unblock chart type apps (e.g. the scatterplot plugin)
-- use typescript to strictly validate filters with helpful errors
+- use typescript to strictly validate filters
+- build a fluid interface that can morph between different views or chart types 
 
-### How?
+## How?
 
-*"Get your data structures right, and the rest will follow"*
+_"Get your data structures right, and the rest will follow"_
 
-Our filters object needs a refactor. This will influence how we do queries.
-
-## Current state
+### Current state
 
 We capture a stream of events with all sorts of properties:
 
 ```js
 // this is pseudocode: that means code which isn't real
 event = {
-  event: 'event name',
-  distinct_id: 'unique id',
-  ip: '127.0.0.1',
+  event: "event name",
+  distinct_id: "unique id",
+  ip: "127.0.0.1",
   timestamp: string,
   properties: {
-    '$withdollar': 'posthog properties',
-    '$feature/stuff': 'feature flags',
-    'anything else': 'custom properties'
+    $withdollar: "posthog properties",
+    "$feature/stuff": "feature flags",
+    "anything else": "custom properties",
   },
   person_properties: {},
   group_properties: {},
-}
+};
 ```
 
-We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", 
-"persons" or "events list". For example, you can: 
+We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", "persons" or "events list". 
+
+For example, you can:
 
 - Through "live events"
   - List all latest events and show their properties
   - Filter this list by any event, person, or group property
   - Filter this list by event name, person_id, distinct_id, group ids
 - Through an "insight"
-  - Aggregate these events by a time bucket (number of events per day) 
-  - Aggregate this data by some property (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`)
+  - Aggregate these events by a time bucket (number of events per day)
+  - Aggregate this data with math or by some property (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`)
   - Group by properties (breakdown by `$browser`)
   - Slice or dice this stream for custom visualisations (`funnel`, `retention`, `paths`)
 - Through the insight persons modal
   - Remove the aggregation (e.g. remove the count by day, and focus on one day), and get the actual persons behind the list.
   - On a funnel, get the success/dropoff for each step.
-- Through persons/cohorts 
+- Through persons/cohorts
   - Show people who have done various things
 
 All these tools operate by passing to the server some large object, usually just `FilterType`:
 
 ```ts
 export interface FilterType {
-    insight?: InsightType
-    display?: ChartDisplayType
-    interval?: IntervalType
+  insight?: InsightType;
+  display?: ChartDisplayType;
+  interval?: IntervalType;
 
-    // Specifies that we want to smooth the aggregation over the specified
-    // number of intervals, e.g. for a day interval, we may want to smooth over
-    // 7 days to remove weekly variation. Smoothing is performed as a moving average.
-    smoothing_intervals?: number
-    date_from?: string | null
-    date_to?: string | null
-    properties?: AnyPropertyFilter[] | PropertyGroupFilter
-    events?: Record<string, any>[]
-    event?: string // specify one event
-    actions?: Record<string, any>[]
-    breakdown_type?: BreakdownType | null
-    breakdown?: BreakdownKeyType
-    breakdowns?: Breakdown[]
-    breakdown_value?: string | number
-    breakdown_group_type_index?: number | null
-    shown_as?: ShownAsValue
-    session?: string
-    period?: string
+  // Specifies that we want to smooth the aggregation over the specified
+  // number of intervals, e.g. for a day interval, we may want to smooth over
+  // 7 days to remove weekly variation. Smoothing is performed as a moving average.
+  smoothing_intervals?: number;
+  date_from?: string | null;
+  date_to?: string | null;
+  properties?: AnyPropertyFilter[] | PropertyGroupFilter;
+  events?: Record<string, any>[];
+  event?: string; // specify one event
+  actions?: Record<string, any>[];
+  breakdown_type?: BreakdownType | null;
+  breakdown?: BreakdownKeyType;
+  breakdowns?: Breakdown[];
+  breakdown_value?: string | number;
+  breakdown_group_type_index?: number | null;
+  shown_as?: ShownAsValue;
+  session?: string;
+  period?: string;
 
-    retention_type?: RetentionType
-    retention_reference?: 'total' | 'previous' // retention wrt cohort size or previous period
-    total_intervals?: number // retention total intervals
-    new_entity?: Record<string, any>[]
-    returning_entity?: Record<string, any>
-    target_entity?: Record<string, any>
-    path_type?: PathType
-    include_event_types?: PathType[]
-    start_point?: string
-    end_point?: string
-    path_groupings?: string[]
-    stickiness_days?: number
-    type?: EntityType
-    entity_id?: string | number
-    entity_type?: EntityType
-    entity_math?: string
-    people_day?: any
-    people_action?: any
-    formula?: any
-    filter_test_accounts?: boolean
-    from_dashboard?: boolean | number
-    layout?: FunnelLayout // used only for funnels
-    funnel_step?: number
-    entrance_period_start?: string // this and drop_off is used for funnels time conversion date for the persons modal
-    drop_off?: boolean
-    funnel_viz_type?: FunnelVizType // parameter sent to funnels API for time conversion code path
-    funnel_from_step?: number // used in time to convert: initial step index to compute time to convert
-    funnel_to_step?: number // used in time to convert: ending step index to compute time to convert
-    funnel_step_breakdown?: string | number[] | number | null // used in steps breakdown: persons modal
-    compare?: boolean
-    bin_count?: BinCountValue // used in time to convert: number of bins to show in histogram
-    funnel_window_interval_unit?: FunnelConversionWindowTimeUnit // minutes, days, weeks, etc. for conversion window
-    funnel_window_interval?: number | undefined // length of conversion window
-    funnel_order_type?: StepOrderValue
-    exclusions?: FunnelStepRangeEntityFilter[] // used in funnel exclusion filters
-    exclude_events?: string[] // Paths Exclusion type
-    step_limit?: number // Paths Step Limit
-    path_start_key?: string // Paths People Start Key
-    path_end_key?: string // Paths People End Key
-    path_dropoff_key?: string // Paths People Dropoff Key
-    path_replacements?: boolean
-    local_path_cleaning_filters?: Record<string, any>[]
-    funnel_filter?: Record<string, any> // Funnel Filter used in Paths
-    funnel_paths?: FunnelPathType
-    edge_limit?: number | undefined // Paths edge limit
-    min_edge_weight?: number | undefined // Paths
-    max_edge_weight?: number | undefined // Paths
-    funnel_correlation_person_entity?: Record<string, any> // Funnel Correlation Persons Filter
-    funnel_correlation_person_converted?: 'true' | 'false' // Funnel Correlation Persons Converted - success or failure counts
-    funnel_custom_steps?: number[] // used to provide custom steps for which to get people in a funnel - primarily for correlation use
-    aggregation_group_type_index?: number | undefined // Groups aggregation
-    funnel_advanced?: boolean // used to toggle advanced options on or off
-    show_legend?: boolean // used to show/hide legend next to insights graph
-    hidden_legend_keys?: Record<string, boolean | undefined> // used to toggle visibilities in table and legend
-    breakdown_attribution_type?: BreakdownAttributionType // funnels breakdown attribution type
-    breakdown_attribution_value?: number // funnels breakdown attribution specific step value
-    breakdown_histogram_bin_count?: number // trends breakdown histogram bin count
-    aggregation_axis_format?: AggregationAxisFormat // a fixed format like duration that needs calculation
-    aggregation_axis_prefix?: string // a prefix to add to the aggregation axis e.g. £
-    aggregation_axis_postfix?: string // a postfix to add to the aggregation axis e.g. %
+  retention_type?: RetentionType;
+  retention_reference?: "total" | "previous"; // retention wrt cohort size or previous period
+  total_intervals?: number; // retention total intervals
+  new_entity?: Record<string, any>[];
+  returning_entity?: Record<string, any>;
+  target_entity?: Record<string, any>;
+  path_type?: PathType;
+  include_event_types?: PathType[];
+  start_point?: string;
+  end_point?: string;
+  path_groupings?: string[];
+  stickiness_days?: number;
+  type?: EntityType;
+  entity_id?: string | number;
+  entity_type?: EntityType;
+  entity_math?: string;
+  people_day?: any;
+  people_action?: any;
+  formula?: any;
+  filter_test_accounts?: boolean;
+  from_dashboard?: boolean | number;
+  layout?: FunnelLayout; // used only for funnels
+  funnel_step?: number;
+  entrance_period_start?: string; // this and drop_off is used for funnels time conversion date for the persons modal
+  drop_off?: boolean;
+  funnel_viz_type?: FunnelVizType; // parameter sent to funnels API for time conversion code path
+  funnel_from_step?: number; // used in time to convert: initial step index to compute time to convert
+  funnel_to_step?: number; // used in time to convert: ending step index to compute time to convert
+  funnel_step_breakdown?: string | number[] | number | null; // used in steps breakdown: persons modal
+  compare?: boolean;
+  bin_count?: BinCountValue; // used in time to convert: number of bins to show in histogram
+  funnel_window_interval_unit?: FunnelConversionWindowTimeUnit; // minutes, days, weeks, etc. for conversion window
+  funnel_window_interval?: number | undefined; // length of conversion window
+  funnel_order_type?: StepOrderValue;
+  exclusions?: FunnelStepRangeEntityFilter[]; // used in funnel exclusion filters
+  exclude_events?: string[]; // Paths Exclusion type
+  step_limit?: number; // Paths Step Limit
+  path_start_key?: string; // Paths People Start Key
+  path_end_key?: string; // Paths People End Key
+  path_dropoff_key?: string; // Paths People Dropoff Key
+  path_replacements?: boolean;
+  local_path_cleaning_filters?: Record<string, any>[];
+  funnel_filter?: Record<string, any>; // Funnel Filter used in Paths
+  funnel_paths?: FunnelPathType;
+  edge_limit?: number | undefined; // Paths edge limit
+  min_edge_weight?: number | undefined; // Paths
+  max_edge_weight?: number | undefined; // Paths
+  funnel_correlation_person_entity?: Record<string, any>; // Funnel Correlation Persons Filter
+  funnel_correlation_person_converted?: "true" | "false"; // Funnel Correlation Persons Converted - success or failure counts
+  funnel_custom_steps?: number[]; // used to provide custom steps for which to get people in a funnel - primarily for correlation use
+  aggregation_group_type_index?: number | undefined; // Groups aggregation
+  funnel_advanced?: boolean; // used to toggle advanced options on or off
+  show_legend?: boolean; // used to show/hide legend next to insights graph
+  hidden_legend_keys?: Record<string, boolean | undefined>; // used to toggle visibilities in table and legend
+  breakdown_attribution_type?: BreakdownAttributionType; // funnels breakdown attribution type
+  breakdown_attribution_value?: number; // funnels breakdown attribution specific step value
+  breakdown_histogram_bin_count?: number; // trends breakdown histogram bin count
+  aggregation_axis_format?: AggregationAxisFormat; // a fixed format like duration that needs calculation
+  aggregation_axis_prefix?: string; // a prefix to add to the aggregation axis e.g. £
+  aggregation_axis_postfix?: string; // a postfix to add to the aggregation axis e.g. %
 }
 ```
 
@@ -157,22 +156,22 @@ Here's a filter that returns a trends insight showing the count of events of typ
 
 ```json
 {
-    "insight": "TRENDS",
-    "interval": "day",
-    "display": "ActionsLineGraph",
-    "actions": [],
-    "events": [
-        {
-            "id": "$pageview",
-            "name": "$pageview",
-            "type": "events",
-            "order": 0
-        }
-    ],
-    "properties": [],
-    "filter_test_accounts": false,
-    "date_from": "-14d",
-    "date_to": null
+  "insight": "TRENDS",
+  "interval": "day",
+  "display": "ActionsLineGraph",
+  "actions": [],
+  "events": [
+    {
+      "id": "$pageview",
+      "name": "$pageview",
+      "type": "events",
+      "order": 0
+    }
+  ],
+  "properties": [],
+  "filter_test_accounts": false,
+  "date_from": "-14d",
+  "date_to": null
 }
 ```
 
@@ -182,63 +181,59 @@ Here's a funnel `$pageview -> $pageview with filters -> action`:
 
 ```json
 {
-    "insight": "FUNNELS",
-    "date_from": "-14d",
-    "actions": [
+  "insight": "FUNNELS",
+  "date_from": "-14d",
+  "actions": [
+    {
+      "id": "2",
+      "type": "actions",
+      "order": 2,
+      "name": "definitely not an action"
+    }
+  ],
+  "events": [
+    {
+      "id": "$pageview",
+      "math": "avg_count_per_actor",
+      "name": "$pageview",
+      "type": "events",
+      "order": 0,
+      "custom_name": "Visited a page"
+    },
+    {
+      "id": "viewed dashboard",
+      "type": "events",
+      "order": 1,
+      "name": "viewed dashboard",
+      "properties": [
         {
-            "id": "2",
-            "type": "actions",
-            "order": 2,
-            "name": "definitely not an action"
-        }
-    ],
-    "events": [
-        {
-            "id": "$pageview",
-            "math": "avg_count_per_actor",
-            "name": "$pageview",
-            "type": "events",
-            "order": 0,
-            "custom_name": "Visited a page"
+          "key": "created_at",
+          "value": "2022-11-14",
+          "operator": "is_date_exact",
+          "type": "group",
+          "group_type_index": 1
         },
         {
-            "id": "viewed dashboard",
-            "type": "events",
-            "order": 1,
-            "name": "viewed dashboard",
-            "properties": [
-                {
-                    "key": "created_at",
-                    "value": "2022-11-14",
-                    "operator": "is_date_exact",
-                    "type": "group",
-                    "group_type_index": 1
-                },
-                {
-                    "key": "$browser",
-                    "value": [
-                        "Chrome"
-                    ],
-                    "operator": "exact",
-                    "type": "event"
-                },
-                {
-                    "key": "email_opt_in",
-                    "value": [
-                        "true"
-                    ],
-                    "operator": "exact",
-                    "type": "person"
-                }
-            ]
+          "key": "$browser",
+          "value": ["Chrome"],
+          "operator": "exact",
+          "type": "event"
+        },
+        {
+          "key": "email_opt_in",
+          "value": ["true"],
+          "operator": "exact",
+          "type": "person"
         }
-    ],
-    "display": "FunnelViz",
-    "new_entity": [],
-    "interval": "day",
-    "properties": [],
-    "funnel_viz_type": "steps",
-    "exclusions": []
+      ]
+    }
+  ],
+  "display": "FunnelViz",
+  "new_entity": [],
+  "interval": "day",
+  "properties": [],
+  "funnel_viz_type": "steps",
+  "exclusions": []
 }
 ```
 
@@ -251,41 +246,38 @@ If I want to open "step 2 dropoff", the filter just gets these extra fields:
 }
 ```
 
-
 Here's a path with some global filter
 
 ```json
 {
-    "insight": "PATHS",
-    "properties": {
+  "insight": "PATHS",
+  "properties": {
+    "type": "AND",
+    "values": [
+      {
         "type": "AND",
         "values": [
-            {
-                "type": "AND",
-                "values": [
-                    {
-                        "key": "$anon_distinct_id",
-                        "value": "e",
-                        "operator": "not_icontains",
-                        "type": "event"
-                    }
-                ]
-            }
+          {
+            "key": "$anon_distinct_id",
+            "value": "e",
+            "operator": "not_icontains",
+            "type": "event"
+          }
         ]
-    },
-    "end_point": "http://amazingstore.com/cart",
-    "step_limit": 8,
-    "include_event_types": [
-        "$pageview"
-    ],
-    "path_groupings": [],
-    "exclude_events": [],
-    "date_from": "-14d",
-    "date_to": null,
-    "funnel_filter": {
-        "date_from": "-14d"
-    },
-    "local_path_cleaning_filters": []
+      }
+    ]
+  },
+  "end_point": "http://amazingstore.com/cart",
+  "step_limit": 8,
+  "include_event_types": ["$pageview"],
+  "path_groupings": [],
+  "exclude_events": [],
+  "date_from": "-14d",
+  "date_to": null,
+  "funnel_filter": {
+    "date_from": "-14d"
+  },
+  "local_path_cleaning_filters": []
 }
 ```
 
@@ -317,82 +309,132 @@ Here's a query for cohorts for "match persons who match any criteria: completed 
 }
 ```
 
-## Proposal
+## Proposal: nestable typed filter objects
 
+Instead of a bespoke and scary monolithic filter object, I propose to split this up into **nestable typed filter objects**.
 
+The exact keywords, object types, etc are all up for debate.
 
+Let's start with the simplest query that returns all events:
 
-
-We want to be able to manipulate each step further. Suppose we get the list of persons who dropped off in a funnel.
-
-This steps should be encapsulated as an input.
-
+```json
+{
+  "type": "events"
+}
 ```
-query = {
-  type: 'persons',
-  breakdown: ['person.account_type'],
-  columns: ['count(*)', 'person.distinct_id', 'person.account_type'],
-  display: [
-    'pie',
-    'table',
-    'area',
-  ],
-  from: {
-    type: 'funnel-dropoff',
-    step: '2',
-    from: {
-      type: 'funnel',
-      steps: [{}, {}, {}],
-      from: {
-        type: 'events'
-        filters: {
-          date_from: '',
-          date_to: '',
-        },
+
+Adding a few filters
+
+```json
+{
+  "type": "events",
+  "filters": {
+    "event": "$pageview",
+    "properties": [{ "key": "$browser", "equals": "Chrome" }]
+  }
+}
+```
+
+This query returns data of type `"events"`. It can be used as input wherever an event stream is expected. For example
+on funnels:
+
+```json
+{
+  "type": "funnels",
+  "steps": [
+    {
+      "type": "events"
+    },
+    {
+      "type": "events",
+      "filters": {
+        "event": "$pageview",
+        "properties": [{ "key": "$browser", "equals": "Chrome" }]
       }
+    }
+  ]
+}
+```
+
+If we want people who dropped off at a step, here's one way:
+
+```json
+{
+  "type": "persons",
+  "breakdown": ["person.account_type"],
+  "columns": ["count(*)", "person.distinct_id", "person.account_type"],
+  "display": ["pie", "table", "area"],
+  "from": {
+    "type": "funnel-dropoff",
+    "step": "2",
+    "from": {
+      "type": "funnels",
+      "steps": [
+        {
+          "type": "events"
+        },
+        {
+          "type": "events",
+          "filters": {
+            "event": "$pageview",
+            "properties": [{ "key": "$browser", "equals": "Chrome" }]
+          }
+        }
+      ]
     }
   }
 }
 ```
 
-```
+You could get correlation analysis for a funnel in a similar wway
+
+```json
 {
-  type: 'corrleation',
-  correlation: {
-    type: "properties", 
-    exclude_names: ["$initial_geoip_postal_code", "$initial_geoip_latitude", "$initial_geoip_longitude"],
-    names: ["$all"]
+  "type": "correlation",
+  "correlation": {
+    "type": "properties",
+    "exclude_names": [
+      "$initial_geoip_postal_code",
+      "$initial_geoip_latitude",
+      "$initial_geoip_longitude"
+    ],
+    "names": ["$all"]
   },
-  from: {
-    type: 'funnel-dropoff',
-    step: '2',
-    from: {
-      type: 'funnel',
-      steps: [{}, {}, {}],
-      from: {
-        type: 'events'
-        filters: {
-          date_from: '',
-          date_to: ''
+  "from": {
+    "type": "funnels",
+    "steps": [
+      {
+        "type": "events"
+      },
+      {
+        "type": "events",
+        "filters": {
+          "event": "$pageview",
+          "properties": [{ "key": "$browser", "equals": "Chrome" }]
         }
       }
-    }
+    ]
   }
 }
 ```
+
+## Spec
+
+```json
+{
+  "type": "",
+  "filters": [],
+  "from": 
+}
+```
+
+
 
 Depending on the type of output, you can have different views.
 
 Most event data types can be sent to a table.
 Output type "events" with aggregations and a time column
 
-
-
-
-
-
-
 - universal search https://github.com/PostHog/posthog/issues/7963
 
 Show me [People | Group Type G | Cohorts | Recordings | Events from people | Recordings from people] who [Have property | Belong to COHORT | Have done Y]
-

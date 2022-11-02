@@ -3,6 +3,9 @@
 ## Problem statement
 *Who are we building for, what are their needs (include example cases), why is this important?*
 
+- Current activation rates for organizations (as opposed to an individual) are lower than we'd like. This means that too many people sign up for PostHog, but then fail to get set up properly or see value before they get tired and leave.
+
+### Hypotheses for some things that could cause this to happen (independently or combined)
 - Signup form asks for lots of information (e.g. Where did you hear about us?) which adds friction
 - If you are a non-technical user, onboarding is a daunting experience, and inviting a team member is not exposed as a step
 - Onboarding flow does not take into account session recording or feature flags, but only event tracking

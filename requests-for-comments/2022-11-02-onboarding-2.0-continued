@@ -1,0 +1,56 @@
+# Request for comments: Onboarding 2.0 (continued) - Emanuele Capparelli
+
+## Problem statement
+*Who are we building for, what are their needs (include example cases), why is this important?*
+
+- Signup form asks for lots of information (e.g. Where did you hear about us?) which adds friction
+- If you are a non-technical user, onboarding is a daunting experience, and inviting a team member is not exposed as a step
+- Onboarding flow does not take into account session recording or feature flags, but only event tracking
+- Email flows are basic and do not include any drip campaigning or A/B flows to reduce churn during onboarding
+- If onboarding steps are skipped, there is currently no way to go back to them
+- We currently have an activation checklist prompt, but it has performed poorly, and we might want to integrate this directly in the onboarding flow as additional non-blocking steps
+- The onboarding flow doesn't provide value after completion, while it could be kept as reference to specific tutorials or docs in the manual
+- We have developed a product tour but it hasn't been released to production yet, it could be added as a final optional step after the onboarding
+- The bookmarklet is currently used to skip the onboarding and skews the metrics
+- The onboarding is pretty boring, we could do with more hedgehogs
+
+## Success criteria
+*How do we know if this is successful (i.e. metrics, customer feedback), what's out of scope, whats makes this ambitious?*
+
+### Desired state
+- Onboarding flow is not boring
+
+#### New onboarding flow
+- Signup flow is seamless, only email field and SSO are shown to users, any other data capturing happens within the onboarding flow
+- At the beginning of the onboarding flow, we should ask the users if they need technical help, and suggest to invite a team member
+- At any step during the onboarding, the CTA to invite members should be prominent, to avoid users getting stuck
+- The bookmarklet should be removed, and we could add an option to create some basic test events
+- Event ingestion should be the first step of a multi-step onboarding flow, as well as the only mandatory one
+- After event ingestion is completed, we should show an activation checklist button within the sidebar, to prompt the user to complete optional onboarding steps
+- Setting up session recordings should be the first optional step after event ingestion, with feature flags to be added in a second iteration
+- The current activation checklist steps should be refactored in in this new onboarding (invite users to track their marketing websites, invite users to track custom actions, to install apps, and to invite other team members)
+- Optional, add the current product tour as a step
+- Each step of the onboarding checklist, if completed, should turn into a reference to the relevant content in the manual
+
+#### Emailing
+- We should integrate an external tool to allow marketing to create and test email flows
+- At minimum, email flows should be reworked following suggestions in [the previous RFC](https://github.com/PostHog/meta/issues/64)
+
+### Metrics
+- We want to improve the signup to discovery activation metric by 100% as compared to the current baseline ([see here, internal only](https://app.posthog.com/dashboard/54139))
+
+## Context
+*What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*
+
+This is what Sentry currently does:
+TODO: add nice pictures here
+
+
+## Design 
+*What are the key user experience and technical design decisions / trade-offs?*
+TODO: add some wireframes here
+
+## Tasks
+*How do we break this into discrete and valuable chunks for the folks shipping it? How do we ensure it's high quality and fast?*
+- [ ]
+

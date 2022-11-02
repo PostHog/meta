@@ -1,37 +1,33 @@
 # Request for comments: Data Exploration - Marius Andra
 
-"Get your data structures right, and the rest will follow"
-- me
+## Description
 
-## Premise
+### Why?
 
-At PostHog, users own their data. It's theirs. They can do whatever they want with it. 
+We want to build a "data exploration" view, which lets users take any data for any insight, and explore it further.
 
-Ideally we want to support them getting any insight out of it.
+### What?
 
-This includes export to other
-tools to do analysis which PostHog can't. 
+This is a proposal to change the way we ask for data from PostHog. This will unblock the new "data exploration" view,
+and also:
 
+- let us embed anything on any dashboard (e.g. funnel correlation results, retention line graph, list of events)
+- let us link to any view (e.g. full screen persons modal with an extra breakdown applied)
+- unblock chart type apps (e.g. the scatterplot plugin)
+- use typescript to strictly validate filters with helpful errors
 
+### How?
 
+*"Get your data structures right, and the rest will follow"*
 
+Our filters object needs a refactor. This will influence how we do queries.
 
-We provide the tools to analyse this data.
+## Current state
 
-Users should be able to ask any kind of question about the data they own, and we would provide the tools to get an answer.
-
-Data exploration in PostHog is currently limited by the tools we have built.
-
-Luckily we have built enough tools to answer most common questions, but there are always some that require special
-analysis or further exploration to get to the bottom of them.
-
-Currently it feels like we're building an AI using "if" statements, instead of neural networks.
-
-How can we improve it? Well, let's see what's there.
-
-For each user we capture an event. It can have all sorts of properties.
+We capture a stream of events with all sorts of properties:
 
 ```js
+// this is pseudocode: that means code which isn't real
 event = {
   event: 'event name',
   distinct_id: 'unique id',
@@ -47,187 +43,25 @@ event = {
 }
 ```
 
-These are stored in a table. We have then built interfaces to:
+We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", 
+"persons" or "events list". For example, you can: 
 
-- List all the events stored in this table
 - Through "live events"
-  - Filter this list by any event/person/group property or event name
-  - Filter this list by person/group/distinct_id
-- Through an insight
-  - Aggregate this data by a time bucket 
-  - Aggregate this data by some property (`count(distinct distinct_id)`, `count(*)`, `avg()`)
-  - Split this aggregation by another property (breakdown by `$browser`)
-  - Slice or dice this stream of events in a different way (`funnel`, `retention`, `paths`)
+  - List all latest events and show their properties
+  - Filter this list by any event, person, or group property
+  - Filter this list by event name, person_id, distinct_id, group ids
+- Through an "insight"
+  - Aggregate these events by a time bucket (number of events per day) 
+  - Aggregate this data by some property (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`)
+  - Group by properties (breakdown by `$browser`)
+  - Slice or dice this stream for custom visualisations (`funnel`, `retention`, `paths`)
 - Through the insight persons modal
-  - Remove the aggregation and get the actual events behind the property
-  - On a funnel, get the success/dropoff for each step
+  - Remove the aggregation (e.g. remove the count by day, and focus on one day), and get the actual persons behind the list.
+  - On a funnel, get the success/dropoff for each step.
+- Through persons/cohorts 
+  - Show people who have done various things
 
-
-We want to be able to manipulate each step further. Suppose we get the list of persons who dropped off in a funnel.
-
-This steps should be encapsulated as an input.
-
-```
-query = {
-  type: 'persons',
-  breakdown: ['person.account_type'],
-  columns: ['count(*)', 'person.distinct_id', 'person.account_type'],
-  display: {
-    as: 'pie',
-  },
-  from: {
-    type: 'funnel-dropoff',
-    step: '2',
-    from: {
-      type: 'funnel',
-      steps: [{}, {}, {}],
-      from: {
-        type: 'events'
-        filters: {
-          date_from: '',
-          date_to: '',
-        },
-      }
-    }
-  }
-}
-```
-
-Depending on the type of output, you can have different views.
-
-Most event data types can be sent to a table.
-Output type "events" with aggregations and a time column 
-
-The current filters object is a mess
-
-
-Here's a simple trends line
-```json
-{
-    "events": [
-        {
-            "id": "$pageview",
-            "math": "avg_count_per_actor",
-            "name": "$pageview",
-            "type": "events",
-            "order": 0
-        }
-    ],
-    "actions": [],
-    "date_to": null,
-    "display": "ActionsLineGraph",
-    "insight": "TRENDS",
-    "interval": "day",
-    "breakdown": "$geoip_city_name",
-    "date_from": "-14d",
-    "new_entity": [],
-    "properties": [],
-    "breakdown_type": "event",
-    "filter_test_accounts": false
-}
-```
-Here's a funnel:
-
-```json
-{
-    "insight": "FUNNELS",
-    "date_from": "-14d",
-    "actions": [
-        {
-            "id": "2",
-            "type": "actions",
-            "order": 2,
-            "name": "definitely not an action"
-        }
-    ],
-    "events": [
-        {
-            "id": "$pageview",
-            "math": "avg_count_per_actor",
-            "name": "$pageview",
-            "type": "events",
-            "order": 0,
-            "custom_name": "Visited a page"
-        },
-        {
-            "id": "viewed dashboard",
-            "type": "events",
-            "order": 1,
-            "name": "viewed dashboard",
-            "properties": [
-                {
-                    "key": "created_at",
-                    "value": "2022-11-14",
-                    "operator": "is_date_exact",
-                    "type": "group",
-                    "group_type_index": 1
-                },
-                {
-                    "key": "$browser",
-                    "value": [
-                        "Chrome"
-                    ],
-                    "operator": "exact",
-                    "type": "event"
-                },
-                {
-                    "key": "email_opt_in",
-                    "value": [
-                        "true"
-                    ],
-                    "operator": "exact",
-                    "type": "person"
-                }
-            ]
-        }
-    ],
-    "display": "FunnelViz",
-    "new_entity": [],
-    "interval": "day",
-    "properties": [],
-    "funnel_viz_type": "steps",
-    "exclusions": []
-}
-```
-
-Here's a path with some global filter
-
-```json
-{
-    "insight": "PATHS",
-    "properties": {
-        "type": "AND",
-        "values": [
-            {
-                "type": "AND",
-                "values": [
-                    {
-                        "key": "$anon_distinct_id",
-                        "value": "e",
-                        "operator": "not_icontains",
-                        "type": "event"
-                    }
-                ]
-            }
-        ]
-    },
-    "end_point": "http://amazingstore.com/cart",
-    "step_limit": 8,
-    "include_event_types": [
-        "$pageview"
-    ],
-    "path_groupings": [],
-    "exclude_events": [],
-    "date_from": "-14d",
-    "date_to": null,
-    "funnel_filter": {
-        "date_from": "-14d"
-    },
-    "local_path_cleaning_filters": []
-}
-```
-
-Here are all the filter keys currently supported
+All these tools operate by passing to the server some large object, usually just `FilterType`:
 
 ```ts
 export interface FilterType {
@@ -317,14 +151,15 @@ export interface FilterType {
 }
 ```
 
-Other than scanning for a keyword like "funnel", it's very hard to know when anything is used.
+This datatype has lived a happy "append-only" life since 2020. I think we need to refactor it.
 
-Sometimes we want to use part of an insight as an input to the next query, e.g. in a "persons modal".
+Here's a filter that returns a trends insight showing the count of events of type `$pageview` for the last 14 days:
 
 ```json
 {
-    "insight": "FUNNELS",
-    "date_from": "-30d",
+    "insight": "TRENDS",
+    "interval": "day",
+    "display": "ActionsLineGraph",
     "actions": [],
     "events": [
         {
@@ -332,49 +167,70 @@ Sometimes we want to use part of an insight as an input to the next query, e.g. 
             "name": "$pageview",
             "type": "events",
             "order": 0
-        },
-        {
-            "id": "$pageview",
-            "type": "events",
-            "order": 1,
-            "name": "$pageview"
         }
     ],
-    "display": "FunnelViz",
-    "new_entity": [],
-    "interval": "day",
     "properties": [],
-    "funnel_viz_type": "steps",
-    "exclusions": [],
-    "breakdowns": [
-        {
-            "property": "$geoip_country_code",
-            "type": "event"
-        }
-    ],
-    "breakdown_type": "event"
+    "filter_test_accounts": false,
+    "date_from": "-14d",
+    "date_to": null
 }
 ```
 
-vs
+Here's a funnel `$pageview -> $pageview with filters -> action`:
+
+(Funny how the math selector is still applied to the first pageview, even though it doesn't do anything here)
 
 ```json
 {
     "insight": "FUNNELS",
-    "date_from": "-30d",
-    "actions": [],
+    "date_from": "-14d",
+    "actions": [
+        {
+            "id": "2",
+            "type": "actions",
+            "order": 2,
+            "name": "definitely not an action"
+        }
+    ],
     "events": [
         {
             "id": "$pageview",
+            "math": "avg_count_per_actor",
             "name": "$pageview",
             "type": "events",
-            "order": 0
+            "order": 0,
+            "custom_name": "Visited a page"
         },
         {
-            "id": "$pageview",
+            "id": "viewed dashboard",
             "type": "events",
             "order": 1,
-            "name": "$pageview"
+            "name": "viewed dashboard",
+            "properties": [
+                {
+                    "key": "created_at",
+                    "value": "2022-11-14",
+                    "operator": "is_date_exact",
+                    "type": "group",
+                    "group_type_index": 1
+                },
+                {
+                    "key": "$browser",
+                    "value": [
+                        "Chrome"
+                    ],
+                    "operator": "exact",
+                    "type": "event"
+                },
+                {
+                    "key": "email_opt_in",
+                    "value": [
+                        "true"
+                    ],
+                    "operator": "exact",
+                    "type": "person"
+                }
+            ]
         }
     ],
     "display": "FunnelViz",
@@ -382,27 +238,11 @@ vs
     "interval": "day",
     "properties": [],
     "funnel_viz_type": "steps",
-    "exclusions": [],
-    "breakdowns": [
-        {
-            "property": "$geoip_country_code",
-            "type": "event"
-        }
-    ],
-    "breakdown_type": "event",
-    "/* new stuff below this line */": "/////////",
-    "breakdown": ["$geoip_country_code"],
-    "breakdown_attribution_type": "first_touch",
-    "funnel_step_breakdown": [""],
-    "funnel_step": -2,
-    "funnel_window_interval": 14,
-    "funnel_window_interval_unit": "day",
-    "smoothing_intervals": 1,
-    "include_recordings": true
+    "exclusions": []
 }
 ```
 
-It's the same query, just with this added: 
+If I want to open "step 2 dropoff", the filter just gets these extra fields:
 
 ```json
 {
@@ -412,4 +252,147 @@ It's the same query, just with this added:
 ```
 
 
+Here's a path with some global filter
+
+```json
+{
+    "insight": "PATHS",
+    "properties": {
+        "type": "AND",
+        "values": [
+            {
+                "type": "AND",
+                "values": [
+                    {
+                        "key": "$anon_distinct_id",
+                        "value": "e",
+                        "operator": "not_icontains",
+                        "type": "event"
+                    }
+                ]
+            }
+        ]
+    },
+    "end_point": "http://amazingstore.com/cart",
+    "step_limit": 8,
+    "include_event_types": [
+        "$pageview"
+    ],
+    "path_groupings": [],
+    "exclude_events": [],
+    "date_from": "-14d",
+    "date_to": null,
+    "funnel_filter": {
+        "date_from": "-14d"
+    },
+    "local_path_cleaning_filters": []
+}
+```
+
+Here's a query for cohorts for "match persons who match any criteria: completed an event multiple times. $autocapture exactly 5 times in the last 30 days"
+
+```json
+{
+  "properties": {
+    "type": "OR",
+    "values": [
+      {
+        "type": "OR",
+        "values": [
+          {
+            "key": "$autocapture",
+            "type": "behavioral",
+            "value": "performed_event_multiple",
+            "negation": false,
+            "operator": "exact",
+            "event_type": "events",
+            "time_value": "30",
+            "time_interval": "day",
+            "operator_value": 5
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Proposal
+
+
+
+
+
+We want to be able to manipulate each step further. Suppose we get the list of persons who dropped off in a funnel.
+
+This steps should be encapsulated as an input.
+
+```
+query = {
+  type: 'persons',
+  breakdown: ['person.account_type'],
+  columns: ['count(*)', 'person.distinct_id', 'person.account_type'],
+  display: [
+    'pie',
+    'table',
+    'area',
+  ],
+  from: {
+    type: 'funnel-dropoff',
+    step: '2',
+    from: {
+      type: 'funnel',
+      steps: [{}, {}, {}],
+      from: {
+        type: 'events'
+        filters: {
+          date_from: '',
+          date_to: '',
+        },
+      }
+    }
+  }
+}
+```
+
+```
+{
+  type: 'corrleation',
+  correlation: {
+    type: "properties", 
+    exclude_names: ["$initial_geoip_postal_code", "$initial_geoip_latitude", "$initial_geoip_longitude"],
+    names: ["$all"]
+  },
+  from: {
+    type: 'funnel-dropoff',
+    step: '2',
+    from: {
+      type: 'funnel',
+      steps: [{}, {}, {}],
+      from: {
+        type: 'events'
+        filters: {
+          date_from: '',
+          date_to: ''
+        }
+      }
+    }
+  }
+}
+```
+
+Depending on the type of output, you can have different views.
+
+Most event data types can be sent to a table.
+Output type "events" with aggregations and a time column
+
+
+
+
+
+
+
+- universal search https://github.com/PostHog/posthog/issues/7963
+
+Show me [People | Group Type G | Cohorts | Recordings | Events from people | Recordings from people] who [Have property | Belong to COHORT | Have done Y]
 

@@ -37,7 +37,7 @@
 - At minimum, email flows should be reworked following suggestions in [the previous RFC](https://github.com/PostHog/meta/issues/64)
 
 ### Metrics
-- We want to improve the signup to discovery activation metric by 100% as compared to the current baseline ([see here, internal only](https://app.posthog.com/dashboard/54139))
+- We want to improve the organization signup to discovery activation metric by 100% as compared to the current baseline ([see here, internal only](https://app.posthog.com/dashboard/54139))
 
 ## Context
 *What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*

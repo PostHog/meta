@@ -1,10 +1,20 @@
 # Request for comments: Data Exploration - Marius Andra
 
+Whenever people ask me to be the life of the party, I go into a long rant about the importance of getting your data structures right.
+
+It's the single most impactful advice you can give junior developers, and it's what we're going to do here.
+
 ## Why?
 
 We want to build a "data exploration" view, which lets users take any data for any insight, and explore it further.
 
-Users have been asking for this for a while.
+Users have been asking for this for a while. Some example pain points:
+
+- You can't drill down on insight person modals (e.g. filter the list further, break down by cohorts, etc).
+- Our tables are basic. E.g. The events table supports some customisation, but not enough. What about aggregations? Tables below insights contain different data in insight vs table mode. Persons tables are very basic. Math and formulas?
+- There are chart components that can't be added to dashboards (e.g. retention line chart)
+- Various code reasons (explained below) of why it's a bad idea to keep appending stuff to `FilterType`
+- Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`), hard to know what is supported where.
 
 ## What?
 
@@ -14,18 +24,16 @@ This is a proposal to change the way we ask for data from PostHog. This will unb
 - let us link (via the URL) to any view (e.g. full screen persons modal with an extra breakdown applied)
 - unblock chart type apps (e.g. the scatterplot plugin)
 - use typescript to strictly validate filters
-- build a fluid interface that can morph between different views or chart types 
+- build a fluid interface that can morph between different views or chart types
 
 ## How?
-
-_"Get your data structures right, and the rest will follow"_
 
 ### Current state
 
 We capture a stream of events with all sorts of properties:
 
 ```js
-// this is pseudocode: that means code which isn't real
+// this is pseudocode, only for illustration
 event = {
   event: "event name",
   distinct_id: "unique id",
@@ -36,12 +44,12 @@ event = {
     "$feature/stuff": "feature flags",
     "anything else": "custom properties",
   },
-  person_properties: {},
-  group_properties: {},
+  person: { properties: {} },
+  group1: { properties: {} },
 };
 ```
 
-We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", "persons" or "events list". 
+We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", "persons" or "events list".
 
 For example, you can:
 
@@ -49,18 +57,20 @@ For example, you can:
   - List all latest events and show their properties
   - Filter this list by any event, person, or group property
   - Filter this list by event name, person_id, distinct_id, group ids
+  - Add custom properties
 - Through an "insight"
-  - Aggregate these events by a time bucket (number of events per day)
-  - Aggregate this data with math or by some property (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`)
-  - Group by properties (breakdown by `$browser`)
-  - Slice or dice this stream for custom visualisations (`funnel`, `retention`, `paths`)
+  - Aggregate these event lists into time buckets (number of events per day)
+  - Support this data with aggregate math (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`) or formulas
+  - Breakdown by properties (`$browser`)
+  - Manipulate these events further with custom queries to generate bespoke graphs (`funnel`, `retention`, `paths`)
 - Through the insight persons modal
-  - Remove the aggregation (e.g. remove the count by day, and focus on one day), and get the actual persons behind the list.
+  - Remove the aggregation (e.g. remove the count by day, and focus on the events of one day)
+  - Get the actual persons behind the list.
   - On a funnel, get the success/dropoff for each step.
 - Through persons/cohorts
   - Show people who have done various things
 
-All these tools operate by passing to the server some large object, usually just `FilterType`:
+All these tools operate by passing to various API endpoints a HUGE object of type `FilterType`:
 
 ```ts
 export interface FilterType {
@@ -150,9 +160,13 @@ export interface FilterType {
 }
 ```
 
-This datatype has lived a happy "append-only" life since 2020. I think we need to refactor it.
+This data type has been "append-only" since 2020, and has passed the point of maintainability.
 
-Here's a filter that returns a trends insight showing the count of events of type `$pageview` for the last 14 days:
+I have a proposal for a refactor, but first some examples.
+
+### Filter examples
+
+Here's a filter that returns a trends insight showing the aggregate count of events of type `$pageview` for the last 14 days:
 
 ```json
 {
@@ -175,9 +189,7 @@ Here's a filter that returns a trends insight showing the count of events of typ
 }
 ```
 
-Here's a funnel `$pageview -> $pageview with filters -> action`:
-
-(Funny how the math selector is still applied to the first pageview, even though it doesn't do anything here)
+Here's a funnel `$pageview -> $pageview with filters -> action "definitely not an action"`. The second event has a few filters applied.
 
 ```json
 {
@@ -194,7 +206,6 @@ Here's a funnel `$pageview -> $pageview with filters -> action`:
   "events": [
     {
       "id": "$pageview",
-      "math": "avg_count_per_actor",
       "name": "$pageview",
       "type": "events",
       "order": 0,
@@ -237,7 +248,7 @@ Here's a funnel `$pageview -> $pageview with filters -> action`:
 }
 ```
 
-If I want to open "step 2 dropoff", the filter just gets these extra fields:
+If I want to open "step 2 dropoff", the filter just gets these extra fields, and gets sent to a different API endpoint (`/insights/funnel` vs `/person/funnel`):
 
 ```json
 {
@@ -246,7 +257,7 @@ If I want to open "step 2 dropoff", the filter just gets these extra fields:
 }
 ```
 
-Here's a path with some global filter
+Here's a path with a global filter:
 
 ```json
 {
@@ -281,7 +292,7 @@ Here's a path with some global filter
 }
 ```
 
-Here's a query for cohorts for "match persons who match any criteria: completed an event multiple times. $autocapture exactly 5 times in the last 30 days"
+Moving away from insights, here's a query under cohorts for "match persons who match any criteria: completed an event multiple times. $autocapture exactly 5 times in the last 30 days"
 
 ```json
 {
@@ -313,13 +324,22 @@ Here's a query for cohorts for "match persons who match any criteria: completed 
 
 Instead of a bespoke and scary monolithic filter object, I propose to split this up into **nestable typed filter objects**.
 
-The exact keywords, object types, etc are all up for debate.
+Basically, I'd like to build something that can pass as an AST - Abstract Syntax Tree. This means we could convert it 
+to any other notation down the line (think HogQL perhaps?).
+
+The exact keywords, object types, etc. are all up for debate. Here's just the basic idea.
 
 Let's start with the simplest query that returns all events:
 
 ```json
 {
   "type": "events"
+}
+```
+
+```ts
+interface Node {
+  type: string;
 }
 ```
 
@@ -330,17 +350,38 @@ Adding a few filters
   "type": "events",
   "filters": {
     "event": "$pageview",
-    "properties": [{ "key": "$browser", "equals": "Chrome" }]
+    "properties": [{ "key": "$browser", "equals": "Chrome" }],
+    "date_from": "-14d",
+    "date_to": null
   }
 }
 ```
 
-This query returns data of type `"events"`. It can be used as input wherever an event stream is expected. For example
-on funnels:
+```ts
+interface EventsNode extends Node {
+  type: "events";
+  filters: EventFilters;
+}
+```
+
+This query can be used as input wherever an `EventsNode` is expected. If it's at the root of a query, the frontend will
+receive an `EventsResponse`,  
+
+```ts
+interface EventsResponse {
+  type: "events";
+  query: EventsNode,
+  response: { count: number, results: EventResult[], }
+}
+```
+
+and will likely render the "events list" scene.
+
+If the result comes back with `type: "funnel"`, we'll instead render an insight with the funnel:
 
 ```json
 {
-  "type": "funnels",
+  "type": "funnel",
   "steps": [
     {
       "type": "events"
@@ -356,14 +397,19 @@ on funnels:
 }
 ```
 
-If we want people who dropped off at a step, here's one way:
+```ts
+interface FunnelNode extends Node {
+  type: "funnel";
+  steps: EventsNode[];
+}
+```
+
+If we want people who dropped off at a step, broken down further, it'd be something like:
 
 ```json
 {
   "type": "persons",
   "breakdown": ["person.account_type"],
-  "columns": ["count(*)", "person.distinct_id", "person.account_type"],
-  "display": ["pie", "table", "area"],
   "from": {
     "type": "funnel-dropoff",
     "step": "2",
@@ -377,12 +423,31 @@ If we want people who dropped off at a step, here's one way:
           "type": "events",
           "filters": {
             "event": "$pageview",
-            "properties": [{ "key": "$browser", "equals": "Chrome" }]
+            "properties": [
+              {
+                "key": "$browser",
+                "equals": "Chrome"
+              }
+            ]
           }
         }
       ]
     }
   }
+}
+```
+
+```ts
+interface PersonsNode extends Node {
+  type: "persons";
+  breakdown?: string[];
+  from?: FunnelDropoffNode | EventsNode;
+}
+
+interface FunnelDropoffNode extends Node {
+  type: "funnel-dropoff";
+  step: number;
+  from: FunnelNode;
 }
 ```
 
@@ -418,23 +483,107 @@ You could get correlation analysis for a funnel in a similar wway
 }
 ```
 
-## Spec
-
-```json
-{
-  "type": "",
-  "filters": [],
-  "from": 
+```ts
+interface CorrelationNode extends Node {
+  type: "correlation";
+  correlation?: CorrelationOptions;
+  from?: FunnelNode;
 }
 ```
 
+## Backend
+
+TODO: what is needed in the backend to make this possible?
+
+## Frontend
+
+### Iteration 1
+
+The "data exploration" view will basically be one big query editor. The first steps will look similar to the existing [MVP](https://github.com/PostHog/posthog/pull/11981). 
+
+- Two select boxes and a large table below. 
+- You can select "events", apply "matching filters" and see a list of rows
+- You can switch "events" to "persons" and get a different list.
+- Switching to "recordings" might open a different looking interface (recordings might come later)
+
+I wouldn't change anything with the current insights visually. However they should also be powered by the new query engine.
+
+### Iteration 2. 
+
+Start bringing in new features:
+
+- Add grouping, breakdowns, formulas and person properties to the "events" and "persons" pages.
+- Make it possible to also see trends and funnels in the same interface. The filters should transform smoothly,
+  e.g. the full "events" filter moves into the "step 1" box of the "funnels" filter when you click "start funnel from here".
 
 
-Depending on the type of output, you can have different views.
+## What does the future hold?
 
-Most event data types can be sent to a table.
-Output type "events" with aggregations and a time column
+### "Query Apps"
 
-- universal search https://github.com/PostHog/posthog/issues/7963
+If we expand this further, we could build various apps that modify the query, like you'd modify an AST.
 
-Show me [People | Group Type G | Cohorts | Recordings | Events from people | Recordings from people] who [Have property | Belong to COHORT | Have done Y]
+```json
+{
+  "type": "funnels",
+  "steps": [
+    {
+      "type": "action",
+      "action": {
+        "id": 1
+      }
+    },
+    {
+      "type": "events",
+      "filters": {
+        "event": "$pageview",
+        "properties": [
+          {
+            "key": "$browser",
+            "equals": "Chrome"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+A hypothetical "action inliner" app could convert the `{ type: 'action' }` node into a corresponding `{ type: 'events', filters: {} }` node.
+
+Such an app definitely needs to be part of PostHog. 
+
+A better example might be a "scatterplot" app, which adds extra columns and aggregations to a raw `events` query before passing it to the backend.
+
+### HogQL
+
+An AST can be converted into any language.
+
+For example this:
+
+```json
+{
+  "type": "funnel",
+  "steps": [
+    {
+      "type": "events"
+    },
+    {
+      "type": "events",
+      "filters": {
+        "event": "$pageview",
+        "properties": [{ "key": "$browser", "equals": "Chrome" }]
+      }
+    }
+  ],
+  "breakdown": ["event[0].$browser"]
+}
+```
+
+could be equivalent to this:
+
+```sql
+SELECT * FROM funnel WITH STEPS (SELECT * FROM events) as events1, (SELECT * FROM events WHERE event='$pageview' AND properties.$browser = 'Chrome') as events2 BREAKDOWN BY events1.properties.$browser
+```
+
+If it's better, I don't know.

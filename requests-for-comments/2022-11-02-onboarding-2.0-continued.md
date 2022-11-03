@@ -1,7 +1,8 @@
 # Request for comments: Onboarding 2.0 (continued) - Emanuele Capparelli
 
 ## Problem statement
-*Who are we building for, what are their needs (include example cases), why is this important?*
+
+With this effort we're tckling a couple different problems with onboarding:
 
 1. Current activation rates for organizations (as opposed to an individual) are lower than we'd like. This means that too many people sign up for PostHog, but then fail to get set up properly or see value before they get tired and leave.
 2. Current activation rates for session recordings (even after successful event ingestion) are lower than we'd like. This means that people get set up, but then don't use the session recording product.
@@ -52,34 +53,38 @@
 
 ## Context
 *What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*
-Onboarding: 
+
+**Onboarding:**
+
 - According to the linked dashboard, those who get their events ingesting properly have a decent rate of activation (see [this insight](https://app.posthog.com/insights/yj7DIktG) and show conversion rate from Step 2 to Step 3)
 - People seem to struggle more with getting their events ingesting (view above linked insight from Step 1 to Step 2)
-Introducing users to other products (specifically session recording):
+
+**Introducing users to other products (specifically session recording):**
+
 - After successfully ingesting events, activation for the session recording product is lower than we'd like (see [this insight](https://app.posthog.com/insights/YdcM8sBK), from Step 2 to Step 3) 
   - We will look at activation rates only after someone has successfully started ingesting events, since that is a necessary prerequisite and ingestion success is being worked on with the onboarding tasks
 
 Fortunately, there are lots of examples of onboarding on the internet! This is what Sentry currently does:
 1. Sentry asks if you need to invite a team member right away.
-![image](https://user-images.githubusercontent.com/18598166/199791647-b3af837d-dd53-4bf3-8d1e-4be1139247dd.png)
+    - ![image](https://user-images.githubusercontent.com/18598166/199791647-b3af837d-dd53-4bf3-8d1e-4be1139247dd.png)
 2. They also let you skip onboarding by importing a sample error.
-![image](https://user-images.githubusercontent.com/18598166/199792853-277ad016-2edb-4531-b120-fd6590c62102.png)
+    - ![image](https://user-images.githubusercontent.com/18598166/199792853-277ad016-2edb-4531-b120-fd6590c62102.png)
 3. After initial onboarding, there is a Quick Start that is triggered in the left menu. 
 4. The Quick Start panel contains info about the onboarding steps you already completed and more tasks to intro you to other parts of the product.
-![image](https://user-images.githubusercontent.com/18598166/199791737-cd5dc488-324a-4cee-8544-e42a9e03235e.png)
+    - ![image](https://user-images.githubusercontent.com/18598166/199791737-cd5dc488-324a-4cee-8544-e42a9e03235e.png)
 5. Intrestingly, they gamify it a bit by "locking" some tasks until you complete others.
-![image](https://user-images.githubusercontent.com/18598166/199791879-ba9df04a-23b8-481d-a02e-5b2b3d7c5938.png)
+    - ![image](https://user-images.githubusercontent.com/18598166/199791879-ba9df04a-23b8-481d-a02e-5b2b3d7c5938.png)
 
 
 ## Design 
 *What are the key user experience and technical design decisions / trade-offs?*
 
 1. We'll ask people if they need help installing the snippet right away
-  - ![Screen Shot 2022-11-02 at 3 51 28 PM](https://user-images.githubusercontent.com/18598166/199792106-33eb8f0b-0f88-458e-b071-5d621f270c36.png)
+    - ![Screen Shot 2022-11-02 at 3 51 28 PM](https://user-images.githubusercontent.com/18598166/199792106-33eb8f0b-0f88-458e-b071-5d621f270c36.png)
 2. We'll also let people skip onboarding by importing some dummy events for them
-  - This is open to discussion. Em mentioned that people might not like having dummy data in their project. However, they can always create a clean new project when they are ready to actually start using PostHog with their real data.
+    - This is open to discussion. Em mentioned that people might not like having dummy data in their project. However, they can always create a clean new project when they are ready to actually start using PostHog with their real data.
 3. Every step of the onboarding will give the user another opportunity to invite a team member for help.
-  - ![image](https://user-images.githubusercontent.com/18598166/199793207-b8e45d38-b68f-4480-9bfd-c1f091e9dce8.png)
+    - ![image](https://user-images.githubusercontent.com/18598166/199793207-b8e45d38-b68f-4480-9bfd-c1f091e9dce8.png)
 4. After onboarding we'll have a panel similar to Sentry's to allow people to go back to previous onboarding steps, or explore other parts of the product
   
 

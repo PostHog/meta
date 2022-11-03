@@ -1,8 +1,8 @@
 # Request for comments: Data Exploration - Marius Andra
 
-Whenever people ask me to be the life of the party, I go into a long rant about the importance of getting your data structures right.
+_Whenever people ask me to be the life of the party, I go into a long rant about the importance of getting your data structures right.
 
-It's the single most impactful advice you can give junior developers, and it's what we're going to do here.
+It's the single most impactful advice you can give junior developers, and it's what we're going to do here._
 
 ## Why?
 
@@ -18,12 +18,12 @@ Users have been asking for this for a while. Some example pain points:
 
 ## What?
 
-This is a proposal to change the way we ask for data from PostHog. This will unblock the new "data exploration" view, and also:
+This is a proposal to change the way we ask for data from the PostHog API. This will unblock the new "data exploration" view, and also:
 
 - let us embed anything on any dashboard (e.g. funnel correlation results, retention line graph, list of events)
 - let us link (via the URL) to any view (e.g. full screen persons modal with an extra breakdown applied)
 - unblock chart type apps (e.g. the scatterplot plugin)
-- use typescript to strictly validate filters
+- use typescript and a few helpers to strictly validate all queries
 - build a fluid interface that can morph between different views or chart types
 
 ## How?
@@ -49,7 +49,7 @@ event = {
 };
 ```
 
-We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", "persons" or "events list".
+We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", "persons" or "live events".
 
 For example, you can:
 
@@ -57,10 +57,11 @@ For example, you can:
   - List all latest events and show their properties
   - Filter this list by any event, person, or group property
   - Filter this list by event name, person_id, distinct_id, group ids
-  - Add custom properties
+  - Select custom properties to fetch
 - Through an "insight"
   - Aggregate these event lists into time buckets (number of events per day)
-  - Support this data with aggregate math (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`) or formulas
+  - Support this data with aggregate math (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`)
+  - Combine multiple columns with formulas
   - Breakdown by properties (`$browser`)
   - Manipulate these events further with custom queries to generate bespoke graphs (`funnel`, `retention`, `paths`)
 - Through the insight persons modal
@@ -68,7 +69,8 @@ For example, you can:
   - Get the actual persons behind the list.
   - On a funnel, get the success/dropoff for each step.
 - Through persons/cohorts
-  - Show people who have done various things
+  - Show people who have done various events any number of times
+  - Show people whose properties match certain values
 
 All these tools operate by passing to various API endpoints a HUGE object of type `FilterType`:
 
@@ -160,7 +162,7 @@ export interface FilterType {
 }
 ```
 
-This data type has been "append-only" since 2020, and has passed the point of maintainability.
+This `FilterType` has been "append-only" since 2020, and has passed the point of maintainability.
 
 I have a proposal for a refactor, but first some examples.
 
@@ -451,7 +453,9 @@ interface FunnelDropoffNode extends Node {
 }
 ```
 
-You could get correlation analysis for a funnel in a similar wway
+I'm not sure how many levels of abstractions this requires. It'll depend on how this maps to actual SQL.
+
+You could get correlation analysis for a funnel in a similar way:
 
 ```json
 {
@@ -499,14 +503,18 @@ TODO: what is needed in the backend to make this possible?
 
 ### Iteration 1
 
-The "data exploration" view will basically be one big query editor. The first steps will look similar to the existing [MVP](https://github.com/PostHog/posthog/pull/11981). 
+The "data exploration" view will basically be one big query editor. The first steps will look similar to the existing [MVP](https://github.com/PostHog/posthog/pull/11981) and expose a big table. 
 
 - Two select boxes and a large table below. 
 - You can select "events", apply "matching filters" and see a list of rows
 - You can switch "events" to "persons" and get a different list.
 - Switching to "recordings" might open a different looking interface (recordings might come later)
 
-I wouldn't change anything with the current insights visually. However they should also be powered by the new query engine.
+The goal is to replace the existing events and persons tables, including the persons table in insight modals.
+
+These person modals will now have an "Expand" button that will open them in the "data explorer" view.
+
+All insights should otherwise look the same, yet be powered by the new query engine.
 
 ### Iteration 2. 
 
@@ -515,9 +523,12 @@ Start bringing in new features:
 - Add grouping, breakdowns, formulas and person properties to the "events" and "persons" pages.
 - Make it possible to also see trends and funnels in the same interface. The filters should transform smoothly,
   e.g. the full "events" filter moves into the "step 1" box of the "funnels" filter when you click "start funnel from here".
+- This will require a lot of ideation and a big design sprint. 
 
 
 ## What does the future hold?
+
+Iteration 2 will already bring a lot of challenges. Thinking further, here are two more ideas:
 
 ### "Query Apps"
 

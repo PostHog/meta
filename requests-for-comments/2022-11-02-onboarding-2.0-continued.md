@@ -1,24 +1,23 @@
-# Request for comments: Onboarding 2.0 (continued) - Emanuele Capparelli
+# Request for comments: Onboarding 2.0 (continued) - Emanuele Capparelli / Raquel Smith
 
 ## Problem statement
 
-With this effort we're tckling a couple different problems with onboarding:
+With this effort we're tackling a couple different problems with onboarding:
 
-1. Current activation rates for organizations (as opposed to an individual) are lower than we'd like. This means that too many people sign up for PostHog, but then fail to get set up properly or see value before they get tired and leave.
+1. Current activation rates for organizations are lower than we'd like. This means that too many people sign up for PostHog, but then fail to get set up properly or see value before they get tired and leave.
 2. Current activation rates for session recordings (even after successful event ingestion) are lower than we'd like. This means that people get set up, but then don't use the session recording product.
 
 ### Hypotheses for some things that could cause this to happen (independently or combined)
 - Activation / Onboarding:
   - Signup form asks for lots of information (e.g. Where did you hear about us?) which adds friction
-  - If you are a non-technical user, onboarding is a daunting experience, and inviting a team member is not exposed as a step
-  - Email flows are basic and do not include any drip campaigning or A/B flows to reduce churn during onboarding
-  - If onboarding steps are skipped, there is currently no way to go back to them
+  - If you are a non-technical user, onboarding is a daunting experience, and inviting a team member is not exposed enough
+  - Email flows are basic and we could do with better flows to reduce churn during onboarding
   - The onboarding flow doesn't provide value after completion, while it could be kept as reference to specific tutorials or docs in the manual
   - The bookmarklet is currently used to skip the onboarding and skews the metrics
   - The onboarding is pretty boring, we could do with more hedgehogs
 - Introducing users to other products:
   - Onboarding flow does not take into account session recording or feature flags, but only event tracking
-  - We currently have an activation checklist prompt, but it has performed poorly, and we might want to integrate this directly in the onboarding flow as additional non-blocking steps
+  - We currently have an activation checklist prompt, but it has performed poorly, and we might want to integrate this directly in the onboarding flow as additional non-blocking steps we suggest users to perform
   - We have developed a product tour but it hasn't been released to production yet, it could be added as a final optional step after the onboarding
 
 ## Success criteria
@@ -30,9 +29,9 @@ With this effort we're tckling a couple different problems with onboarding:
 
 ### Desired state
 - New users are immediately vetted for technical ability (to install the snippet) and, if they are not technical, they invite someone who is
-- Onboarding flow is not boring and has more hedgehogs
 - Email sequences get the right people into the product to support successful onboarding
 - Customers are introduced to other products in a secondary product onboarding (eg. Sentry's QuickStart panel)
+- Onboarding flow is not visually boring and has more hedgehogs
 
 #### New onboarding flow
 - Signup flow is seamless, only email field and SSO are shown to users, any other data capturing happens within the onboarding flow
@@ -47,7 +46,7 @@ With this effort we're tckling a couple different problems with onboarding:
 - Each step of the onboarding checklist, if completed, should turn into a reference to the relevant content in the manual
 
 #### Emailing
-- We should integrate an external tool (Customer.io) to allow marketing to create and test email flows
+- We should integrate an external tool (e.g. Customer.io) to allow marketing to create and test email flows
 - At minimum, email flows should be reworked following suggestions in [the previous RFC](https://github.com/PostHog/meta/issues/64)
 
 
@@ -57,7 +56,7 @@ With this effort we're tckling a couple different problems with onboarding:
 **Onboarding:**
 
 - According to the linked dashboard, those who get their events ingesting properly have a decent rate of activation (see [this insight](https://app.posthog.com/insights/yj7DIktG) and show conversion rate from Step 2 to Step 3)
-- People seem to struggle more with getting their events ingesting (view above linked insight from Step 1 to Step 2)
+- People seem to struggle more with getting their events ingested (view above linked insight from Step 1 to Step 2)
 
 **Introducing users to other products (specifically session recording):**
 
@@ -72,7 +71,7 @@ Fortunately, there are lots of examples of onboarding on the internet! This is w
 3. After initial onboarding, there is a Quick Start that is triggered in the left menu. 
 4. The Quick Start panel contains info about the onboarding steps you already completed and more tasks to intro you to other parts of the product.
     - ![image](https://user-images.githubusercontent.com/18598166/199791737-cd5dc488-324a-4cee-8544-e42a9e03235e.png)
-5. Intrestingly, they gamify it a bit by "locking" some tasks until you complete others.
+5. Interestingly, they gamify it a bit by "locking" some tasks until you complete others.
     - ![image](https://user-images.githubusercontent.com/18598166/199791879-ba9df04a-23b8-481d-a02e-5b2b3d7c5938.png)
 
 
@@ -82,10 +81,12 @@ Fortunately, there are lots of examples of onboarding on the internet! This is w
 1. We'll ask people if they need help installing the snippet right away
     - ![Screen Shot 2022-11-02 at 3 51 28 PM](https://user-images.githubusercontent.com/18598166/199792106-33eb8f0b-0f88-458e-b071-5d621f270c36.png)
 2. We'll also let people skip onboarding by importing some dummy events for them
-    - This is open to discussion. Em mentioned that people might not like having dummy data in their project. However, they can always create a clean new project when they are ready to actually start using PostHog with their real data.
+    - This is open to discussion. People might not like having dummy data in their project. However, they could always create a clean new project when they are ready to actually start using PostHog with their real data.
 3. Every step of the onboarding will give the user another opportunity to invite a team member for help.
     - ![image](https://user-images.githubusercontent.com/18598166/199793207-b8e45d38-b68f-4480-9bfd-c1f091e9dce8.png)
-4. After onboarding we'll have a panel similar to Sentry's to allow people to go back to previous onboarding steps, or explore other parts of the product
+4. After onboarding we'll have a panel similar to Sentry's to allow people to go back to previous onboarding steps, or explore other parts of the product.
+5. When clicking on a todo in the sidebar, the relevant instructions can directly be shown in there, e.g. if users click on "Setup Session Recording", we would show the session recording config options directly in the sidebar, and links to the relevant docs in the manual.
+6. If users have already performed a task, e.g. "Setup Session Recording", clicking again on the task would show them again the links to the manual / tutorials. 
   
 
 ## Tasks
@@ -109,10 +110,12 @@ This can be broken down into 3 distinct projects, which can be shipped independe
       - Ingesting events
       - Billing info added
       - Team invited
+      - Session recording setup
     - [ ] A/B test: Add a task for trying out session recordings
       - See if the task actually gets used, and if it actually gets people to successfully use session recordings more than baseline
 3. Integrate with Customer.io so marketing/other teams can easily create and send email sequences
     - Lead: Emanuele
-    - [ ] Create an app to sync events between Customer.io and PostHog
-    - [ ] ...
+    - [ ] Refactor the existing Customer.io app to sync PostHog data
+      - Data would be sent to Customer.io using the API, and Customer.io events would be synced back using webhooks to the PostHog API
+    - [ ] Move email flows to Customer.io ([everything here](https://github.com/PostHog/meta/issues/64) + the new billing emails, currently unmapped)
 

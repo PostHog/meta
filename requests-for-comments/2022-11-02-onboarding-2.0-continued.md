@@ -39,8 +39,8 @@ With this effort we're tackling a couple different problems with onboarding:
 - At any step during the onboarding, the CTA to invite members should be prominent, to avoid users getting stuck
 - The bookmarklet should be removed, and we could add an option to create some basic test events
 - Event ingestion should be the first step of a multi-step onboarding flow, as well as the only mandatory one
-- After event ingestion is completed, we should show an activation checklist button within the sidebar, to prompt the user to complete optional onboarding steps
-- Setting up session recordings should be the first optional step after event ingestion, with feature flags to be added in a second iteration
+- After event ingestion is completed, we should show an activation checklist button within the sidebar, to prompt the user to complete optional onboarding steps like creating a dashboard, action, and/or cohort
+- Setting up session recordings should be an optional step after event ingestion, with feature flags to be added in a second iteration
 - The current activation checklist steps should be refactored in in this new onboarding (invite users to track their marketing websites, invite users to track custom actions, to install apps, and to invite other team members)
 - Optional, add the current product tour as a step
 - Each step of the onboarding checklist, if completed, should turn into a reference to the relevant content in the manual
@@ -96,6 +96,7 @@ This can be broken down into 3 distinct projects, which can be shipped independe
 1. Redo the existing onboarding to encourage more technical people to help get set up
     - Lead: Raquel
     - [ ] Start tracking signup form usage and attrition
+      - [ ] If the above seems to indicate a problem, then A/B test moving the extra fields (Name, where did you hear about us) to a secondary screen in the signup flow, or into the onboarding
     - [ ] A/B test: remove extra signup form fields
     - [ ] A/B test: Add a first step in the onboarding to ask if someone can install the snippet, or if they need help from a team member
     - [ ] A/B Test: Let people skip event ingestion to just explore the product
@@ -111,6 +112,7 @@ This can be broken down into 3 distinct projects, which can be shipped independe
       - Billing info added
       - Team invited
       - Session recording setup
+    - [ ] A/B test: Add tasks for creating a dashboard, action, and cohort
     - [ ] A/B test: Add a task for trying out session recordings
       - See if the task actually gets used, and if it actually gets people to successfully use session recordings more than baseline
 3. Integrate with Customer.io so marketing/other teams can easily create and send email sequences

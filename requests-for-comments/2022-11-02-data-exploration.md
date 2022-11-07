@@ -16,7 +16,9 @@ Users have been asking for this for a while. Some example pain points:
 - Various code reasons (explained below) of why it's a bad idea to keep appending stuff to `FilterType`
 - Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`), hard to know what is supported where.
 
-## What?
+The changes require improvements and different changes to both the backend and the frontend. This RFC is thus split into many parts.
+
+## Part 1. Analysis of the backend
 
 This is a proposal to change the way we ask for data from the PostHog API. This will unblock the new "data exploration" view, and also:
 
@@ -25,8 +27,6 @@ This is a proposal to change the way we ask for data from the PostHog API. This 
 - unblock chart type apps (e.g. the scatterplot plugin)
 - use typescript and a few helpers to strictly validate all queries
 - build a fluid interface that can morph between different views or chart types
-
-## How?
 
 ### Current state
 
@@ -322,7 +322,7 @@ Moving away from insights, here's a query under cohorts for "match persons who m
 }
 ```
 
-## Proposal: nestable typed filter objects
+### Proposal: nestable typed filter objects
 
 Instead of a bespoke and scary monolithic filter object, I propose to split this up into **nestable typed filter objects**.
 
@@ -495,9 +495,33 @@ interface CorrelationNode extends Node {
 }
 ```
 
-## Backend
+### Considerations
 
-TODO: what is needed in the backend to make this possible?
+- The exact shape of this new API is not yet fixed. It will change somewhat when starting implementation.
+- We will likely need an `apiVersion` field in each AST node.
+- Not each node in the request (e.g. `{ type: 'people', from: { type: 'events', ... } }`) will map to a SQL subquery in the response ([discussion](https://github.com/PostHog/meta/pull/66#discussion_r1013178284)). 
+  While we can be verbose in describing the query, we'll need a different approach on the backend, where merging queries together in bespoke ways often yields a lot higher performance.  
+
+### Next steps for backend
+
+The plan is to slowly transform the existing queries into the new approach. 
+
+Here's a rough list of steps we can take on the backend. These will bring no visible changes on the frontend, though they will require some refactoring. 
+
+1. Refactor the huge `FilterType` into `InsightTrendsFilter`, `InsightFunnelsFilter`, etc. It's still the same backend, just with cleaner queries (e.g. remove all `funnel*` fields for the trends filter).
+2. Create flat query nodes like `insightTrendsQuery`, `insightPathsQuery`, and document their structure. 
+3. Create a "backend router". This will be one endpoint, which takes a query object, and returns the matching results. For now, we will just pass these queries on to the existing insight queries.
+4. Create a new query node type `"events"`, with support for various filters. Use this to power the "live events" page. 
+5. Replace the bespoke steps in `insightTrendsQuery`, `insightFunnelQuery`, etc with nodes of type `events`.
+
+The next steps after these will be determined when we work on this. However these are some steps:
+
+1. Create a new node type `persons`, and connect it to the existing persons/cohorts/etc filters.
+2. Create a new node type `persons from events`, something like: `{ type: 'persons', from: { query: { type: 'insightTrends', ... } } }`, where you get a list of persons for any events query
+3. Refactor the person modals to use this new query. 
+
+
+## Part 2. Analysis of the frontend
 
 ## Frontend
 
@@ -526,13 +550,13 @@ Start bringing in new features:
 - This will require a lot of ideation and a big design sprint. 
 
 
-## What does the future hold?
+## Part 3. Future directions.
 
-Iteration 2 will already bring a lot of challenges. Thinking further, here are two more ideas:
+All of the above is already a lot of work. Here are some ways to take it even further:
 
 ### "Query Apps"
 
-If we expand this further, we could build various apps that modify the query, like you'd modify an AST.
+We could build various apps that modify the query, like you'd modify an AST.
 
 ```json
 {
@@ -562,9 +586,9 @@ If we expand this further, we could build various apps that modify the query, li
 
 A hypothetical "action inliner" app could convert the `{ type: 'action' }` node into a corresponding `{ type: 'events', filters: {} }` node.
 
-Such an app definitely needs to be part of PostHog. 
+### Visualization apps
 
-A better example might be a "scatterplot" app, which adds extra columns and aggregations to a raw `events` query before passing it to the backend.
+
 
 ### HogQL
 

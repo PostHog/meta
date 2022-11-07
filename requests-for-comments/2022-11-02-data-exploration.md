@@ -6,27 +6,33 @@ It's the single most impactful advice you can give junior developers, and it's w
 
 ## Why?
 
-We want to build a "data exploration" view, which lets users take any data for any insight, and explore it further.
+With PostHog, users own their data. Yet when exploring it, they're limited to the tools we've built. Sometimes they want more: 
 
-Users have been asking for this for a while. Some example pain points:
+- You can't explore insight person modals further (e.g. add a filter, break down by cohorts, etc).
+- The events table supports event properties as columns, but that's it. What about person properties? What about aggregations? Tables below insights contain different data in insight vs table mode. Sorting is not supported.
+- You can't have non-event insights. E.g. show a count of users with property X.
+- Persons tables are very basic. No column customisation. No math or formulas.
+- There are charts in insights that can't be added to dashboards (e.g. retention line chart).
+- Various pages (events, persons, etc) support filters, but those can't be saved.
+- There are parameters you can't directly filter for or list (such as `distinct_id`, `timestamp`)
+- Our `FilterType` has been append-only for 2+ years and is long overdue for a serious cleanup.
+- Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`). It's impossible to type the outputs without blindly guessing.
 
-- You can't drill down on insight person modals (e.g. filter the list further, break down by cohorts, etc).
-- Our tables are basic. E.g. The events table supports some customisation, but not enough. What about aggregations? Tables below insights contain different data in insight vs table mode. Persons tables are very basic. Math and formulas?
-- There are chart components that can't be added to dashboards (e.g. retention line chart)
-- Various code reasons (explained below) of why it's a bad idea to keep appending stuff to `FilterType`
-- Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`), hard to know what is supported where.
+We have an opportunity to build a unified "data exploration" view, which would solve all of the above, and open the floodgates to allowing any type of analysis.
 
-The changes require improvements and different changes to both the backend and the frontend. This RFC is thus split into many parts.
+The proposed changes below will and also unblock:
+
+- let us embed anything on any dashboard (e.g. funnel correlation results, retention line graph, list of live events)
+- let us link to any piece of data from anywhere (e.g. persons modal, full screen, with extra filters on the list)
+- use typescript and a few helpers to strictly validate all query requests and responses
+- build a fluid interface that can morph between different views or chart types (it's nodes all the way down)
+- unblock visualisation apps (e.g. the scatterplot plugin, world map v2.0)
+- let us embed data from sources other than clickhouse onto dashboards
+- using any other query engine as our backend
 
 ## Part 1. Analysis of the backend
 
-This is a proposal to change the way we ask for data from the PostHog API. This will unblock the new "data exploration" view, and also:
-
-- let us embed anything on any dashboard (e.g. funnel correlation results, retention line graph, list of events)
-- let us link (via the URL) to any view (e.g. full screen persons modal with an extra breakdown applied)
-- unblock chart type apps (e.g. the scatterplot plugin)
-- use typescript and a few helpers to strictly validate all queries
-- build a fluid interface that can morph between different views or chart types
+This is a proposal to change the way we query the PostHog API.
 
 ### Current state
 
@@ -322,14 +328,17 @@ Moving away from insights, here's a query under cohorts for "match persons who m
 }
 ```
 
-### Proposal: nestable typed filter objects
+### Proposal: nestable typed query objects
 
-Instead of a bespoke and scary monolithic filter object, I propose to split this up into **nestable typed filter objects**.
+Instead of a bespoke and scary monolithic filter object, I propose to split this up into **nestable typed query objects**.
 
-Basically, I'd like to build something that can pass as an AST - Abstract Syntax Tree. This means we could convert it 
-to any other notation down the line (think HogQL perhaps?).
+The end result should pass as an [AST - an Abstract Syntax Tree](https://ts-ast-viewer.com/#code/GYVwdgxgLglg9mABBAFjCBrApkgFASkQG8AoRZBAZzgBssA6GuAc1wHIUsanEB3OAE40AJm3wkAvkA). This means we could convert it **to and from** any other notation. Think `HogQL` --> `AST` (this RFC ) --> `Clickhouse SQL` or `BigQuery SQL`  output.
 
-The exact keywords, object types, etc. are all up for debate. Here's just the basic idea.
+For now, I wouldn't focus on `HogQL` input nor `BigQuery` output. These can be implemented in the future.
+
+This RFC is only scoped to the `AST` --> `ClickHouse SQL` transformation.
+
+How would this AST look like?
 
 Let's start with the simplest query that returns all events:
 

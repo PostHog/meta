@@ -4,8 +4,8 @@
 
 With this effort we're tackling a couple different problems with onboarding:
 
-1. Current activation rates for organizations are lower than we'd like. This means that too many people sign up for PostHog, but then fail to get set up properly or see value before they get tired and leave.
-2. Current activation rates for session recordings (even after successful event ingestion) are lower than we'd like. This means that people get set up, but then don't use the session recording product.
+1. Current activation rates for organizations from signup to a discovery (defined as any of these actions: insight/dashboard/correlation/recording analyzed) stand at 25%. About 40% organizations get to ingest a first event, out of which 60% get to perform an activation action.
+2. Current activation rates for session recordings (even after successful event ingestion) are lower than we'd like. Only 32% of organizations which have ingested events end up analyzing a session recording.
 
 ### Hypotheses for some things that could cause this to happen (independently or combined)
 - Activation / Onboarding:
@@ -24,8 +24,8 @@ With this effort we're tackling a couple different problems with onboarding:
 *How do we know if this is successful (i.e. metrics, customer feedback), what's out of scope, whats makes this ambitious?*
 
 ### Metrics
-- Improve the organization signup to discovery activation metric by 100% as compared to the current baseline ([see here, internal only](https://app.posthog.com/dashboard/54139))
-- Improve the organization session recordings activation metric by 50% as compared to current baseline (see [this insight, internal only](https://app.posthog.com/insights/YdcM8sBK), from Step 2 to Step 3)
+- Improve the organization signup to discovery activation metric by 100%, from 25% to 50% ([see here, internal only](https://app.posthog.com/dashboard/54139))
+- Improve the organization session recordings activation metric by 50%, from 32% to 48% (see [this insight, internal only](https://app.posthog.com/insights/YdcM8sBK), from Step 2 to Step 3)
 
 ### Desired state
 - New users are immediately vetted for technical ability (to install the snippet) and, if they are not technical, they invite someone who is

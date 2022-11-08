@@ -14,6 +14,8 @@ This has two parts:
 1. A single table which lets you flip between persons, events and recordings (need a better name, currently called Drill Down view OR Universal Search)
 2. Pivot tables for viewing aggregate level statistics.
 
+Loom workflow of how they tie together: https://www.loom.com/share/4658a6fd575c49c982a6b2741daec8d0
+
 In order to Nail Data tables, we should also **create a V2 of the Insights API** which we will later refactor the other insights to use too.
 
 The new V2 Insights API has several core advantages:

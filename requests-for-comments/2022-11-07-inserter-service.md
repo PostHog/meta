@@ -1,6 +1,6 @@
 # Inserter Service Requirements
 
-We’ve used the `kafka` table engine on ClickHouse for some time now. It was the perfect table engine to support our ingestion pipeline at the time. We had very few resources and needed a way to safely get events from our `[events.py](http://events.py)` ingestion service into ClickHouse with very little fuss.
+We’ve used the `kafka` table engine on ClickHouse for some time now. It was the perfect table engine to support our ingestion pipeline at the time. We had very few resources and needed a way to safely get events from our `[event.py](https://github.com/PostHog/posthog/blob/master/posthog/api/event.py)` ingestion service into ClickHouse with very little fuss.
 
 It’s time now for us to move on from our friend the `kafka` table engine and move this functionality outside of ClickHouse.
 

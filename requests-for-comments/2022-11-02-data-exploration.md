@@ -1,40 +1,34 @@
 # Request for comments: Data Exploration - Marius Andra
 
-\_Whenever people ask me to be the life of the party, I go into a long rant about the importance of getting your data structures right.
-
-It's the single most impactful advice you can give junior developers, and it's what we're going to do here.\_
+This is a proposal to change the way we query for data in PostHog, and how we display the results.
 
 ## Why?
 
 With PostHog, users own their data. Yet when exploring it, they're limited to the tools we've built. Sometimes they want more:
 
--   You can't explore insight person modals further (e.g. add a filter, break down by cohorts, etc).
--   The events table supports event properties as columns, but that's it. What about person properties? What about aggregations? Tables below insights contain different data in insight vs table mode. Sorting is not supported.
--   You can't have non-event insights. E.g. show a count of users with property X.
+-   Insight person modals limit you to looking at a list of people. You can't drill them further (e.g. add a filter, break down by cohorts, etc).
+-   The live events table supports event properties as columns, but that's it. What about person properties? What about aggregations? Sorting is not supported.
+-   You can't have insights with non-event data sources (_persons_, event names?), even though some chart types could support them (e.g. pie chart of all persons in the system broken down by country)
 -   Persons tables are very basic. No column customisation. No math or formulas.
--   There are charts in insights that can't be added to dashboards (e.g. retention line chart).
--   Various pages (events, persons, etc) support filters, but those can't be saved.
--   There are parameters you can't directly filter for or list (such as `distinct_id`, `timestamp`)
+-   There are charts in insights that can't be added to dashboards (e.g. retention line chart, funnel correlation results).
+-   The listing pages (events, persons, etc) support filters, but those can't be saved.
+-   There are parameters you can't directly filter for or list (such as `distinct_id`, `timestamp`).
 -   Our `FilterType` has been append-only for 2+ years and is long overdue for a serious cleanup.
--   Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`). It's impossible to type the outputs without blindly guessing.
+-   Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`). They're all typed by this same object. It's impossible to type the outputs without blindly guessing.
 
-We have an opportunity to build a unified "data exploration" view, which would solve all of the above, and open the floodgates to allowing any type of analysis.
+We have an opportunity to build a unified "data exploration" view, which would solve all or most of the above, and open the floodgates to allowing any type of analysis.
 
 The proposed changes below will and also unblock:
 
--   let us embed anything on any dashboard (e.g. funnel correlation results, retention line graph, list of live events)
--   let us link to any piece of data from anywhere (e.g. persons modal, full screen, with extra filters on the list)
--   use typescript and a few helpers to strictly validate all query requests and responses
--   build a fluid interface that can morph between different views or chart types (it's nodes all the way down)
--   unblock visualisation apps (e.g. the scatterplot plugin, world map v2.0)
--   let us embed data from sources other than clickhouse onto dashboards
--   using any other query engine as our backend
+-   Embed anything on any dashboard (e.g. list of live events or cohort persons)
+-   Embed anything anywhere else (insights, event lists, etc, all with an easy API)
+-   Every query and table can have a unique URL.
+-   Build a fluid interface that can morph between different views or chart types
+-   Unblock visualisation apps (e.g. the scatterplot plugin, world map v2.0)
+-   Let us embed data from sources other than clickhouse onto dashboards
+-   Using any other query engine as our backend
 
-## Part 1. Analysis of the backend
-
-This is a proposal to change the way we query the PostHog API.
-
-### Current state
+## Analysis of the backend
 
 We capture a stream of events with all sorts of properties:
 
@@ -55,7 +49,7 @@ event = {
 }
 ```
 
-We store this stream of events in a table, and let users analyse it with bespoke tools like "trends", "retention", "persons" or "live events".
+We store this stream of events in a table in ClickHouse, and let users analyse it with bespoke tools like "trends", "retention", "persons" or "live events".
 
 For example, you can:
 
@@ -170,11 +164,11 @@ export interface FilterType {
 
 This `FilterType` has been "append-only" since 2020, and has passed the point of maintainability.
 
-I have a proposal for a refactor, but first some examples.
+First some examples, then a proposal for a new approach.
 
 ### Filter examples
 
-Here's a filter that returns a trends insight showing the aggregate count of events of type `$pageview` for the last 14 days:
+Here's a filter that returns a "trends" insight showing the aggregate count of events of type `$pageview` for the last 14 days:
 
 ```json
 {
@@ -197,7 +191,7 @@ Here's a filter that returns a trends insight showing the aggregate count of eve
 }
 ```
 
-Here's a funnel `$pageview -> $pageview with filters -> action "definitely not an action"`. The second event has a few filters applied.
+Here's a funnel `event $pageview -> event $pageview with filters -> action "definitely not an action"`. The second event has a few filters applied.
 
 ```json
 {
@@ -256,7 +250,7 @@ Here's a funnel `$pageview -> $pageview with filters -> action "definitely not a
 }
 ```
 
-If I want to open "step 2 dropoff", the filter just gets these extra fields, and gets sent to a different API endpoint (`/insights/funnel` vs `/person/funnel`):
+That's a funnel. If I open its "step 2 dropoff", the filter gets two extra fields, and the API endpoint is different (`/insights/funnel` vs `/person/funnel`):
 
 ```json
 {
@@ -300,7 +294,7 @@ Here's a path with a global filter:
 }
 ```
 
-Moving away from insights, here's a query under cohorts for "match persons who match any criteria: completed an event multiple times. $autocapture exactly 5 times in the last 30 days"
+Moving away from insights, here's a query under cohorts for "match persons who match criteria: completed `$autocapture` exactly 5 times in the last 30 days"
 
 ```json
 {
@@ -328,17 +322,21 @@ Moving away from insights, here's a query under cohorts for "match persons who m
 }
 ```
 
-### Proposal: nestable typed query objects
+## Proposal: PostHog Query AST
 
 Instead of a bespoke and scary monolithic filter object, I propose to split this up into **nestable typed query objects**.
 
-The end result should pass as an [AST - an Abstract Syntax Tree](https://ts-ast-viewer.com/#code/GYVwdgxgLglg9mABBAFjCBrApkgFASkQG8AoRZBAZzgBssA6GuAc1wHIUsanEB3OAE40AJm3wkAvkA). This means we could convert it **to and from** any other notation. Think `HogQL` --> `AST` (this RFC ) --> `Clickhouse SQL` or `BigQuery SQL` output.
+The end result should pass as an AST - an Abstract Syntax Tree ([here's an example TypeScript AST](https://ts-ast-viewer.com/#code/GYVwdgxgLglg9mABBAFjCBrApkgFASkQG8AoRZBAZzgBssA6GuAc1wHIUsanEB3OAE40AJm3wkAvkA)).
 
-For now, I wouldn't focus on `HogQL` input nor `BigQuery` output. These can be implemented in the future.
+An AST is an abstraction, and with some effort and clever tree parsing, we can convert it **to and from** any other query language. Think `HogQL` --> `AST` (this RFC) --> `Clickhouse SQL` or `BigQuery SQL`.
 
-This RFC is only scoped to the `AST` --> `ClickHouse SQL` transformation.
+This RFC is only scoped to the `AST` --> `ClickHouse SQL` transformation and does not worry about `HogQL` input nor `BigQuery` output. Those are for the future, if at all.
 
-How would this AST look like?
+### Examples
+
+_Note: These examples are illustrative, and possibly not coherent at a query level. The final shapes will be determined when actual work starts._
+
+#### Events example
 
 Let's start with the simplest query that returns all events:
 
@@ -353,6 +351,8 @@ interface Node {
     type: string
 }
 ```
+
+#### Events with filters
 
 Adding a few filters
 
@@ -375,20 +375,11 @@ interface EventsNode extends Node {
 }
 ```
 
-This query can be used as input wherever an `EventsNode` is expected. If it's at the root of a query, the frontend will
-receive an `EventsResponse`,
+This query can be used as input wherever an `EventsNode` is expected.
 
-```ts
-interface EventsResponse {
-    type: 'events'
-    query: EventsNode
-    response: { count: number; results: EventsResult[] }
-}
-```
+#### Funnel example
 
-and will likely render the "events list" scene.
-
-If the result comes back with `type: "funnel"`, we'll instead render an insight with the funnel:
+Sample insight with 2 steps, both of type `EventsNode`.
 
 ```json
 {
@@ -414,6 +405,10 @@ interface FunnelNode extends Node {
     steps: EventsNode[]
 }
 ```
+
+It's exactly the same type, no confusion.
+
+#### Funnel dropoff persons
 
 If we want people who dropped off at a step, broken down further, it'd be something like:
 
@@ -464,6 +459,8 @@ interface FunnelDropoffNode extends Node {
 
 I'm not sure how many levels of abstractions this requires. It'll depend on how this maps to actual SQL.
 
+#### Funnel correlation
+
 You could get correlation analysis for a funnel in a similar way:
 
 ```json
@@ -500,7 +497,73 @@ interface CorrelationNode extends Node {
 }
 ```
 
-### Tree parsing
+### Types of Nodes
+
+There are two types of AST nodes: 1) Data nodes, 2) Visualization nodes.
+
+Here's a visualization node `barTimeGraph`, which has a data node of type `events` as its source.
+
+```json
+{
+    "type": "barTimeGraph",
+    "options": {
+        "legend": false,
+        "xAxisLabel": "klingons",
+        "xAxisUnit": "kg"
+    },
+    "source": {
+        "type": "events",
+        "filter": { "date_from": "-7d" },
+        "breakdown": "event.properties.$browser",
+        "interval": "day"
+    }
+}
+```
+
+Here's the same data powering an events table
+
+```json
+{
+    "type": "eventsTable",
+    "options": {
+        "columns": [
+            "timestamp",
+            "event",
+            "person",
+            "properties.$browser",
+            "person.properties.$initial_browser",
+            "formula:(properties.$screen_width * properties.$screen_height)"
+        ]
+    },
+    "source": {
+        "type": "events",
+        "filter": { "date_from": "-7d" },
+        "breakdown": "event.properties.$browser",
+        "interval": "day"
+    }
+}
+```
+
+The frontend can use this knowledge to persist any screen configuration anywhere.
+
+### API endpoint
+
+Proposed endpoint: `https://app.posthog.com/api/projects/:team_id/query`
+
+The request will be a valid JSON **data node** from any of the queries above. Requesting a visualization node will result in an error.
+
+The response for a query of type `events` will be something like this:
+
+```ts
+interface EventsResponse {
+    type: 'events'
+    query: EventsNode
+    count: number
+    results: EventsResult[]
+}
+```
+
+### Performance
 
 The funnel query above can be summarised as `persons.from --> funnel_dropoff.from --> funnels.steps[] -> events`
 
@@ -518,69 +581,85 @@ from (
 group by foobar
 ```
 
-In reality, we'd prefer a more performant query like this:
+In reality, that's the answer sometimes. Most times we'd like to "unwrap" this and run a more performant query instead:
 
 ```sql
 select sum(...) from events where time filter group by foobar
 ```
 
-There are many ways to keep this performant. The easiest is to peek inside the inputs.
+There are many ways to keep this performant. For example an optimization pass on the AST that merges nodes into faster composed nodes. `funnels.steps[] -> events` becomes `funnels.steps_from_events[]`.
 
-**Note:** this is not real code! The following will need to be implemented in Python. I'm using TS now for illustration.
+Yet such an optimisation step is overkill at this stage. The easiest solution is to just peek inside the inputs when parsing them.
 
-Instead of
+That basically means, instead of
 
 ```ts
+function parseFunnelDropoff(node: FunnelDropoffNode, ctx: QueryContext) {
+    const sql = ctx.wrap(opts.from)
+    return `query something (${sql}) step ${ctx.wrap(step)} power to the people`
+}
+function parseFunnel(node: FunnelDropoffNode, ctx: QueryContext) {
+    const sql = ctx.wrap(opts.steps.map((step) => `(${ctx.wrap(opts.step)})`))
+    return `make funnel from (${sql}) get stuff`
+}
+```
+
+you write
+
+```ts
+function parseFunnelDropoff(node: FunnelDropoffNode, ctx: QueryContext) {
+    const sql = ctx.wrap(opts.from.steps.map((step) => `(${ctx.wrap(opts.step)})`))
+    return `query something (${sql}) step ${ctx.wrap(step)} do other stuff`
+}
+```
+
+### Tree parsing
+
+I don't know what's the right shape for the parser. I don't know if this should be a bunch of functions, or classes. I do however know we need to pass around a global `ctx` object
+
+```ts
+// either this
 class FunnelDropoffNode extends Node {
     toSQL({ wrap, ctx, opts }) {
         // opts.from is FunnelNode
         return `query something (${wrap(opts.from, ctx)}) step ${wrap(step, ctx)} do other stuff`
     }
 }
-class FunnelNode extends Node {
-    toSQL({ wrap, ctx, opts }) {
-        return `make funnel from (${opts.steps.map((step) => `(${wrap(opts.step, ctx)})`)}) get stuff`
-    }
+
+// or this
+function parseFunnelDropoff(node: FunnelDropoffNode, ctx: QueryContext) {
+    const sql = ctx.wrap(opts.from)
+    return `query something (${sql}) step ${ctx.wrap(step)} power to the people`
 }
 ```
 
-we can have
-
-Instead of
+This `ctx` could be used to carry global filters to the end, e.g. from `funnel` to the `events` themselves.
 
 ```ts
-// inlines params it knows how to handle
-class FunnelDropoffNode extends Node {
-    toSQL({ wrap, ctx, opts }) {
-        // opts.from is FunnelNode
-        return `query something (make funnel WITH SHORTCUT!!! from (${opts.from.steps.map(
-            (step) => `(${wrap(opts.step, ctx)})`
-        )}) get stuff) step ${wrap(step, ctx)} do other stuff`
-    }
-}
-// still there if someone asks for the full funnel
-// these two would probably share code
-class FunnelNode extends Node {
-    toSQL({ wrap, ctx, opts }) {
-        return `make funnel from (${opts.steps.map((step) => `(${wrap(opts.step, ctx)})`)}) get stuff`
-    }
+function parseFunnel(node: FunnelDropoffNode, ctx: QueryContext) {
+    ctx.filters = [...ctx.filters, ...node.globalFilters]
+    const sql = ctx.wrap(opts.steps.map((step) => `(${ctx.wrap(opts.step)})`))
+    return `make funnel from (${sql}) get stuff`
 }
 ```
 
-As long as somewhere in the chain we have something that normalises to either `persons` or `events`, we're golden.
+This section requires a deeper dive, possibly during implementation.
 
-### Considerations
+### Multiple levels
 
--   The exact shape of this new API is not fixed. The above is a draft.
--   **Versioning:** We will possibly need an `apiVersion` field in each AST node.
--   **Query performance:** Not each node in the request (e.g. `{ type: 'people', from: { type: 'events', ... } }`) will map to a SQL subquery in the response ([discussion](https://github.com/PostHog/meta/pull/66#discussion_r1013178284)).
-    While we can be verbose in describing the query, we'll need a different approach on the backend, where merging queries together in bespoke ways often yields a lot higher performance. This could be solved perhaps with
+As long as somewhere in the chain we have something that normalises to either `persons` or `events`, we're golden. These should be the common targets, that can act as input to a lot of queries and visualizations. Each level in this chain will require a subquery.
 
-### Next steps for backend
+### Pagination
 
-The plan is to slowly transform the existing queries into the new approach.
+TODO
 
-Here's a rough list of steps we can take on the backend. These will bring no visible changes on the frontend, though they will require some refactoring.
+### Versioning
+
+TODO. We will possibly need an `apiVersion` field in each AST node.
+
+## Next steps for the backend
+
+This is a gradual rollout. There will be no big rewrite. The steps below will also bring no visible changes on the frontend.
 
 1. Refactor the huge `FilterType` into `InsightTrendsFilter`, `InsightFunnelsFilter`, etc. It's still the same backend, just with cleaner queries (e.g. remove all `funnel*` fields for the trends filter).
 2. Create flat query nodes like `insightTrendsQuery`, `insightPathsQuery`, and document their structure.
@@ -588,43 +667,55 @@ Here's a rough list of steps we can take on the backend. These will bring no vis
 4. Create a new query node type `"events"`, with support for various filters. Use this to power the "live events" page.
 5. Replace the bespoke steps in `insightTrendsQuery`, `insightFunnelQuery`, etc with nodes of type `events`.
 
-The next steps after these will be determined when we work on this. However these are some steps:
+The next steps after these will be determined when we work on this. However, these are some options:
 
-1. Create a new node type `persons`, and connect it to the existing persons/cohorts/etc filters.
-2. Create a new node type `persons from events`, something like: `{ type: 'persons', from: { query: { type: 'insightTrends', ... } } }`, where you get a list of persons for any events query
+1. Create a new node type `persons`, and connect it to the existing persons/cohorts/etc tables.
+2. Create a new node type `persons from events`, something like: `{ type: 'persons', from: { query: { type: 'insightTrends', ... } } }`, where you get a list of persons for any events query.
 3. Refactor the person modals to use this new query.
 
-## Part 2. Analysis of the frontend
+## The Frontend
 
-## Frontend
+### Phase 1 - keeping up with the refactors
 
-### Iteration 1
+The changes above will require a lot of frontend refactors. To keep this manageable, we will not introduce (almost?) any new frontend functionality in the first phase. We will refactor the frontend to support the new queries as they are implemented.
 
-The "data exploration" view will basically be one big query editor. The first steps will look similar to the existing [MVP](https://github.com/PostHog/posthog/pull/11981) and expose a big table.
+Some new things that could be included:
 
--   Two select boxes and a large table below.
--   You can select "events", apply "matching filters" and see a list of rows
--   You can switch "events" to "persons" and get a different list.
--   Switching to "recordings" might open a different looking interface (recordings might come later)
+-   You can now put all different tables and parts of insights (e.g. correlation analysis) onto a dashboard
+-   Same with event tables and the like
 
-The goal is to replace the existing events and persons tables, including the persons table in insight modals.
+### Phase 2 - new live events table
 
-These person modals will now have an "Expand" button that will open them in the "data explorer" view.
+Combining work from the [Lemon Data Grid](https://github.com/PostHog/posthog/pull/11817), build and release a new events table. Add configurable person properties.
 
-All insights should otherwise look the same, yet be powered by the new query engine.
+### Phase 3 - live events aggregrations
 
-### Iteration 2.
+Finally a big new feature: add support for aggregating values in the events view.
 
-Start bringing in new features:
+### Phase 4 - non-event visualizations
 
--   Add grouping, breakdowns, formulas and person properties to the "events" and "persons" pages.
--   Make it possible to also see trends and funnels in the same interface. The filters should transform smoothly,
-    e.g. the full "events" filter moves into the "step 1" box of the "funnels" filter when you click "start funnel from here".
--   This will require a lot of ideation and a big design sprint.
+Make visualizations like `pieChart` accept different mappable inputs, so it could be used to render any type of data.
 
-## Part 3. Future directions.
+### Phase 5 - escape the persons modal
 
-All of the above is already a lot of work. Here are some ways to take it even further:
+Add an "explore further" button to break out of the persons modal. This would effectively load a new data table (think persons list), but with certain filters applied.
+
+### Phase 6 - start converging things
+
+-   Implement universal search. [MVP](https://github.com/PostHog/posthog/pull/11981)
+-   Introduce a big search bar that lets you swoop between different views. (maybe two selects at first?)
+-   Easily switch between events, persons, filters, etc.
+-   We could store a lot of stuff in the URL now, including frontend filters: `app.posthog.com/query#q={big-json-object}`
+
+### Phase 7 - implement more things
+
+- Add grouping, breakdowns, formulas and person properties to the "events" and "persons" pages.
+- Make a nifty query editor that knows what to suggest. Perhaps use this to build the edit interface?
+- ???
+
+## Future directions.
+
+Here even more ways to take this further.
 
 ### "Query Apps"
 
@@ -658,7 +749,9 @@ We could build various apps that modify the query, like you'd modify an AST.
 
 A hypothetical "action inliner" app could convert the `{ type: 'action' }` node into a corresponding `{ type: 'events', filters: {} }` node.
 
-### Visualization apps
+### "Visualization apps"
+
+Custom JS apps that get data and show it in many new formats. World map 2.0.
 
 ### HogQL
 
@@ -691,4 +784,4 @@ could be equivalent to this:
 SELECT * FROM funnel WITH STEPS (SELECT * FROM events) as events1, (SELECT * FROM events WHERE event='$pageview' AND properties.$browser = 'Chrome') as events2 BREAKDOWN BY events1.properties.$browser
 ```
 
-If it's better, I don't know.
+If it's better, I don't know. Probably just more error prone.

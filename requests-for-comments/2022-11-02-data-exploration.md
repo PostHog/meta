@@ -6,27 +6,27 @@ This is a proposal to change the way we query for data in PostHog, and how we di
 
 With PostHog, users own their data. Yet when exploring it, they're limited to the tools we've built. Sometimes they want more:
 
--   Insight person modals limit you to looking at a list of people. You can't drill them further (e.g. add a filter, break down by cohorts, etc).
--   The live events table supports event properties as columns, but that's it. What about person properties? What about aggregations? Sorting is not supported.
--   You can't have insights with non-event data sources (_persons_, event names?), even though some chart types could support them (e.g. pie chart of all persons in the system broken down by country)
--   Persons tables are very basic. No column customisation. No math or formulas.
--   There are charts in insights that can't be added to dashboards (e.g. retention line chart, funnel correlation results).
--   The listing pages (events, persons, etc) support filters, but those can't be saved.
--   There are parameters you can't directly filter for or list (such as `distinct_id`, `timestamp`).
--   Our `FilterType` has been append-only for 2+ years and is long overdue for a serious cleanup.
--   Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`). They're all typed by this same object. It's impossible to type the outputs without blindly guessing.
+- Insight person modals limit you to looking at a list of people. You can't drill them further (e.g. add a filter, break down by cohorts, etc).
+- The live events table supports event properties as columns, but that's it. What about person properties? What about aggregations? Sorting is not supported.
+- You can't have insights with non-event data sources (_persons_, event names?), even though some chart types could support them (e.g. pie chart of all persons in the system broken down by country)
+- Persons tables are very basic. No column customisation. No math or formulas.
+- There are charts in insights that can't be added to dashboards (e.g. retention line chart, funnel correlation results).
+- The listing pages (events, persons, etc) support filters, but those can't be saved.
+- There are parameters you can't directly filter for or list (such as `distinct_id`, `timestamp`).
+- Our `FilterType` has been append-only for 2+ years and is long overdue for a serious cleanup.
+- Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`). They're all typed by this same object. It's impossible to type the outputs without blindly guessing.
 
 We have an opportunity to build a unified "data exploration" view, which would solve all or most of the above, and open the floodgates to allowing any type of analysis.
 
 The proposed changes below will and also unblock:
 
--   Embed anything on any dashboard (e.g. list of live events or cohort persons)
--   Embed anything anywhere else (insights, event lists, etc, all with an easy API)
--   Every query and table can have a unique URL.
--   Build a fluid interface that can morph between different views or chart types
--   Unblock visualisation apps (e.g. the scatterplot plugin, world map v2.0)
--   Let us embed data from sources other than clickhouse onto dashboards
--   Using any other query engine as our backend
+- Embed anything on any dashboard (e.g. list of live events or cohort persons)
+- Embed anything anywhere else (insights, event lists, etc, all with an easy API)
+- Every query and table can have a unique URL.
+- Build a fluid interface that can morph between different views or chart types
+- Unblock visualisation apps (e.g. the scatterplot plugin, world map v2.0)
+- Let us embed data from sources other than clickhouse onto dashboards
+- Using any other query engine as our backend
 
 ## Analysis of the backend
 
@@ -53,24 +53,24 @@ We store this stream of events in a table in ClickHouse, and let users analyse i
 
 For example, you can:
 
--   Through "live events"
-    -   List all latest events and show their properties
-    -   Filter this list by any event, person, or group property
-    -   Filter this list by event name, person_id, distinct_id, group ids
-    -   Select custom properties to fetch
--   Through an "insight"
-    -   Aggregate these event lists into time buckets (number of events per day)
-    -   Support this data with aggregate math (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`)
-    -   Combine multiple columns with formulas
-    -   Breakdown by properties (`$browser`)
-    -   Manipulate these events further with custom queries to generate bespoke graphs (`funnel`, `retention`, `paths`)
--   Through the insight persons modal
-    -   Remove the aggregation (e.g. remove the count by day, and focus on the events of one day)
-    -   Get the actual persons behind the list.
-    -   On a funnel, get the success/dropoff for each step.
--   Through persons/cohorts
-    -   Show people who have done various events any number of times
-    -   Show people whose properties match certain values
+- Through "live events"
+  - List all latest events and show their properties
+  - Filter this list by any event, person, or group property
+  - Filter this list by event name, person_id, distinct_id, group ids
+  - Select custom properties to fetch
+- Through an "insight"
+  - Aggregate these event lists into time buckets (number of events per day)
+  - Support this data with aggregate math (`count(distinct distinct_id)`, `count(*)`, `avg(count(unique property))`)
+  - Combine multiple columns with formulas
+  - Breakdown by properties (`$browser`)
+  - Manipulate these events further with custom queries to generate bespoke graphs (`funnel`, `retention`, `paths`)
+- Through the insight persons modal
+  - Remove the aggregation (e.g. remove the count by day, and focus on the events of one day)
+  - Get the actual persons behind the list.
+  - On a funnel, get the success/dropoff for each step.
+- Through persons/cohorts
+  - Show people who have done various events any number of times
+  - Show people whose properties match certain values
 
 All these tools operate by passing to various API endpoints a HUGE object of type `FilterType`:
 
@@ -681,8 +681,8 @@ The changes above will require a lot of frontend refactors. To keep this managea
 
 Some new things that could be included:
 
--   You can now put all different tables and parts of insights (e.g. correlation analysis) onto a dashboard
--   Same with event tables and the like
+- You can now put all different tables and parts of insights (e.g. correlation analysis) onto a dashboard
+- Same with event tables and the like
 
 ### Phase 2 - new live events table
 
@@ -702,10 +702,10 @@ Add an "explore further" button to break out of the persons modal. This would ef
 
 ### Phase 6 - start converging things
 
--   Implement universal search. [MVP](https://github.com/PostHog/posthog/pull/11981)
--   Introduce a big search bar that lets you swoop between different views. (maybe two selects at first?)
--   Easily switch between events, persons, filters, etc.
--   We could store a lot of stuff in the URL now, including frontend filters: `app.posthog.com/query#q={big-json-object}`
+- Implement universal search. [MVP](https://github.com/PostHog/posthog/pull/11981)
+- Introduce a big search bar that lets you swoop between different views. (maybe two selects at first?)
+- Easily switch between events, persons, filters, etc.
+- We could store a lot of stuff in the URL now, including frontend filters: `app.posthog.com/query#q={big-json-object}`
 
 ### Phase 7 - implement more things
 
@@ -713,7 +713,7 @@ Add an "explore further" button to break out of the persons modal. This would ef
 - Make a nifty query editor that knows what to suggest. Perhaps use this to build the edit interface?
 - ???
 
-## Future directions.
+## Future directions
 
 Here even more ways to take this further.
 

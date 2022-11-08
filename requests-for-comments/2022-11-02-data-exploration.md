@@ -11,7 +11,7 @@ Proposed solution: **Nail Data Tables for exploration**.
 
 This has two parts:
 
-1. A single table which lets you flip between persons, events and recordings (nicknamed Universal Search)
+1. A single table which lets you flip between persons, events and recordings (need a better name, currently called Drill Down view OR Universal Search)
 2. Pivot tables for viewing aggregate level statistics.
 
 In order to Nail Data tables, we should also **create a V2 of the Insights API** which we will later refactor the other insights to use too.

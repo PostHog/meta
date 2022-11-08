@@ -1,34 +1,116 @@
-# Request for comments: Data Exploration - Marius Andra
+# Request for comments: Data exploration: Nail Data Tables + V2 of the Insights API - Marius Andra
 
-This is a proposal to change the way we query for data in PostHog, and how we display the results.
+## Summary
 
-## Why?
+Problem 1 (The user's problem): PostHog is good for the creator (you know what you what insight you want to create) and consumer (viewing already made insights). But less so for the explorer (where the questions are higher level and more uncertain). For these questions you need to be able to "drill down" into the specific data and roll-up into more aggregated views.
 
-With PostHog, users own their data. Yet when exploring it, they're limited to the tools we've built. Sometimes they want more:
+Problem 2 (The engineering problem): Our API for querying insights has became very complex. It's slowing down our ability to iterate. Instead of extending our existing API we should be a more powerful V2 Insights API.
+    - Why extend our API now rather than refactor later on? Many of the important feature requests will make the API even more complex. We should therefore refactor the API now before implementing the requested feature requests.
 
-- Insight person modals limit you to looking at a list of people. You can't drill them further (e.g. add a filter, break down by cohorts, etc).
-- The live events table supports event properties as columns, but that's it. What about person properties? What about aggregations? Sorting is not supported.
-- You can't have insights with non-event data sources (_persons_, event names?), even though some chart types could support them (e.g. pie chart of all persons in the system broken down by country)
-- Persons tables are very basic. No column customisation. No math or formulas.
-- There are charts in insights that can't be added to dashboards (e.g. retention line chart, funnel correlation results).
-- The listing pages (events, persons, etc) support filters, but those can't be saved.
-- There are parameters you can't directly filter for or list (such as `distinct_id`, `timestamp`).
-- Our `FilterType` has been append-only for 2+ years and is long overdue for a serious cleanup.
-- Multiple endpoints accept various types of filters with various capabilities (`/insights/funnel/correlations` vs `/insights/trend/` vs `/events` vs `/persons/trends`). They're all typed by this same object. It's impossible to type the outputs without blindly guessing.
+Proposed solution: **Nail Data Tables for exploration**.
 
-We have an opportunity to build a unified "data exploration" view, which would solve all or most of the above, and open the floodgates to allowing any type of analysis.
+This has two parts:
 
-The proposed changes below will and also unblock:
+1. A single table which lets you flip between persons, events and recordings (nicknamed Universal Search)
+2. Pivot tables for viewing aggregate level statistics.
 
-- Embed anything on any dashboard (e.g. list of live events or cohort persons)
-- Embed anything anywhere else (insights, event lists, etc, all with an easy API)
-- Every query and table can have a unique URL.
-- Build a fluid interface that can morph between different views or chart types
-- Unblock visualisation apps (e.g. the scatterplot plugin, world map v2.0)
-- Let us embed data from sources other than clickhouse onto dashboards
-- Using any other query engine as our backend
+In order to Nail Data tables, we should also **create a V2 of the Insights API** which we will later refactor the other insights to use too.
 
-## Analysis of the backend
+The new V2 Insights API has several core advantages:
+
+1. Can return data of different modalities
+2. Common filter interface across insight types
+3. Enables sorting
+4. Breakdown of specific events
+
+## What is Data Exploration?
+
+*Feel free to skim read this part*
+
+PostHog is a broad product solving a number of different Jobs to be done (JBTD) for a variety of users. Each job-to-be-done requires a different set of tools and has a different user behavior.
+
+Example job-to-be-done (non-exhaustive list):
+
+- Monitoring KPIs - how are the specific KPIs (product/team/company) doing? Are there any big changes, is everything going roughly in the right direction?
+- Insights into a new feature you've built - I've created a new feature and I want to keep track of success metrics, view live events of people, and view session recordings of how people use it (Combines feature flags, trends, funnels and session recordings)
+- Watching for errors and debugging - something went wrong (error gets trigger, visual regression, drop in conversion), getting told it went wrong, debugging it, shipping a solution and making sure that fixes it
+- Conversion optimization - the growth team is monitoring how particular KPIs are doing, trying to come up with experiments, shipping features to try and improve these
+- Answering product strategy questions - which customers should we focus on, what are our most used/valued features. e.g. should we increase the pricing from X to Y? Which customers should we focus on?
+
+You can broadly group the job-to-be-done of Product Analytics in PostHog as:
+
+- Creating: you know the view of the data that you are wanting to see **beforehand** and then you create the view. E.g. creating a dashboard to Monitor KPIs, or creating the funnel for your onboarding flow
+- Consuming: you or someone else has made something in Posthog that you refer back to. E.g. Checking the dashboard you made to Monitor KPIs
+- Exploring: you're answering a broader open-ended question. E.g. If you're monitoring your KPIs and you see something not right - you then want to dive into understanding why
+
+Sometimes these different modes will be in the same session.
+
+For this quarter we've decided to focus on the "Exploring" set of jobs-to-be-done as we believe we are currently under-serving users there. (For brevity I'm not going to go further into detail on this and the reasons why but I can if useful)
+
+There are a number of exciting directions that we could go with Data Exploration. For example:
+
+1. Making it easy to "drill down" = going from visualizations to the raw data.
+   1. **Conversion dropping example**: you see there's a drop in sign up conversion this month. You click on dropped off users and starting manually browsing a few of their properties. You see lots of signups from Reddit and form a hypothesis that this this drop in conversion is caused by lower quality traffic.
+2. Making it easy to "Roll up" = summarize the data
+   1. **Continuing with the previous analogy:** You then create a table view to compare the sources of traffic for this month compared to last month by referral source. To do this you group the new sign ups by referral source and add a custom formula to calculate the conversion rate.
+3. (Out of scope of this RFC) Making it easy to "Pivot between raw data and visualizations".
+   1. **Continuing with the previous analogy** For example, given the table of data you then create a stacked bar chart showing the conversions by source for each month and see a decline in higher quality sources.
+4. (Out of scope of this RFC) Making it easy to chain together different questions and answers + store working notes. Such as the "report" concept
+
+## Let's Nail Data Tables
+
+Summary for Nailing Data Tables:
+
+- Problem we are solving:
+  - High-level: answering more open-ended exploratory questions
+  - Specific problem: being able to view and compare multiple aggregate statistics
+- Proposed solution has two parts:
+  - Creating a powerful table of specific events/persons/session recordings table (aka universal search)
+  - Pivot tables
+- Primary persona: Engineers and Technical PMs at 10-100 person post-PMF startups
+- Secondary persona: Growth team analyzing conversion
+
+Why should we enable users to do this:
+
+1. (Luke's hypothesis based on personal experience) Currently we don't serve complex data exploration workflows that are often used by the power users of Posthog
+2. Nailing data tables will solve many commonly requested smaller features:
+   1. Table with multiple columns/metrics (aka ‘multiple breakdowns’): [https://github.com/PostHog/posthog/issues/11913](https://github.com/PostHog/posthog/issues/11913), [https://github.com/PostHog/posthog/issues/8454](https://github.com/PostHog/posthog/issues/8454), [https://github.com/PostHog/posthog/issues/938](https://github.com/PostHog/posthog/issues/938)
+   2. Allow showing person/group properties as columns under live events: [https://github.com/PostHog/posthog/issues/11861](https://github.com/PostHog/posthog/issues/11861)
+   3. Default sort order for tables (on dashboards): [https://github.com/PostHog/posthog/issues/10562](https://github.com/PostHog/posthog/issues/10562)
+   4. Sort multiple columns in table: [https://github.com/PostHog/posthog/issues/12167](https://github.com/PostHog/posthog/issues/12167)
+   5. Aggregation based on persons properties
+   - Joe from MentionMe: It would be great to have non-event insights - example: Percentage of all users who have property X, How many groups have property Y, Currently (unless I’m mistaken), it requires an event to do this? There’s no way to get these arbitrary (but fairly simple) counts from PostHog data?
+   - Count of items in a filtered list: [https://github.com/PostHog/posthog/issues/10410](https://github.com/PostHog/posthog/issues/10410)
+3. *Bonus but important given the context of this RFC* By creating the API needed for complex data tables we'll also unlock a more general API for insights
+
+## Drill down view - Raw events/persons/recordings table
+
+Marius has done a good job getting started with this: https://github.com/PostHog/posthog/pull/11981
+
+This would replace the modal when you click on a part of a visualization or a cell in a Pivot Table. It would show you the raw events/persons/recordings. And importantly you can view the specific filters and edit them as you'd like
+
+![Universal search picture](https://user-images.githubusercontent.com/53387/192393780-179c3e7f-541c-4c71-aca5-a3e5164e0e57.gif)
+
+## Pivot table example
+
+Pivot table requirements:
+
+1. Multiple sort by columns i.e. sort by org name then by email address
+2. 2D view of data (not just event on the left, time on the top axis)
+3. Group bys (same thing as breakdowns) (on both axis)
+4. Value aggregation
+5. Column containing custom formula
+6. Click on aggregate value to view the raw data
+
+Here's what the pivot table might look like:
+
+![Balsamiq pivot table](./2022-11-02-data-exploration/balsamiq-pivot-table.png)
+
+For extra context here is what the [Google Sheets Pivot Table](./2022-11-02-data-exploration/google-sheet-pivot-table.png) looks like and the Excel Pivot Table ![Excel Pivot Table](./2022-11-02-data-exploration/excel-pivot-table.png).
+
+Loom workflow of how they tie together: https://www.loom.com/share/4658a6fd575c49c982a6b2741daec8d0
+
+## Problems with the current insights API details
 
 We capture a stream of events with all sorts of properties:
 
@@ -324,6 +406,28 @@ Moving away from insights, here's a query under cohorts for "match persons who m
 
 ## Proposal: PostHog Query AST
 
+TODO: *Create a spec of what the API should look like*
+TODO: *Likely don't have the operation as a key and instead as a value*
+
+```json
+{
+    "type": "funnel",
+    "steps": [
+        {
+            "type": "events"
+        },
+        {
+            "type": "events",
+            "filters": {
+                "event": "$pageview",
+                "properties": [{ "key": "$browser", "equals": "Chrome" }]
+            }
+        }
+    ],
+    "breakdown": ["event[0].$browser"]
+}
+```
+
 Instead of a bespoke and scary monolithic filter object, I propose to split this up into **nestable typed query objects**.
 
 The end result should pass as an AST - an Abstract Syntax Tree ([here's an example TypeScript AST](https://ts-ast-viewer.com/#code/GYVwdgxgLglg9mABBAFjCBrApkgFASkQG8AoRZBAZzgBssA6GuAc1wHIUsanEB3OAE40AJm3wkAvkA)).
@@ -334,7 +438,7 @@ This RFC is only scoped to the `AST` --> `ClickHouse SQL` transformation and doe
 
 ### Examples
 
-_Note: These examples are illustrative, and possibly not coherent at a query level. The final shapes will be determined when actual work starts._
+*Note: These examples are illustrative, and possibly not coherent at a query level. The final shapes will be determined when actual work starts.*
 
 #### Events example
 
@@ -497,56 +601,9 @@ interface CorrelationNode extends Node {
 }
 ```
 
-### Types of Nodes
-
-There are two types of AST nodes: 1) Data nodes, 2) Visualization nodes.
-
-Here's a visualization node `barTimeGraph`, which has a data node of type `events` as its source.
-
-```json
-{
-    "type": "barTimeGraph",
-    "options": {
-        "legend": false,
-        "xAxisLabel": "klingons",
-        "xAxisUnit": "kg"
-    },
-    "source": {
-        "type": "events",
-        "filter": { "date_from": "-7d" },
-        "breakdown": "event.properties.$browser",
-        "interval": "day"
-    }
-}
-```
-
-Here's the same data powering an events table
-
-```json
-{
-    "type": "eventsTable",
-    "options": {
-        "columns": [
-            "timestamp",
-            "event",
-            "person",
-            "properties.$browser",
-            "person.properties.$initial_browser",
-            "formula:(properties.$screen_width * properties.$screen_height)"
-        ]
-    },
-    "source": {
-        "type": "events",
-        "filter": { "date_from": "-7d" },
-        "breakdown": "event.properties.$browser",
-        "interval": "day"
-    }
-}
-```
-
-The frontend can use this knowledge to persist any screen configuration anywhere.
-
 ### API endpoint
+
+*Luke todo: need to investigate this further - I think the return object should either be events/persons/sessions?*
 
 Proposed endpoint: `https://app.posthog.com/api/projects/:team_id/query`
 
@@ -659,6 +716,8 @@ TODO. We will possibly need an `apiVersion` field in each AST node.
 
 ## Next steps for the backend
 
+Focus first on getting it working for Data Tables
+
 This is a gradual rollout. There will be no big rewrite. The steps below will also bring no visible changes on the frontend.
 
 1. Refactor the huge `FilterType` into `InsightTrendsFilter`, `InsightFunnelsFilter`, etc. It's still the same backend, just with cleaner queries (e.g. remove all `funnel*` fields for the trends filter).
@@ -673,45 +732,56 @@ The next steps after these will be determined when we work on this. However, the
 2. Create a new node type `persons from events`, something like: `{ type: 'persons', from: { query: { type: 'insightTrends', ... } } }`, where you get a list of persons for any events query.
 3. Refactor the person modals to use this new query.
 
-## The Frontend
+## Appendix
 
-### Phase 1 - keeping up with the refactors
+### Frontend types of Nodes
 
-The changes above will require a lot of frontend refactors. To keep this manageable, we will not introduce (almost?) any new frontend functionality in the first phase. We will refactor the frontend to support the new queries as they are implemented.
+*Luke: this seems important but separate to the Insights API and the Data Exploration?*
 
-Some new things that could be included:
+There are two types of AST nodes: 1) Data nodes, 2) Visualization nodes.
 
-- You can now put all different tables and parts of insights (e.g. correlation analysis) onto a dashboard
-- Same with event tables and the like
+Here's a visualization node `barTimeGraph`, which has a data node of type `events` as its source.
 
-### Phase 2 - new live events table
+```json
+{
+    "type": "barTimeGraph",
+    "options": {
+        "legend": false,
+        "xAxisLabel": "klingons",
+        "xAxisUnit": "kg"
+    },
+    "source": {
+        "type": "events",
+        "filter": { "date_from": "-7d" },
+        "breakdown": "event.properties.$browser",
+        "interval": "day"
+    }
+}
+```
 
-Combining work from the [Lemon Data Grid](https://github.com/PostHog/posthog/pull/11817), build and release a new events table. Add configurable person properties.
+Here's the same data powering an events table
 
-### Phase 3 - live events aggregrations
-
-Finally a big new feature: add support for aggregating values in the events view.
-
-### Phase 4 - non-event visualizations
-
-Make visualizations like `pieChart` accept different mappable inputs, so it could be used to render any type of data.
-
-### Phase 5 - escape the persons modal
-
-Add an "explore further" button to break out of the persons modal. This would effectively load a new data table (think persons list), but with certain filters applied.
-
-### Phase 6 - start converging things
-
-- Implement universal search. [MVP](https://github.com/PostHog/posthog/pull/11981)
-- Introduce a big search bar that lets you swoop between different views. (maybe two selects at first?)
-- Easily switch between events, persons, filters, etc.
-- We could store a lot of stuff in the URL now, including frontend filters: `app.posthog.com/query#q={big-json-object}`
-
-### Phase 7 - implement more things
-
-- Add grouping, breakdowns, formulas and person properties to the "events" and "persons" pages.
-- Make a nifty query editor that knows what to suggest. Perhaps use this to build the edit interface?
-- ???
+```json
+{
+    "type": "eventsTable",
+    "options": {
+        "columns": [
+            "timestamp",
+            "event",
+            "person",
+            "properties.$browser",
+            "person.properties.$initial_browser",
+            "formula:(properties.$screen_width * properties.$screen_height)"
+        ]
+    },
+    "source": {
+        "type": "events",
+        "filter": { "date_from": "-7d" },
+        "breakdown": "event.properties.$browser",
+        "interval": "day"
+    }
+}
+```
 
 ## Future directions
 
@@ -785,3 +855,55 @@ SELECT * FROM funnel WITH STEPS (SELECT * FROM events) as events1, (SELECT * FRO
 ```
 
 If it's better, I don't know. Probably just more error prone.
+
+Other frontend directions that we could go
+
+### Phase 1 - keeping up with the refactors
+
+The changes above will require a lot of frontend refactors. To keep this manageable, we will not introduce (almost?) any new frontend functionality in the first phase. We will refactor the frontend to support the new queries as they are implemented.
+
+Some new things that could be included:
+
+- You can now put all different tables and parts of insights (e.g. correlation analysis) onto a dashboard
+- Same with event tables and the like
+
+### Phase 2 - new live events table
+
+Combining work from the [Lemon Data Grid](https://github.com/PostHog/posthog/pull/11817), build and release a new events table. Add configurable person properties.
+
+### Phase 3 - live events aggregrations
+
+Finally a big new feature: add support for aggregating values in the events view.
+
+Useful for debugging
+Less important about stuff being live
+More about raw view of events and then being able to pivot/aggregate the data
+
+### Phase 4 - non-event visualizations
+
+Make visualizations like `pieChart` accept different mappable inputs, so it could be used to render any type of data.
+
+new API would return persons or events
+
+### Phase 5 - escape the persons modal
+
+Add an "explore further" button to break out of the persons modal. This would effectively load a new data table (think persons list), but with certain filters applied.
+
+person view of the pivot table
+
+### Phase 6 - start converging things
+
+- Implement universal search. [MVP](https://github.com/PostHog/posthog/pull/11981)
+- Introduce a big search bar that lets you swoop between different views. (maybe two selects at first?)
+- Easily switch between events, persons, filters, etc.
+- We could store a lot of stuff in the URL now, including frontend filters: `app.posthog.com/query#q={big-json-object}`
+
+### Phase 7 - implement more things
+
+- Add grouping, breakdowns, formulas and person properties to the "events" and "persons" pages.
+- Make a nifty query editor that knows what to suggest. Perhaps use this to build the edit interface?
+- ???
+
+## Luke's todos
+
+**TODO**: Merge cohort filter and event filters

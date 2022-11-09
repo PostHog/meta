@@ -56,13 +56,13 @@ I'm going to split this into 'let's get good at this channel' vs. 'we should pos
 
 For _these_ channels, I think it should just be the responsibility of the person who created the content itself to post it in the above channels (or not - it's your call). That way, we're staying focused on the stuff we want to get good at.
 
-- PostHog LinkedIn
-- PostHog Twitter
-- User Slack
+- PostHog LinkedIn - _could outsource_
+- PostHog Twitter - _could outsource_
+- User Slack - _could outsource_
 - Hacker News
 - LinkedIn paid ads
 - Twitter paid ads
-- Dev.to (remember to add [canonicals](https://dev.to/michaelburrows/comment/125j0))
+- Dev.to (remember to add [canonicals](https://dev.to/michaelburrows/comment/125j0)) - _could outsource_
 
 ## Why these channels and what types of content?
 

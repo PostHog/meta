@@ -48,9 +48,9 @@ I'm going to split this into 'let's get good at this channel' vs. 'we should pos
 - SEO - _Andy_
 - HogMail - _Andy_
 - James' personal Twitter - _James H_
+- James' personal LinkedIn - _James H will outsource this_
 - TikTok - _James H_
 - YouTube - _Ian_
-- Charles' personal LinkedIn (maybe, or James') - _Charles_
 
 ### Let's post here out of habit/hygiene factor
 
@@ -69,9 +69,9 @@ For _these_ channels, I think it should just be the responsibility of the person
 - SEO: already a proven winner for us, we know what we're doing here
 - HogMail: we want to build a totally owned audience, usually sharing tutorials and brand-building content
 - James' personal Twitter: a lot of our target audience are there, usually sharing brand-building content
+- James' personal LinkedIn: a lot of our target audience, especially buyers, are there, will need to test which content lands best
 - Tik Tok: massive viral potential, we'll need to test what content lands best
 - YouTube: lots of devs on there, we'll probably test tutorial content first (ie. target folks who prefer video > reading docs)
-- Charles' personal LinkedIn (maybe, or James'): a lot of our target audience, especially buyers, are there, will need to test which content lands best
 
 ## How will we measure success?
 

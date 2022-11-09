@@ -28,6 +28,7 @@ These are the places we want to try distributing content in Q4:
 
 - TikTok - _James H, via Flowlync_
 - YouTube - _Ian_
+- Dev To - _TBD - see below_
 
 These are the places we have also considered and decided not to try for now:
 
@@ -51,7 +52,7 @@ I'm going to split this into 'let's get good at this channel' vs. 'we should pos
 - YouTube - _Ian_
 - Charles' personal LinkedIn (maybe, or James') - _Charles_
 
-### Let's keep posting here out of habit/hygiene factor
+### Let's post here out of habit/hygiene factor
 
 For _these_ channels, I think it should just be the responsibility of the person who created the content itself to post it in the above channels (or not - it's your call). That way, we're staying focused on the stuff we want to get good at.
 
@@ -61,6 +62,7 @@ For _these_ channels, I think it should just be the responsibility of the person
 - Hacker News
 - LinkedIn paid ads
 - Twitter paid ads
+- Dev.to (remember to add [canonicals](https://dev.to/michaelburrows/comment/125j0))
 
 ## Why these channels and what types of content?
 

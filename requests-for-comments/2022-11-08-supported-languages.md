@@ -57,6 +57,7 @@ The good:
 - Light on memory
 - Used by plenty of organizations big and small
 - We have plenty of Gophers here.
+- A simple binary as a deliverable.
 
 The bad:
 
@@ -74,6 +75,7 @@ The good:
 - Extremely performant and light on memory
 - Used by plenty of organizations big and small
 - We have a few Crustaceans here!
+- A simple binary as a deliverable.
 
 The bad:
 
@@ -123,6 +125,7 @@ The good:
 The bad:
 
 - Dynamically typed
+- Runs in a VM
 
 ### Scala / Java
 
@@ -143,9 +146,19 @@ The bad:
 - Slow boot times
 - JVM tuning is no fun
 
-## Discussion point
+## Discussion
 
-So with this overview laid out let's talk about
+So with this overview laid out let's talk about our first scenario where we need to decide what language we should use:
+
+[RFC: Inserter Service Requirements](https://github.com/PostHog/meta/pull/68)
+
+The TL;DR requirements here are:
+
+- Consume from Kafka
+- Insert into ClickHouse
+- Deserialize some portion of payload (serialization TBD) to determine where to insert
+
+It's a simple service and could be written any anything really. It does give us an opportunity to branch off our well traveled path of Python and Typescript. In my opinion I think Golang or Rust would be a great fit here, as would the other languages listed. I'm a Gopher in particular so I would really like to see more written here.
 
 ## Success criteria
 

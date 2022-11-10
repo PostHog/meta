@@ -25,6 +25,11 @@ It’s time now for us to move on from our friend the `kafka` table engine and m
 - [ ] Routes rows to the correct ClickHouse instance based on `team_id`
 - [ ] Dynamically load the ClickHouse instance details (hostname, port, credentials) for `team_id`
 - [ ] We improve the guarantees of messages on the data bus for typing and serialization and deserialization efficiency (Protobuf and co)
+- [ ] Needs to be able to be paused via API to support Async Migrations
+- [ ] Extremely granular control over how we route messages depending on the error
+- [ ] Sentry is notified of errors with all of the context
+- [ ] Exponential backoff for `too many parts` errors as well as other categories of errors
+- [ ] Failsafe send messages to DLQ
 
 ## Non Goals
 

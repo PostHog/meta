@@ -70,7 +70,7 @@ For _these_ channels, I think it should just be the responsibility of the person
 - HogMail: we want to build a totally owned audience, usually sharing tutorials and brand-building content
 - James' personal Twitter: a lot of our target audience are there, usually sharing brand-building content
 - James' personal LinkedIn: a lot of our target audience, especially buyers, are there, will need to test which content lands best
-- Tik Tok: massive viral potential, we'll need to test what content lands best
+- TikTok: massive viral potential, we'll need to test what content lands best
 - YouTube: lots of devs on there, we'll probably test tutorial content first (ie. target folks who prefer video > reading docs)
 
 ## How will we measure success?

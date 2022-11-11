@@ -4,6 +4,8 @@
 
 We don't have a clear view on how to maximize the impact of our content through good distribution. We have tried (and are trying) various initiatives, but it's not particularly coordinated or structured, so it's hard to say what's definitely working well and what's not for the most part. 
 
+(To clarify - I'm considering anything published on posthog.com as 'content', irrespective of whether it is a blog post, tutorial, or anything else.)
+
 It's rational to go deep on a smaller selection of distribution channels and trying to do them really well, rather than blasting out content onto every platform imaginable in a shallow way. We've found this quality > quantity approach works well for us when it comes to writing the content itself. 
 
 Another problem is that it's not clear whose responsibility on the team content distribution is, so it ends up being a bit ad hoc. This is easy to solve though. 
@@ -47,6 +49,7 @@ I'm going to split this into 'let's get good at this channel' vs. 'we should pos
 
 - SEO - _Andy_
 - HogMail - _Andy_
+- PostHog LinkedIn - _Andy_
 - James' personal Twitter - _James H_
 - James' personal LinkedIn - _James H will outsource this_
 - TikTok - _James H_
@@ -54,14 +57,11 @@ I'm going to split this into 'let's get good at this channel' vs. 'we should pos
 
 ### Let's post here out of habit/hygiene factor
 
-For _these_ channels, I think it should just be the responsibility of the person who created the content itself to post it in the above channels (or not - it's your call). That way, we're staying focused on the stuff we want to get good at.
-
-- PostHog LinkedIn - _could outsource_
 - PostHog Twitter - _could outsource_
-- User Slack - _could outsource_
-- Hacker News
-- LinkedIn paid ads
-- Twitter paid ads
+- User Slack - _whoever wrote the content_
+- Hacker News - _only for Show HN announcements, we shouldn't post anything else here and just let/hope others do it_
+- LinkedIn paid ads - _Charles_
+- Twitter paid ads - _Andy_
 - Dev.to (remember to add [canonicals](https://dev.to/michaelburrows/comment/125j0)) - _could outsource_
 
 ## Why these channels and what types of content?

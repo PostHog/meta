@@ -50,14 +50,14 @@ I'm going to split this into 'let's get good at this channel' vs. 'we should pos
 - SEO - _Andy_
 - HogMail - _Andy_
 - PostHog LinkedIn - _Andy_
-- James' personal Twitter - _James H_
-- James' personal LinkedIn - _James H will outsource this_
-- TikTok - _James H_
+- James' personal Twitter - _James H will outsource this to SM Aqib_
+- James' personal LinkedIn - _James H will outsource this to SM Aqib_
+- TikTok - _James H will outsource this to Flowlync_
 - YouTube - _Ian_
 
 ### Let's post here out of habit/hygiene factor
 
-- PostHog Twitter - _could outsource_
+- PostHog Twitter - _Andy - we're just doing retweeting and sharing, not writing threads_
 - User Slack - _whoever wrote the content_
 - Hacker News - _only for Show HN announcements, we shouldn't post anything else here and just let/hope others do it_
 - LinkedIn paid ads - _Charles_

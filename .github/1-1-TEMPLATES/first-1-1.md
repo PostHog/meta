@@ -1,4 +1,4 @@
-_This template is for a one-off first 1-1 meeting between a manager and team member. For future 1-1s, you should use the [Weekly 1-1 meeting template](https://github.com/PostHog/meta/blob/main/.github/ISSUE_TEMPLATE/weekly-1-1.md)._
+_This template is for a one-off first 1-1 meeting between a manager and team member. For future 1-1s, you should use the [Weekly 1-1 meeting template](https://github.com/PostHog/meta/blob/main/.github/1-1-TEMPLATES/weekly-1-1.md)._
 
 ### [INSERT DATE]
 

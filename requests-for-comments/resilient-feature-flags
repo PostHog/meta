@@ -1,0 +1,52 @@
+# Request for comments: Resilient feature flags
+
+## Problem statement
+*Who are we building for, what are their needs (include example cases), why is this important?*
+
+We've recently realised a few limitations with feature flags when PostHog goes down. This isn't great for permanent feature flags as it causes things to break
+in unexpected ways & for clients to think really hard about defaults & write code defensively.
+
+Ideally, our client libraries and APIs should 'just work', even if there's no error handling on the user's side.
+
+So, how do we make this happen?
+
+## Context
+
+The way things currently work is: TODO
+
+Decide can run on any arbitrary anonymous ID.
+
+Caching decide responses doesn't make too much sense, since it's called usually only once per distinct ID per day. Every anonymous user has a new ID, and except
+for users coming back to the app again & again on the same day, we don't achieve much; while introducing new problems like cache invalidation.
+
+## Solution
+
+Introducing, decide v3.
+
+This is a good opportunity to fix other customer frustrations around this endpoint, and pave the way for breaking changes we've wanted to introduce for a while.
+
+In short:
+
+1. Decide v3 returns all flags, with a `true` or `false` based on whether they're enabled or not, vs. implicitly just not returning the false flags.
+2. Decide v3 does a best effort calculation of flags when PostHog DBs are down, and tells the client that it faced issues computing all flags.
+3. Decide v3 can return a JSON payload with the flag variant (sneaking this into the major version API update)
+
+On the SDK side:
+
+1. We stop obliterating all flags if decide returns a 500, and based on the parameter in (2), update only flags that were computed again, while keeping old values of other flags.
+2. We add timeouts to flushes & shutdowns
+
+
+To make this possible, we cache flag definitions (and not the decide responses) on our side, so these are available even if the DB is down.
+
+
+
+
+## Context
+*What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*
+
+## Design 
+*What are the key user experience and technical design decisions / trade-offs?*
+
+## Sprints
+*How do we break this into discrete and valuable chunks for the folks shipping it? How do we ensure it's high quality and fast?*

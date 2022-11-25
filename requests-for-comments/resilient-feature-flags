@@ -39,7 +39,9 @@ On the SDK side:
 
 To make this possible, we cache flag definitions (and not the decide responses) on our side, so these are available even if the DB is down.
 
+It makes sense to include (3) with (1) for decide because the shape of the response is changing anyways, and it's much easier to handle both at the same time in all client libraries, than doing these one by one.
 
+We don't have to build the rest of it out right now, but having this functionality here means when do build it, it will be extraordinarily faster to do.
 
 
 ## Context

@@ -3,7 +3,7 @@
 - Owner: Luke Harries
 - Deadline: Friday 2nd December 2022
 - Feedback I'm looking for: 
-  - What's the best way to build this?
+  - What's the best way to build this? (I'm looking to do this quick and scrappy)
   - Am I overlooking anything?
 - Who'll build it: Likely Luke for MVP (unless an engineer is very keen and has bandwidth)
 
@@ -41,7 +41,8 @@ Helping customers use and manage user interviews is likely a feature that should
    2. Make being invited not feel spammy (likely inviting by in-app rather than email)
    3. Can reliably book in users for interviews (customers click the link)
    4. (Future work) Make it self-serve for the engineers to organize their own interviews
-2. (Future work) Launch an MVP for user interviewing system to other companies
+2. Should be quick to build launch and test this
+3. (Future work) Launch an MVP for user interviewing system to other companies
 
 ## High-level solution
 
@@ -58,7 +59,7 @@ User recruitment
 - Potential options:
   - Use Em's customer.io popup
   - Develop a site app for the popup with the invitation message. Control the popup with feature flags
-    - *This is the solution that I'm leaning towards*
+    - *This is the solution that I'm leaning towards - seems quick and could also test with external users*
   - Custom feature:
     - Build an add-on feature to cohorts
     - 1st class user interview product in PostHog

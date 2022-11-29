@@ -42,11 +42,11 @@ Helping customers use and manage user interviews is likely a feature that should
 *How do we know if this is successful (i.e. metrics, customer feedback), what's out of scope, whats makes this ambitious?*
 
 1. Improve the system for user interviewing at PostHog:
-   1. Reduce the time and friction required for booking interviews
+   1. Reduce the time and friction required for booking interviews to less than 5 minutes setup time
    2. Make being invited not feel spammy (likely inviting by in-app rather than email)
-   3. Can reliably book in users for interviews (customers click the link)
+   3. Can reliably book in users for interviews (customers actually click the link)
    4. (Future work) Make it self-serve for the engineers to organize their own interviews
-2. Should be quick to build launch and test this
+2. Should be quick to build launch and test this (before the new years, less than 1 week of Luke's time to get this working)
 3. (Future work) Launch an MVP for user interviewing system to other companies
 
 ## High-level solution
@@ -77,9 +77,9 @@ User recruitment
       - Control the page that the popup shows on
       - Have the popup show up directly after an event
     - *This is the solution that I'm leaning towards - seems quick and could also test with external users*
-  - Custom feature:
-    - Build an add-on feature to cohorts
-    - 1st class user interview product in PostHog
+  - ~~Custom feature:~~
+    - ~~Build an add-on feature to cohorts~~
+    - ~~1st class user interview product in PostHog~~
 
 Interview booking
 
@@ -96,7 +96,25 @@ Follow up
   - One-click send shopify voucher and thank you
 
 ### Solutions Requirements
-- Can make more than one user interview recruitment
+- Can make more than one user interview recruitment popup
+- Users only see and dismiss the user interview popup once
+
+- Site app popup to control, controlled by a feature flag and logging events in PostHog
+- After booking in, redirect the user to a thank you page that sends a booked in event
+
+#### Site app - popup
+- Parameters:
+  - Title
+  - Body (ideally handles markdown or html)
+  - Calendly url (Plural, one for each feature flag)
+  - Feature flag id(s) (Plural, to handle multiple user interviews)
+- All popup related analytics are sent to PostHog (user interview popup shown, user interview popup dismissed)
+- Button to "book now"
+- Future:
+  - 'Remind me later' button in popup
+
+##### Calendly
+- Should redirect to app.posthog.com/#user-interview-{feature-flag-name} after booking in
 
 ## Quality bar
 *What quality are we aiming for? Is this a v0.1 that we are going to test with a small number of users, or is this a change to core functionality that needs to work perfectly?*
@@ -115,11 +133,6 @@ From the user side it should meet the quality bar of the general product.
 ## TODOs
 
 - [ ] Sketch of the interface for the product engineer
-  - Invitation text I can customise (what feature I look to get feedback on, what do I offer them (voucher)
-  - Calendly URL I can customise, that is either in the text or as a button "book now"
-  - 'Remind me later' button in popup
-  - Nice to have's:
-- [ ] Sketch of the popup for the user
 - [ ] Outline of tech details
   - [ ] 'Preview mode' where I can see how the popup would look like for the user (to see how long the text is, to test the link?
   - [ ] Events the popup sends - Analytics (How often was the popup shown/link clicked/dismissed)

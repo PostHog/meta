@@ -83,6 +83,8 @@ This allows us to separate types of performance data so we can graph speed of AP
 
 Using a [`PerformanceObserver`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver) we can register to be notified when performance entries are available and then send them back as events.
 
+This avoids having to patch fetch without ruling it out doing that in future.
+
 #### Reporting
 
 This gives us enough information to:

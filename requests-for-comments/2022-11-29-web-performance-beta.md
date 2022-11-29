@@ -1,5 +1,7 @@
 # Request for comments: Web Performance from ALPHA to BETA, Paul D'Ambra
 
+Desired decision date: December 10th 2022
+
 ## Problem statement
 *Who are we building for, what are their needs (include example cases), why is this important?*
 

@@ -5,6 +5,8 @@ Desired decision date: December 10th 2022
 ## Problem statement
 *Who are we building for, what are their needs (include example cases), why is this important?*
 
+Performance monitoring can be split into Synthetic monitoring (measurements carried out by automation, often on a timer) and "real user monitoring" (measurements gathered from production traffic). Because our SDK is already running in the browser we are in a position to add "real user monitoring" to our product.
+
 We're building for engineers who want to correlate performance with product events. Or who want to observe performance in their application in order to avoid adding another tool alongside PostHog to do that.
 
 They want to answer these questions:
@@ -16,7 +18,8 @@ They want to answer these questions:
 * are my assets or server responses compressed 
 * have the speed or size of my responses changed over time
 * what factors are affecting page speed of my application
-* how do these web performance measures correlate with my product analytics
+* how do these web performance measures correlate with my product analytics events
+* what was happening in the browser at a specific moment in a session recording
 
 ## Success criteria
 *How do we know if this is successful (i.e. metrics, customer feedback), what's out of scope, whats makes this ambitious?*

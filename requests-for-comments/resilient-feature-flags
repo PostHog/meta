@@ -62,6 +62,14 @@ It makes sense to include (3) with (1) for decide because the shape of the respo
 
 We don't have to build the rest of it out right now, but having this functionality here means when do build it, it will be extraordinarily faster to do.
 
+## Is it worth doing this?
+
+If PostHog never goes down, none of this gives us an advantage (except maybe speeding up `/decide` responses if we decide to put the cache in front).
+
+However, for the times we do go down, doing this ensures that our customers don't have a terrible experience & don't have their apps break. It's a trust-building
+activity that ensures customers stick around.
+
+It's an extremely big churn risk. If PostHog going down makes their app go down, we become an extra dependency for them being up.
 
 ## Context
 *What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*

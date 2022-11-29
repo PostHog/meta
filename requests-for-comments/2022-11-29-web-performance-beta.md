@@ -7,7 +7,7 @@ Desired decision date: December 10th 2022
 
 We're building for engineers who want to correlate performance with product events. Or who want to observe performance in their application in order to avoid adding another tool alongside PostHog to do that.
 
-They want to complete these tasks
+They want to answer these questions:
 
 * how quickly do my assets loads
 * how fast are my API responses

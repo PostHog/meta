@@ -4,7 +4,7 @@
 *Who are we building for, what are their needs (include example cases), why is this important?*
 
 We've recently realised a few limitations with feature flags when PostHog goes down. This isn't great for permanent feature flags as it causes things to break
-in unexpected ways & for clients to think really hard about defaults & write code defensively.
+in unexpected ways & forces clients to think really hard about defaults & write code defensively.
 
 Ideally, our client libraries and APIs should 'just work', even if there's no error handling on the user's side.
 
@@ -12,12 +12,31 @@ So, how do we make this happen?
 
 ## Context
 
-The way things currently work is: TODO
+The (simplified) way things currently work is: 
 
-Decide can run on any arbitrary anonymous ID.
+Whenever a user shows up on a page, we send a request to `/decide` with their randomly generated anonymous ID to parse feature flags. Usually these people don't have
+properties attached to them, so only flags that don't depend on user properties resolve to `true` (assuming they're within the rollout bound).
 
-Caching decide responses doesn't make too much sense, since it's called usually only once per distinct ID per day. Every anonymous user has a new ID, and except
-for users coming back to the app again & again on the same day, we don't achieve much; while introducing new problems like cache invalidation.
+Things change when we call `identify()` on a user, as this updates their ID, and fires another request to `/decide` to get new flags based on not only current
+user properties, but any past properties that were set for this user.
+
+We need the database to:
+(a) Validate project tokens and find relevant team
+(b) Get feature flag definitions for the given team
+(c) Evaluate above flags using the person's properties stored in the DB
+
+Note that `decide` can run on any arbitrary anonymous ID.
+
+Caching decide responses doesn't make too much sense, since it's called usually only once per distinct ID per session. Every anonymous user has a new ID, and except
+for users coming back to the app again & again on the same day, we don't achieve resiliency as we can't cache for users never seen before, nor can we assume that properties
+haven't changed; while introducing new problems like cache invalidation.
+
+### Possible failure modes
+
+1. The database is down/unreachable: `decide` evaluation fails and returns 500
+2. The servers are down/unreachable: requests from client libraries time out / error out.
+
+(2) seems hard to defend against without a distributed app distribution (and then a resolver to go to the 'correct' app), but (1) is possible.
 
 ## Solution
 
@@ -36,8 +55,8 @@ On the SDK side:
 1. We stop obliterating all flags if decide returns a 500, and based on the parameter in (2), update only flags that were computed again, while keeping old values of other flags.
 2. We add timeouts to flushes & shutdowns
 
-
-To make this possible, we cache flag definitions (and not the decide responses) on our side, so these are available even if the DB is down.
+To make this possible, we cache flag definitions (and not the decide responses) on our side, so these are available even if the DB is down. We need to do the
+same for determining the team given a project API key.
 
 It makes sense to include (3) with (1) for decide because the shape of the response is changing anyways, and it's much easier to handle both at the same time in all client libraries, than doing these one by one.
 

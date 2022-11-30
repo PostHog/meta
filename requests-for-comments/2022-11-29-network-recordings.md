@@ -1,18 +1,19 @@
-# Request for comments: Web Performance from ALPHA to BETA, Paul D'Ambra
+# Request for comments: Network recordings MVP - and Web Performance Alpha to Alpha V0.2, Paul D'Ambra
 
 Desired decision date: December 10th 2022
 
 ## Problem statement
 *Who are we building for, what are their needs (include example cases), why is this important?*
 
-For this increment we are building this for two reasons.
+This RFC is tackling two main problems:
 
-* For ourselves to support "nail slickness". We want to see where in PostHog is it slow and frustrating.
-* To be able to serve a customer need of seeing network logs in session recordings
+* Network recordings MVP: To be able to serve a customer need of seeing network logs in session recordings. This can also help with improving our own web performance
+  * This is the focus of Paul and Ben's work during their trip to Lisbon
+* Web Performance v0.2: For ourselves to support "nail slickness". We want to see where in PostHog is it slow and frustrating.
 
 Performance monitoring can be split into Synthetic monitoring (measurements carried out by automation, often on a timer) and "real user monitoring" (measurements gathered from production traffic). Because our SDK is already running in the browser we are in a position to add "real user monitoring" to our product.
 
-We're building for engineers who want to correlate performance with product events. Or who want to observe performance in their application in order to avoid adding another tool alongside PostHog to do that.
+Product engineers first want to focus on reducing frustration by speeding up the really slow stuff. Then they want to move onto making the product feel really slick. As part of our mission to help people build the best products, PostHog is well suited to help them improve their applications performance. This is particularly important for the leading product teams such as Superhuman/Linear etc.
 
 They want to answer these questions:
 
@@ -29,13 +30,16 @@ They want to answer these questions:
 ## Success criteria
 *How do we know if this is successful (i.e. metrics, customer feedback), what's out of scope, whats makes this ambitious?*
 
-We'll know this is successful when 5 target customers have adopted this tool, and given positive feedback.
-
-This is ambitious because we're adding a new product to our suite. Where people will have clear expectations of performance and features.
-
-We're not adding performance measurement on a timer, and we're not adding alerting on performance issues.
-
-We're not adding performance measurements to mobile or back-end SDKs
+* Network recordings MVP:
+  * We'll know this is successful when 5 target customers have adopted this tool, and given positive feedback.
+  * *TODO: what are the core things that we want users to be able to do with network recordings in Session recordings?*
+* Web Performance v0.2:
+  * *We shouldn't spend too much time on this goal*
+  * The tools we are building out to measure and reduce user frustration (from the point of view of the frontend) are in PostHog.
+    * These features should be generalizable enough that others can use them
+  * We're not adding performance measurement on a timer, and we're not adding alerting on performance issues.
+  * We're not adding performance measurements to mobile or back-end SDKs
+  * For speed, we're not focus on external user feedback for this yet, that can come in a second part of work
 
 ## Context
 *What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?*
@@ -69,15 +73,14 @@ various similar-ish tools
 ## Design 
 *What are the key user experience and technical design decisions / trade-offs?*
 
-Initial alpha focussed on smallest set of data to draw a performance chart for a single page view. It uses the browser's web performance API to capture whatever performance data is available at point of sending a page view event. And includes the entire dataset as JSON on the pageview event.
+### Network recordings MVP:
 
-This has several drawbacks
-
-1) the JSON blob is large and we can't query individual items within it
-2) not all of the interesting information is available at the point we send the pageview
-3) we can't (easily) see how much data we're receiving that is specifically performance data
-
-But, the advantage of leaning on the browser's API is gathering the data takes very little code. And lets us gather a wide set of useful information
+- Initial alpha focussed on smallest set of data to draw a performance chart for a single page view. It uses the browser's web performance API to capture whatever performance data is available at point of sending a page view event. And includes the entire dataset as JSON on the pageview event. This should be shown in the session recordings
+- This has several drawbacks
+  1) the JSON blob is large and we can't query individual items within it
+  2) not all of the interesting information is available at the point we send the pageview
+  3) we can't (easily) see how much data we're receiving that is specifically performance data
+- But, the advantage of leaning on the browser's API is gathering the data takes very little code. And lets us gather a wide set of useful information
 
 ![an example waterfall chart](/images/rfc-web-perf-waterfall-chart.png)
 
@@ -113,7 +116,7 @@ We can allow users to configure which types of data they gather. They might not 
 
 ##### Infra / Performance of performance
 
-Since this will send tens or hundreds of events per pageview we could receive a massive amount of traffic if sending each request individually. 
+Since this will send tens or hundreds of events per pageview we could receive a massive amount of traffic if sending each request individually.
 
 So, similarly to how we process session recordings, it makes sense to send info from the SDK in batches `{sessionId: string, pageViewId: string, entries: PerformanceEntry[]}` and then split them on ingestion. 
 
@@ -122,13 +125,14 @@ The individual performance entries are relatively small but will be numerous. St
 ## Sprints
 *How do we break this into discrete and valuable chunks for the folks shipping it? How do we ensure it's high quality and fast?*
 
-* add page view ID rotation to SDK
-* add new API endpoint to accept/validate batches of performance entries
-* update SDK to observe performance entries and batch them to new API
-* add new route through kafka to a ClickHouse table for performance entries
-* add new ingestion route that splits batches to the new kafka topic
-* update existing performance waterfall to use new data store
-* add network listing to session logs
+* Network recordings
+  * add page view ID rotation to SDK
+  * add new API endpoint to accept/validate batches of performance entries
+  * update SDK to observe performance entries and batch them to new API
+  * add new route through kafka to a ClickHouse table for performance entries
+  * add new ingestion route that splits batches to the new kafka topic
+  * update existing performance waterfall to use new data store
+  * add network listing to session logs
 
 ### Appendix
 

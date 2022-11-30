@@ -5,6 +5,11 @@ Desired decision date: December 10th 2022
 ## Problem statement
 *Who are we building for, what are their needs (include example cases), why is this important?*
 
+For this increment we are building this for two reasons.
+
+* For ourselves to support "nail slickness". We want to see where in PostHog is it slow and frustrating.
+* To be able to serve a customer need of seeing network logs in session recordings
+
 Performance monitoring can be split into Synthetic monitoring (measurements carried out by automation, often on a timer) and "real user monitoring" (measurements gathered from production traffic). Because our SDK is already running in the browser we are in a position to add "real user monitoring" to our product.
 
 We're building for engineers who want to correlate performance with product events. Or who want to observe performance in their application in order to avoid adding another tool alongside PostHog to do that.

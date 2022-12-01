@@ -1,8 +1,8 @@
 # The first "Workflow": Creating a new feature
 
-Owner: Luke Harries
-Decision type:
-Decision date:
+Owner: Eric (team experimentation)
+Decision to be made: Is this something we should build in Q1 as part of team experimentation?
+Decision date: 7th December 2022
 
 ## What's a workflow?
 

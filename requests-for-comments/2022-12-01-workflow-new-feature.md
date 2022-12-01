@@ -27,7 +27,7 @@ Two examples of potential workflows:
 1. Building a new feature - assisting with rollout and measuring success *More details below*
 2. Workbooks - making it easy to come up with questions, save related insights, clip particular bits of recordings and jot down thoughts
 
-## Workflow: Creating a new feature
+## Vision for "Creating a new feature" workflow
 
 Here's the vision of what this could be in 3 - 6 months:
 
@@ -44,3 +44,12 @@ Sarah pings her team to give it a go on a few different devices. When 5 internal
 From the dashboard, Sarah learns most of the users are only watching the first 30 seconds of the 5-minute videos. During the interviews, she asks them what they thought of the videos and while they enjoyed them they said they were too long and dry. Sarah organizes a new set of videos to be made and rolls out an update.
 
 3 months later Sarah gets a slack message from PostHog to view on the retention graph. They can see there's a significant correlation between retention between users that watched a video and users who retained. Success!
+
+## Feature description
+
+1. PostHog should be the starting point when you create a new feature. As the first step, you will create a feature flag. Potentially a VSCode integration can help with this.
+2. When the feature is ready for Beta testing, the engineer can enable the feature for a beta tester cohort or select a pre-defined rollout schedule. This way, he doesn’t have to decide who to release it to on a case-by-case basis.
+3. Users can subscribe to feature flags, so when changes have been made to a flag, e.g. a rollout, they will be notified. This way, everyone else in the team knows about the status of a feature release.
+4. When a feature is rolled out, PostHog automatically monitors relevant metrics and regressions. If those are above a certain threshold, the rollout is stopped and the relevant people are informed.
+5. On a flag itself, there is information on how many users are currently on one of the variants and when this information was last fetched. The idea here is that we distinguish whether a flag is rolled out according to the PostHog interface, but it is in fact not available in the code (anymore).
+6. Once a feature flag has been rolled out to the whole user base for x days/weeks, the relevant people are informed to archive the feature flag to prevent tech debt.

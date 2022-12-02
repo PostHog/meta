@@ -41,7 +41,7 @@ Sarah clicks "Done". PostHog automatically creates a feature flag to control the
 
 Sarah builds the feature between the feature flag and merges it to main branch.
 
-Sarah pings her team to give it a go on a few different devices. When 5 internal users have used the feature PostHog sends her a slack message to the playlist. She reviews it and the error logs - it's all working fine so she gives the thumbs up to escalate to beta users. There are no errors in beta and so it automatically deploys to prod - sending her a slack message to her team to keep them in the loop. PostHog automatically invites 2 users to a user interview after having used the video feature *Luke is working on an MVP for the user interviews feature - can be out of scope for the MVP*.
+Sarah pings her team to give it a go on a few different devices. When 5 internal users have used the feature PostHog sends her a slack message to the playlist. She reviews it and the error logs - it's all working fine so she gives the thumbs up to escalate to beta users. There are no errors in beta and so it automatically deploys to prod as a phased release - sending her a slack message to her team to keep them in the loop. PostHog automatically invites 2 users to a user interview after having used the video feature *Luke is working on an MVP for the user interviews feature - can be out of scope for the MVP*.
 
 From the dashboard, Sarah learns most of the users are only watching the first 30 seconds of the 5-minute videos. During the interviews, she asks them what they thought of the videos and while they enjoyed them they said they were too long and dry. Sarah organizes a new set of videos to be made and rolls out an update.
 

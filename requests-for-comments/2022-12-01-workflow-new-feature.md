@@ -24,10 +24,13 @@ So far we have given product engineers the individual tools to create trends, cr
 
 We have the opportunity to connect these flexible tools with opinionated best practices to focus on specific jobs-to-be-dones in PostHog. These could be called "Workflows".
 
-Two examples of potential workflows:
+Some examples of potential workflows:
 
-1. Building a new feature - assisting with rollout and measuring success *More details below*
+1. Creating and shipping a new feature - assisting with rollout and measuring success *More details below*
 2. Workbooks - making it easy to come up with questions, save related insights, clip particular bits of recordings and jot down thoughts
+3. Iterating on existing features - making sure the new feature is better than the previous iteration
+4. Conversion experiment - making sure that the funnel metrics improve (including quality of new customers)
+5. Fixing bugs - understanding what's broken and confirming that the fix works
 
 ## Vision for "Creating a new feature" workflow
 

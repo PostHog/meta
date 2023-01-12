@@ -6,7 +6,7 @@ _Who are we building for, what are their needs (include example cases), why is t
 Plan names are something seemingly minor that actually get used quite a lot, both internally and by our customers (oftentimes just inside their own heads when evaluating). However, our current plan names leave room for confusion:
 
 * The names don't indicate right at the get-go which plan you are probably interested in based on your company size/scale/needs. 
-* The names can include information about deployment but lack any real plan name (eg. PostHog Cloud as a paid tier but it's also a deployment)
+* The names can include information about deployment but lack any real plan name (eg. PostHog Cloud is a paid tier but it's also a deployment)
 * We use the term self-serve in the docs but no one really knows what this means
 
 ## Proposal

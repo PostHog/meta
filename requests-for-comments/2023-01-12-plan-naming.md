@@ -10,7 +10,7 @@ Plan names are something seemingly minor that actually get used quite a lot, bot
 * We use the term self-serve in the docs but no one really knows what this means
 
 ## Proposal
-The Cloud environment was new a couple years ago, so it made sense to call the plans on Cloud the "Cloud" plans. However, the Cloud environment is by far the default way to use PostHog now, and calling it Cloud is confusing (I can imagine thinking, "should I be here? or is there a different non-cloud thing I should use?").
+The Cloud environment was new a couple years ago, so it made sense to call the plans on Cloud the "Cloud" plans. However, the Cloud environment is by far the default way to use PostHog now, and calling the plans "Cloud" is confusing (I can imagine thinking, "should I be here? or is there a different non-cloud thing I should use?").
 
 So, I'd propose that our Cloud plans are the _default_ plans and are named:
 

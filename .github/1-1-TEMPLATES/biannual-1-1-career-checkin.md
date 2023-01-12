@@ -1,5 +1,5 @@
 
-_This template is a starting point for your quarterly career check ins, but feel free to edit as you feel is most helpful for your meetings!_
+_This template is a starting point for your bi-annual career check ins, but feel free to edit as you feel is most helpful for your meetings!_
 
 _You can also add any of these questions to any relevant performance reviews if you like - it makes sense to combine the performance review and this career check if they are scheduled very closely to each other, for example._
 

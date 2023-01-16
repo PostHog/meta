@@ -21,7 +21,7 @@ So, I'd propose that our Cloud plans are the _default_ plans and are named:
   - I think this speaks to our goal to have post-PMF companies who are wanting to grow quickly be on paid plans
 - **Enterprise**
 
-Since we are sunsetting the k8s deployment, I don't think we will be selling licenses for self-hosted versions any more, correct? If that is the case then the only other option is the self-hosted docker deployment. We could simply call this the **Open-source** plan.
+Since we are sunsetting the k8s deployment, the only other option is the self-hosted docker deployment. We could simply call this the **Open-source** plan.
 
 ## Success criteria
 _How do we know if this is successful (i.e. metrics, customer feedback), what's out of scope, whats makes this ambitious?_

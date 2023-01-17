@@ -16,7 +16,7 @@ Most recent issue for context + feedback: [https://mailchi.mp/posthog/hogmail-15
 
 ## Where we want to be
 
-- 2,500 subs by end of 2023 – a 150% increase on today
+- 3,000 subs by end of 2023 – a 200% increase on today
 - People sharing and recommending newsletter on social media
 - Be a newsletter that’s perceived as a desirable source of promotion for content creators
 

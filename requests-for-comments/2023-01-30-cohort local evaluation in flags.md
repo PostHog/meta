@@ -43,6 +43,7 @@ Rather, I'd propose we do (2), and only for `python` and `node` for now. The way
 3. In the SDKs, we implement AND-OR filtering on the property group type. This is relatively simple, because we're only dealing with person properties,
     and we already have the code in place for matching a single property.
 
+All of this is possible because we've constrained cohorts to be based on person properties only. When this constraint changes, we might have to revisit this, but for now, I don't see this constraint changing, so doing this is easy. Furthermore, even if it does change, all it means is that the _new_ behavioural cohorts would have issues, but the person property cohorts just work.
 
 
 ## Sprints

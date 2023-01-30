@@ -24,6 +24,14 @@ so it made a lot of sense to unlock the main use-cases (80/20 it), vs. solving f
 
 Open question: Is now the time to invest fully in (2)? Based on the very limited requests for this, I'd say no. Or, not for all libraries atleast.
 
+To put some numbers to it:
+
+6.9% of flags have dynamic cohorts.
+0.5% of flags have static cohorts (which can't be locally evaluated).
+
+
+Further, a small percentage of clients use local evaluation (estimate 10% based on logs). So, this affects at best approximately 1% of flags.
+
 ## Design 
 *What are the key user experience and technical design decisions / trade-offs?*
 

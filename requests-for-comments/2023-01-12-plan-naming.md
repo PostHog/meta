@@ -14,9 +14,9 @@ The Cloud environment was new a couple years ago, so it made sense to call the p
 
 So, I'd propose that our Cloud plans are the _default_ plans and are named:
 
-- **Starter**
-  - I prefer Starter over "Free" because "free" can get confused with the FOSS version
-  - I prefer Starter over "Hobby" because someone might be getting a new startup up and running, and they are very serious about it and working full time on it and are definitely not considering themselves a hobbyist, but this is still the correct plan for them
+- **Free**
+  - While "free" can get confused with the FOSS version, this distinction isn't quite as important as we deprioritize self-hosting, and it speaks directly to what people are looking for when they sign up
+  - I prefer Free over "Hobby" because someone might be getting a new startup up and running, and they are very serious about it and working full time on it and are definitely not considering themselves a hobbyist, but this is still the correct plan for them
 - **Scale**
   - I think this speaks to our goal to have post-PMF companies who are wanting to grow quickly be on paid plans
 - **Enterprise**

@@ -1,7 +1,7 @@
 
 _This template is a starting point for your bi-annual career check ins, but feel free to edit as you feel is most helpful for your meetings!_
 
-_You can also add any of these questions to any relevant performance reviews if you like - it makes sense to combine the performance review and this career check if they are scheduled very closely to each other, for example._
+_To get the most out of this session, you should suggest your team member goes round and collects feedback to help guide this conversation from their colleagues. Scheduling these right after a 360 feedback session at an offsite is a great time to do this._
 
 ### [INSERT DATE]
 
@@ -22,9 +22,11 @@ _You can also add any of these questions to any relevant performance reviews if 
 - Are there any goals or aspirations you've set for yourself in the next 1-2 years?
 - How can I support you as a manager in reaching those goals? How can PostHog support you in reaching those goals?
 
+Pro tip: keep the questions and these next steps separate - it's usually better to schedule a follow up conversation to cover next steps, rather than responding in the moment, as your followups will be more thoughtful. 
+
 **Next steps**
 
-This can be anything, but you should consider things like:
+This can be anything, but you can consider things like:
 
 - Finding opportunities to push them outside their comfort zone (in the right direction)
 - Sharing feedback and advice to help them improve on their weaknesses

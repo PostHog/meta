@@ -1,8 +1,10 @@
 # RFC: Getting our client libraries up to scratch
 
-## Summary:
+## Summary
 
 Eric raised a number of problems around the developer experience for our libraries (listed below). Additionally, Cameron and Simon have mentioned that often customers are requesting feature parity for the libraries that we have. As there’s a large number of languages and spikey amounts of work this is likely a task better suited to a few contractors. We will do a trial with enlisting contractors to first improve the developer experience and get to feature parity. And then setup a process for the contractors to maintain feature parity for the non-primary libraries.
+
+What's the decision: Should we try 2 months of working with contractors on improving the developer experience and getting to feature parity for the libraries. If this works, we will continue to work with the contractors. If not, we will re-evaluate.
 
 ## Problems
 
@@ -20,7 +22,7 @@ Custom problems:
 - Missing feature parity for a number of libraries:
     - [https://posthog.com/docs/integrate/libraries](https://posthog.com/docs/integrate/libraries)
 
-## Where we want to get to:
+## Where we want to get to
 
 - Test coverage, CI/CD, and quality docs across all the repos
 - PostHog core team implements the features for the “Primary” libraries (the ones we use ourselves): Javascript, Python and Node.js
@@ -29,7 +31,14 @@ Custom problems:
 - TBD who reviews the core dependencies? Should we instead go with individuals that have good knowledge of those libraries
 - Luke to get the system setup for working with the contractors via a shared slack and github project. Each team as they ship features work directly with the contractors for feature implementation. Luke responsible for making sure the ongoing core work and maintenance happens.
 
-## Open questions:
+## What does success look like?
+
+- Stable libraries that are kept up to date with the core features
+- Good developer experience for the libraries
+- Reliable contractors that don't require too much management or excessive PR reviewing
+- Not spending too much money
+
+## Open questions
 
 - Which team should be responsible for reviewing the PRs for core features?
 - Would we want a contractor implementing autocapture for mobile?
@@ -41,7 +50,7 @@ Custom problems:
 - Eric mentioned that the segment libraries have gone through some larger changes. Is there anything that we can learn from this?
 - Are there any libraries that we are missing that we want to add?
 
-## Rough plan:
+## Rough plan
 
 **Owned by Luke**
 

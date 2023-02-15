@@ -44,7 +44,7 @@ Custom problems:
 - Would we want a contractor implementing autocapture for mobile?
 - We seem to have posthog-js-lite and posthog-js, what’s the plan and timeline for these? Do we want contractor support? (This seems more core)
 - For test coverage, do we want to aim for a % test coverage? Are we also wanting cypress style tests?
-- What profile do we want? Ideally we’d have some overlap of people e.g. 1 person to do all the mobile libraries, and up to 2 people for the server libraries
+- What profile of contractor do we want? Ideally we’d have some overlap of people e.g. 1 person to do all the mobile libraries, and up to 2 people for the server libraries
     - I’d assume we’d want a senior engineer
 - How do we want to solve: “Cross compatibility nuances (kotlin -> java, swift -> objc)”? Do we want to build a swift library?
 - Eric mentioned that the segment libraries have gone through some larger changes. Is there anything that we can learn from this?

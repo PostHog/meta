@@ -11,11 +11,13 @@ Hi there, dear reader. I would love for you to scrutinize this RFC and the follo
 - Is this a good idea?
 - Is getting this done feasible?
 
-I’m specifically looking for feedback from teams that are directly impacted by this, namely:
+I’m specifically looking for feedback from teams that are directly impacted by this, namely and in alphabetical order:
 
-- Infrastructure
 - Billing
+- Feature Flags and Experiments
+- Infrastructure
 - Pipeline
+- Product Analytics
 
 # Problem Statement
 

@@ -35,7 +35,7 @@ We would like to run permanent per-product NPS surveys in the PostHog app, for t
 
 ## Release conditions
 
-- Everyone on the feature flags page (app & eu), I am using the following regex: `https://(app|eu)\.posthog\.com/feature_flags`
+- To everyone on the feature flags page (app & eu), I am using the following regex: `https://(app|eu)\.posthog\.com/feature_flags`
     - Note: Once we have behavioural surveys, we can update the targeting to only show to users who have created a flag / watched 10 recordings / created a survey / created an insight / created an experiment
 - Don’t display to users who have seen another survey in the last 60 days
 - Roll out to a small number of users, e.g. 10%, so that we can track changes over time, rather than asking every user right now. (If we would roll this out to 100%, there is a risk that no user will see another survey for a while, if we keep the ‘survey wait period’ controls

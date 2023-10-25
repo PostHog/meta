@@ -1,6 +1,6 @@
 Per-product NPS
 
-We would like to run per-product NPS surveys in the PostHog app, for the following paid-for products:
+We would like to run permanent per-product NPS surveys in the PostHog app, for the following paid-for products:
 - Product Analytics
 - Feature Flags
 - A/B Testing

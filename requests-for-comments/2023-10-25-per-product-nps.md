@@ -44,4 +44,4 @@ We would like to run permanent per-product NPS surveys in the PostHog app, for t
 
 - [Fix long-running surveys issue](https://github.com/PostHog/posthog/issues/17863)
 - [Fix product announcements ↔ surveys issue](https://posthog.slack.com/archives/C034XD440RK/p1698235239337499)
-- If we want to do the sticker: [Fix link/button in the last step of multi-question surveys](https://posthog.slack.com/archives/C034XD440RK/p1698167499567089)
+- If we want to give away a sticker: [Fix link/button in the last step of multi-question surveys](https://posthog.slack.com/archives/C034XD440RK/p1698167499567089)

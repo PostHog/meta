@@ -16,7 +16,7 @@ See the earlier [RFC Feature flag environments](https://github.com/PostHog/produ
 
 _What are the key user experience and technical design decisions / trade-offs?_
 
-### Option a) Add the ability to _copy or move_ a feature flag to another project.
+### Option a) Add the ability to copy a feature flag to another project.
 
 #### Pros
 
@@ -49,7 +49,7 @@ _What are the key user experience and technical design decisions / trade-offs?_
 -   Most complex to implement
 -   Introduces another layer of complexity where it might not be needed (e.g. dashboards).
 
-Based on Annika's RFC and some preliminary discussion, I recommend implementing **Option a) Add the ability to _copy_ or _move_ a feature flag to another project.** This is the quickest win which addresses the users' requirements from the [RFC user feedback](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#user-feedback).
+Based on Annika's RFC and some preliminary discussion, I recommend implementing **Option a) Add the ability to copy a feature flag to another project.** This is the quickest win which addresses the users' requirements from the [RFC user feedback](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#user-feedback).
 
 ## Implementation
 
@@ -61,9 +61,11 @@ Depending on whether the flag exists in the other project, we'll either `PATCH` 
 
 <img width="1068" alt="Screenshot 2023-10-31 at 09 53 08" src="https://github.com/PostHog/posthog/assets/22996112/432abf9a-b8cc-4d46-a6e6-a5e5ab586b7e">
 
+_Note that the original [RFC](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#user-feedback) also mentions the ability to `move` a flag to another project. I believe we don't need to implement this explicitely. To achieve this, users can simply copy the flag to another environment, and immediately delete the flag in the current environment._
+
 ### Nice to have
 
-It would be useful for users to have an overview of projects that use the current flag - otherwise, they would have to switch projects to check for this. We can add this overview to the vacant space below the "Insights that use this feature flag" list.
+It would be useful for users to have an overview of projects that use the current flag - otherwise, they would have to switch projects to check whether a flag exists in a particular environment. We can add an overview to the vacant space below the "Insights that use this feature flag" list.
 
 <img width="1166" alt="Screenshot 2023-10-31 at 09 53 21" src="https://github.com/PostHog/posthog/assets/22996112/86df3710-60c5-48e0-b1f7-7ab27b1fd80e">
 

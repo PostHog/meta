@@ -75,7 +75,7 @@ This campaign triggers when a user completes the `user signed up` event for the 
 This campaign triggers when a user enters the `Subscribers to Session Replays` segment, provided they also have a valid email address. 
 
 1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 3PM and 7PM in the users' time zone (UTC fallback)
+2. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
 3. Send Replay Onboarding email
 4. Add `replay_onboarding_complete: true` to user. 
 
@@ -85,19 +85,9 @@ This campaign triggers when a user enters the `Subscribers to Session Replays` s
 This campaign triggers when a user enters the `Subscribers to Feature Flags` segment, provided they also have a valid email address. 
 
 1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 9AM and 3PM in the users' time zone (UTC fallback)
+2. Wait 1 day, and until a weekday between 12PM and 3PM in the users' time zone (UTC fallback)
 3. Send Welcome to Flags email
 4. Add `flag_onboarding_complete: true` to user.
-
-### Feature flag onboarding flow
-**Campaign in Customer.io:** Feature flag onboarding
-
-This campaign triggers when a user enters the `Subscribers to Feature Flags` segment, provided they also have a valid email address. 
-
-1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 9AM and 3PM in the users' time zone (UTC fallback)
-3. Send Welcome to Flags email
-4. Add `flag_onboarding_complete: true` to user. 
 
 ### Survey onboarding flow
 **Campaign in Customer.io:** Surveys onboarding
@@ -105,7 +95,7 @@ This campaign triggers when a user enters the `Subscribers to Feature Flags` seg
 This campaign triggers when a user enters the `Subscribers to Surveys` segment, provided they also have a valid email address. 
 
 1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 9AM and 3PM in the users' time zone (UTC fallback)
+2. Wait 1 day, and until a weekday between 3PM and 5PM in the users' time zone (UTC fallback)
 3. Send Welcome to Surveys email
 4. Add `surveys_onboarding_complete: true` to user.
 

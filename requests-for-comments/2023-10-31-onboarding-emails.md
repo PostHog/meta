@@ -109,8 +109,6 @@ This campaign triggers when a user enters the `Subscribers to Surveys` segment, 
 3. Send Welcome to Surveys email
 4. Add `surveys_onboarding_complete: true` to user.
 
-##
-
 ## G2 Review Request Flow
 **Campaign in Customer.io:** G2 Review Requester
 

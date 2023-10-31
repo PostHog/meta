@@ -4,13 +4,13 @@
 
 _Who are we building for, what are their needs (include example cases), why is this important?_
 
-Users find it difficult to work with Feature Flags across environments. To use a flag in a different environments, they must copy it and all its configuration manually.
+Users find it difficult to work with Feature Flags across different projects. Currently, to use a flag in a different project, they must create it from scratch and manually copy the configuration.
 
 ## Context
 
 _What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?_
 
-See the earlier [RFC Feature flag environments](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#221115---rfc-feature-flag-environments) from @annikaschmid.
+See the earlier [RFC Feature flag environments](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#221115---rfc-feature-flag-environments) from @annikaschmid for more context.
 
 ## Design
 
@@ -53,7 +53,7 @@ Based on Annika's RFC and some preliminary discussion, I recommend implementing 
 
 ## Implementation
 
-In the Feature Flag view page, users will have the option to "Sync" the feature flag to another projects. To do so, they'll click the Sync button, after which a modal pops up. They can choose the project to sync the flag to via a dropdown.
+In the Feature Flag view page, users will have the option to "Sync" the feature flag to other projects. To do so, they'll click the Sync button, after which a modal pops up. They can choose the project to sync the flag to via a dropdown.
 
 If they select a project where the flag with the identical ID already exists, a warning will show telling them they are about to overwrite the other project's flag configuration.
 

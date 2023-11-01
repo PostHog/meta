@@ -53,13 +53,13 @@ Based on Annika's RFC and some preliminary discussion, I recommend implementing 
 
 ## Implementation
 
-In the Feature Flag view page, users will have the option to "Sync" the feature flag to other projects. To do so, they'll click the Sync button, after which a modal pops up. They can choose the project to sync the flag to via a dropdown.
+In the Feature Flag view page, users will have the option to copy the feature flag to other projects. To do so, they'll click the Copy button, after which a modal pops up. They can choose the project to copy the flag to via a dropdown.
 
 If they select a project where the flag with the identical ID already exists, a warning will show telling them they are about to overwrite the other project's flag configuration.
 
 Depending on whether the flag exists in the other project, we'll either `PATCH` that existing flag, or `POST` a new feature flag. Alternatively, we can can implement a `PUT` endpoint to handle both scenarios.
 
-<img width="1068" alt="Screenshot 2023-10-31 at 09 53 08" src="https://github.com/PostHog/posthog/assets/22996112/432abf9a-b8cc-4d46-a6e6-a5e5ab586b7e">
+<img width="1036" alt="image" src="https://github.com/PostHog/meta/assets/22996112/9c3d9fd1-3947-442f-b567-edf560eabce5">
 
 _Note that the original [RFC](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#user-feedback) also mentions the ability to `move` a flag to another project. I believe we don't need to implement this explicitely. To achieve this, users can simply copy the flag to another environment, and immediately delete the flag in the current environment._
 
@@ -67,6 +67,6 @@ _Note that the original [RFC](https://github.com/PostHog/product-internal/blob/m
 
 It would be useful for users to have an overview of projects that use the current flag - otherwise, they would have to switch projects to check whether a flag exists in a particular environment. We can add an overview to the vacant space below the "Insights that use this feature flag" list.
 
-<img width="1166" alt="Screenshot 2023-10-31 at 09 53 21" src="https://github.com/PostHog/posthog/assets/22996112/86df3710-60c5-48e0-b1f7-7ab27b1fd80e">
+<img width="1156" alt="image" src="https://github.com/PostHog/meta/assets/22996112/f0102057-4b1a-4404-9405-dcd783c6ce11">
 
-Alternatively, we can add this overview to the new tab "Projects" within the flag view page. If we decide to do so, it would make sense to also move the Sync button there. Having a separate Projects tab might make sense if we want to add more "project flags" operations in the future. This way, the projects list and the related operations would be nicely grouped under a tab.
+Alternatively, we can add this overview to the new tab "Projects" within the flag view page. If we decide to do so, it would make sense to also move the Copy button there. Having a separate Projects tab might make sense if we want to add more "project flags" operations in the future. This way, the projects list and the related operations would be nicely grouped under a tab.

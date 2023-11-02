@@ -48,26 +48,26 @@ This campaign triggers when a user completes the `user signed up` event for the 
     6. If not `founder` `engineering` `product` `marketing` or `sales` then wait 24 hours
 4. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 5. Send AARRR intro article email
-6. Check if the user is in the `Subscribers to Session Replays` segment
+6. Wait 1 week.
+7. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
+8. Check if the user is in the `Subscribers to Session Replays` segment
     1. If `Yes`, do nothing. (See Session replay onboarding flow)
-    2. If `No`, wait 1 day.
-        1. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-        2. Assign to random cohort branch. 
-            1. 50% receive Session replay upsell email
-            2. 50% recieve Experiment: Personal Invite email
-7. Check if the user is in the `Subscribers to Feature Flags` segment
+    2. If `No`, assign to a random cohort branch.
+        1. 50% receive Session replay upsell email
+        2. 50% recieve Experiment: Personal Invite email
+9. Wait 1 week.
+10. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
+11. Check if the user is in the `Subscribers to Feature Flags` segment
     1. If `Yes`, do nothing. (See Feature flag onboarding flow)
-    2. If `No`, wait 1 day.
-        1. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-        2. Assign to random cohort branch. 
-            1. 50% receive Feature Flag Upsell email 1
-            2. 50% recieve Feature Flag Upsell email 2
-8. Check if the user is in the `Subscribers to Surveys` segment
+    2. If `No`, assign to random cohort branch. 
+        1. 50% receive Feature Flag Upsell email 1
+        2. 50% recieve Feature Flag Upsell email 2
+12. Wait 5 days. 
+13. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
+14. Check if the user is in the `Subscribers to Surveys` segment
     1. If `Yes`, do nothing. (See Survey onboarding flow)
-    2. If `No`, wait 1 day.
-        1. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-        2. Send Survey Upsell email
-9. Add `completed_onboarding_emails: true` to user. 
+    2. If `No`, send Survey Upsell email
+15. Add `completed_onboarding_emails: true` to user. 
 
 ### Session replay onboarding flow
 **Campaign in Customer.io:** Session replay onboarding
@@ -106,7 +106,7 @@ This campaign exists to invite reviews to our G2 profile. We have limited contro
 
 The campaign triggers when a user enters the `G2 Review Requests` segment, provided they also have a valid email address, and are not in the `Historic G2 Segment` (from before we moved to Customer.io), or the `Auto unsubscribe segment` (which unsubscribes users who have 2+ emails bounce).
 
-Users enter the `G2 Review Requests` segment when they trigger fulfill **any** of the following criteria:
+Users enter the `G2 Review Requests` segment if the're `role_at_organization` equals `engineering`, **and** if they fulfill **any** of the following criteria:
     - They have performed `insight analyzed` at least 4 times in the last 30 days
     - They have performed `recording analyzed` at least 5 times in the last 30 days
     - They have performed `feature flag created` at least once in the last 30 days
@@ -115,7 +115,7 @@ Users enter the `G2 Review Requests` segment when they trigger fulfill **any** o
 
 Once the campaign triggers:
 
-1. Wait 2 days
+1. Wait 3 days
 2. Send G2 review request email
 
 ## Onboarding for Self-hosted Users

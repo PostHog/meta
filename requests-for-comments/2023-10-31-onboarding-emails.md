@@ -48,21 +48,21 @@ This campaign triggers when a user completes the `user signed up` event for the 
     6. If not `founder` `engineering` `product` `marketing` or `sales` then wait 24 hours
 4. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 5. Send AARRR intro article email
-6. Wait 2 days.
+6. Wait 1 week.
 7. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 8. Check if the user is in the `Subscribers to Session Replays` segment
     1. If `Yes`, do nothing. (See Session replay onboarding flow)
     2. If `No`, assign to a random cohort branch.
         1. 50% receive Session replay upsell email
         2. 50% recieve Experiment: Personal Invite email
-9. Wait 2 days.
+9. Wait 1 week.
 10. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 11. Check if the user is in the `Subscribers to Feature Flags` segment
     1. If `Yes`, do nothing. (See Feature flag onboarding flow)
     2. If `No`, assign to random cohort branch. 
         1. 50% receive Feature Flag Upsell email 1
         2. 50% recieve Feature Flag Upsell email 2
-12. Wait 2 days. 
+12. Wait 5 days. 
 13. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 14. Check if the user is in the `Subscribers to Surveys` segment
     1. If `Yes`, do nothing. (See Survey onboarding flow)

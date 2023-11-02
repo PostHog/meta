@@ -106,7 +106,7 @@ This campaign exists to invite reviews to our G2 profile. We have limited contro
 
 The campaign triggers when a user enters the `G2 Review Requests` segment, provided they also have a valid email address, and are not in the `Historic G2 Segment` (from before we moved to Customer.io), or the `Auto unsubscribe segment` (which unsubscribes users who have 2+ emails bounce).
 
-Users enter the `G2 Review Requests` segment when they trigger fulfill **any** of the following criteria:
+Users enter the `G2 Review Requests` segment if the're `role_at_organization` equals `engineering`, **and** if they fulfill **any** of the following criteria:
     - They have performed `insight analyzed` at least 4 times in the last 30 days
     - They have performed `recording analyzed` at least 5 times in the last 30 days
     - They have performed `feature flag created` at least once in the last 30 days
@@ -115,7 +115,7 @@ Users enter the `G2 Review Requests` segment when they trigger fulfill **any** o
 
 Once the campaign triggers:
 
-1. Wait 2 days
+1. Wait 3 days
 2. Send G2 review request email
 
 ## Onboarding for Self-hosted Users

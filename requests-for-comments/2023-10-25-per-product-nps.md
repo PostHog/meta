@@ -36,6 +36,12 @@ We would like to run permanent per-product NPS surveys in the PostHog app, for t
 ## Release conditions
 
 - Visitors on any feature flags page (app & eu). I am using the following regex: `https://(app|eu)\.posthog\.com/feature_flags`
+- Visitors who have completed an action that stands for feature usage/activation (set up as a new property)
+      - Product analytics: Insight created = true
+      - Session replay: 5 recordings watched = true
+      - Feature Flags: Feature flag created = true
+      - Experiments: Experiment created = true
+      - Surveys: Survey created = true
 - Visitors who have signed up at least 30 days ago: `joined_at` before `date`
     - Note: Once we have behavioural surveys, we can update the targeting to only show to users who have created a flag / watched 10 recordings / created a survey / created an insight / created an experiment
 - Don’t display to users who have seen another survey in the last 60 days

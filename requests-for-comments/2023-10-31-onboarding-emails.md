@@ -22,28 +22,28 @@ This campaign triggers when a user completes the `user signed up` event for the 
 3. Check users' role in organization, using the `role_at_organization` property.
     1. If `founder` then wait 12 hours, and send Joe's Newsletter Invite email.
         1. Check if user clicked the subscription CTA.
-            1. If yes, add `newsletter_cta_clicked: true` to user.
-            2. If no, do nothing. 
+            1. If `Yes`, add `newsletter_cta_clicked: true` to user.
+            2. If `No`, do nothing. 
         2. Wait 12 hours
     2. If `engineering` then wait 12 hours, and send Andy's Newsletter Invite email. 
         1. Check if user clicked the subscription CTA.
-            1. If yes, add `newsletter_cta_clicked: true` to user.
-            2. If no, do nothing. 
+            1. If `Yes`, add `newsletter_cta_clicked: true` to user.
+            2. If n`No`o, do nothing. 
         2. Wait 12 hours
     3. If `product` then wait 12 hours. 
         1. Check if the user has performed `action created`
-            1. If yes, do nothing.
-            2. If no, send Advice for Product Teams email.
+            1. If `Yes`, do nothing.
+            2. If `No`, send Advice for Product Teams email.
         3. Wait 12 hours.
     4. If `marketing` then wait 12 hours. 
         1. Check if the user has performed `action created`
-            1. If yes, do nothing.
-            2. If no, send Advice for Marketing Teams email.
+            1. If `Yes`, do nothing.
+            2. If `No`, send Advice for Marketing Teams email.
         3. Wait 12 hours.
     5. If `sales` then wait 12 hours. 
         1. Check if the user has performed `action created`
-            1. If yes, do nothing.
-            2. If no, send Advice for Sales Teams email.
+            1. If `Yes`, do nothing.
+            2. If `No`, send Advice for Sales Teams email.
         3. Wait 12 hours.
     6. If not `founder` `engineering` `product` `marketing` or `sales` then wait 24 hours
 4. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
@@ -51,21 +51,23 @@ This campaign triggers when a user completes the `user signed up` event for the 
 6. Wait 1 week.
 7. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 8. Check if the user is in the `Subscribers to Session Replays` segment
-    1. If `Yes`, do nothing. (See Session replay onboarding flow)
-    2. If `No`, assign to a random cohort branch.
-        1. 50% receive Session replay upsell email
-        2. 50% recieve Experiment: Personal Invite email
-9. Wait 1 week.
+    1. If `Yes`, check if the user is in the `Subscribers to Feature Flags` segment
+        1. If `Yes`, if the user is in the `Subscribers to Surveys` segment
+            1. If `Yes`, send [New email about using templates]
+            2. If `No`, send Survey Upsell email.
+        2. If `No`, send Feature Flag Upsell email
+    2. If `No`, send Replay Upsell email. 
+9. Wait 1 week. 
 10. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 11. Check if the user is in the `Subscribers to Feature Flags` segment
-    1. If `Yes`, do nothing. (See Feature flag onboarding flow)
-    2. If `No`, assign to random cohort branch. 
-        1. 50% receive Feature Flag Upsell email 1
-        2. 50% recieve Feature Flag Upsell email 2
-12. Wait 5 days. 
+    1. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
+        1. If `Yes`, [send new email about hogQL]
+        2. If `No`, send Surveys Upsell email
+    2. If `No`, send Feature Flag Upsell email
+12. Wait 1 week. 
 13. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 14. Check if the user is in the `Subscribers to Surveys` segment
-    1. If `Yes`, do nothing. (See Survey onboarding flow)
+    1. If `Yes`, [send new email about notebooks]
     2. If `No`, send Survey Upsell email
 15. Add `completed_onboarding_emails: true` to user. 
 
@@ -74,30 +76,27 @@ This campaign triggers when a user completes the `user signed up` event for the 
 
 This campaign triggers when a user enters the `Subscribers to Session Replays` segment, provided they also have a valid email address. 
 
-1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
-3. Send Replay Onboarding email
-4. Add `replay_onboarding_complete: true` to user. 
+1. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
+2. Send Replay Onboarding email
+3. Add `replay_onboarding_complete: true` to user. 
 
 ### Feature flag onboarding flow
 **Campaign in Customer.io:** Feature flag onboarding
 
 This campaign triggers when a user enters the `Subscribers to Feature Flags` segment, provided they also have a valid email address. 
 
-1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 12PM and 3PM in the users' time zone (UTC fallback)
-3. Send Welcome to Flags email
-4. Add `flag_onboarding_complete: true` to user.
+1. Wait 1 day, and until a weekday between 12PM and 3PM in the users' time zone (UTC fallback)
+2. Send Welcome to Flags email
+3. Add `flag_onboarding_complete: true` to user.
 
 ### Survey onboarding flow
 **Campaign in Customer.io:** Surveys onboarding
 
 This campaign triggers when a user enters the `Subscribers to Surveys` segment, provided they also have a valid email address. 
 
-1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 3PM and 5PM in the users' time zone (UTC fallback)
-3. Send Welcome to Surveys email
-4. Add `surveys_onboarding_complete: true` to user.
+1. Wait 1 day, and until a weekday between 3PM and 5PM in the users' time zone (UTC fallback)
+2. Send Welcome to Surveys email
+3. Add `surveys_onboarding_complete: true` to user.
 
 ## G2 Review Request Flow
 **Campaign in Customer.io:** G2 Review Requester

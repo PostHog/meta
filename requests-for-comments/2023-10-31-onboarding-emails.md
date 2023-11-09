@@ -32,17 +32,17 @@ This campaign triggers when a user completes the `user signed up` event for the 
         2. Wait 12 hours
     3. If `product` then wait 12 hours. 
         1. Check if the user has performed `action created`
-            1. If `Yes`, do nothing.
+            1. If `Yes`, send NEW email promoting the user interview survey template
             2. If `No`, send Advice for Product Teams email.
         3. Wait 12 hours.
     4. If `marketing` then wait 12 hours. 
         1. Check if the user has performed `action created`
-            1. If `Yes`, do nothing.
+            1. If `Yes`, send NEW email promoting the dashboard templates. 
             2. If `No`, send Advice for Marketing Teams email.
         3. Wait 12 hours.
     5. If `sales` then wait 12 hours. 
         1. Check if the user has performed `action created`
-            1. If `Yes`, do nothing.
+            1. If `Yes`, send NEW email promoting the tutorials section.
             2. If `No`, send Advice for Sales Teams email.
         3. Wait 12 hours.
     6. If not `founder` `engineering` `product` `marketing` or `sales` then wait 24 hours

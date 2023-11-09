@@ -28,7 +28,7 @@ This campaign triggers when a user completes the `user signed up` event for the 
     2. If `engineering` then wait 12 hours, and send Andy's Newsletter Invite email. 
         1. Check if user clicked the subscription CTA.
             1. If `Yes`, add `newsletter_cta_clicked: true` to user.
-            2. If n`No`o, do nothing. 
+            2. If `No`, do nothing. 
         2. Wait 12 hours
     3. If `product` then wait 12 hours. 
         1. Check if the user has performed `action created`

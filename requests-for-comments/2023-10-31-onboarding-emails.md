@@ -61,7 +61,7 @@ This campaign triggers when a user completes the `user signed up` event for the 
 10. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 11. Check if the user is in the `Subscribers to Feature Flags` segment
     1. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
-        1. If `Yes`, [send new email about HogQL]
+        1. If `Yes`, [send new email about Toolbar]
         2. If `No`, send Surveys Upsell email
     2. If `No`, send Feature Flag Upsell email
 12. Wait 1 week. 

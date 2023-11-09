@@ -36,13 +36,7 @@ We would like to run permanent per-product NPS surveys in the PostHog app, for t
 ## Release conditions
 
 - Visitors on any feature flags page (app & eu). I am using the following regex: `https://(app|eu)\.posthog\.com/feature_flags`
-- Visitors who have completed an action that stands for feature usage/activation (set up as a new property)
-    - Product analytics: Insight created = true
-    - Session replay: 5 recordings watched = true
-    - Feature Flags: Feature flag created = true
-    - Experiments: Experiment created = true
-    - Surveys: Survey created = true
-
+- Visitors who match the 'activated users' cohort, see definitions below
 - Visitors who have signed up at least 30 days ago: `joined_at` before `date`
     - Note: Once we have behavioural surveys, we can update the targeting to only show to users who have created a flag / watched 10 recordings / created a survey / created an insight / created an experiment
 - Don’t display to users who have seen another survey in the last 60 days
@@ -53,3 +47,23 @@ We would like to run permanent per-product NPS surveys in the PostHog app, for t
 - [Fix long-running surveys issue](https://github.com/PostHog/posthog/issues/17863)
 - [Fix product announcements ↔ surveys issue](https://posthog.slack.com/archives/C034XD440RK/p1698235239337499)
 - If we want to give away a sticker: [Fix link/button in the last step of multi-question surveys](https://posthog.slack.com/archives/C034XD440RK/p1698167499567089)
+
+## Appendix: How do we define activated users?
+
+In [this document](https://docs.google.com/document/d/16Z6m4kdgxui53SuSq-PeZ30lYfEsyict3u2fPm2vlsE/edit#heading=h.9kfq6mtxomjq), there is a proposal for what counts as an activated organisation for each product. Because of a cohorts feature limitation, I will be targetting 'activated users' instead of 'users in activated organisations' and therefore slightly modify the definitions in the linked document.
+
+Product Analytics
+- Completed event `insight created` AND event `insight analyzed` in the last 90 days: [Cohort](https://app.posthog.com/cohorts/48711)
+
+Session Replay
+- Completed event `recording analyzed` at least 5 times in the last 90 days: [Cohort](https://app.posthog.com/cohorts/48712)
+
+Feature Flags
+- Completed action `clicked-save-feature-flag (existing flags)` OR action `clicked-save-feature-flag (new flags)`
+ in the last 90 days: [Cohort](https://app.posthog.com/cohorts/48720)
+
+Experiments
+- Completed event `experiment created` OR event `experiment launched` in the last 90 days: [Cohort](https://app.posthog.com/cohorts/48729)
+
+Surveys
+- Completed event `survey created` OR event `survey launched` in the last 90 days [Cohort](https://app.posthog.com/cohorts/48730)

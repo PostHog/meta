@@ -50,26 +50,46 @@ This campaign triggers when a user completes the `user signed up` event for the 
 5. Send AARRR intro article email
 6. Wait 1 week.
 7. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-8. Check if the user is in the `Subscribers to Session Replays` segment
-    1. If `Yes`, check if the user is in the `Subscribers to Feature Flags` segment
-        1. If `Yes`, if the user is in the `Subscribers to Surveys` segment
-            1. If `Yes`, send [New email about using templates]
-            2. If `No`, send Survey Upsell email.
-        2. If `No`, send Feature Flag Upsell email
-    2. If `No`, send Replay Upsell email. 
+8. Check if the user is in the `Subscribers to Product Analytics` segment
+    1. If `No`, send Analytics Upsell email
+    2. If `Yes`, check if the user is in the `Subscribers to Session Replays` segment
+        1. If `No`, send Replay Upsell email
+        2. If `Yes`, check if the user is in the `Subscribers to Feature Flags` segment
+            1. If `No`, send Feature Flags Upsell email.
+            2. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
+                1. If `No`, send Surveys Upsell email
+                2. If `Yes`, send email about enabling beta features
 9. Wait 1 week. 
 10. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-11. Check if the user is in the `Subscribers to Feature Flags` segment
-    1. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
-        1. If `Yes`, [send new email about Toolbar]
-        2. If `No`, send Surveys Upsell email
-    2. If `No`, send Feature Flag Upsell email
+11. Check if the user is in the `Subscribers to Session Replays` segment
+    1. If `No`, send Replay Upsell email
+    2. If `Yes`, check if the user is in the `Subscribers to Feature Flags` segment
+        1. If `No`, send Feature Flags Upsell email.
+        2. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
+            1. If `No`, send Surveys Upsell email
+            2. If `Yes`, send email inviting user to join the PostHog community
 12. Wait 1 week. 
 13. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-14. Check if the user is in the `Subscribers to Surveys` segment
-    1. If `Yes`, [send new email about notebooks]
+14. Check if the user is in the `Subscribers to Feature Flags` segment
+    1. If `No`, send Feature Flags Upsell email.
+    2. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
+        1. If `No`, send Surveys Upsell email
+        2. If `Yes`, send email email about dashboard and survey templates 
+15. Wait 1 week. 
+16. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
+17. Check if the user is in the `Subscribers to Surveys` segment
+    1. If `Yes`, send an email pushing about building like PostHog
     2. If `No`, send Survey Upsell email
-15. Add `completed_onboarding_emails: true` to user. 
+18. Add `completed_onboarding_emails: true` to user 
+
+### Product analytics onboarding flow
+**Campaign in Customer.io:** Product Analytics onboarding
+
+This campaign triggers when a user enters the `Subscribers to Session Replays` segment, provided they also have a valid email address. 
+
+1. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
+2. Product Analytics Onboarding email
+3. Add `productanalytics_onboarding_complete: true` to user. 
 
 ### Session replay onboarding flow
 **Campaign in Customer.io:** Session replay onboarding

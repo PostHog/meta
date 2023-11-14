@@ -51,7 +51,7 @@ This campaign triggers when a user completes the `user signed up` event for the 
 6. Wait 1 week.
 7. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
 8. Check if the user is in the `Subscribers to Product Analytics` segment
-    1. If `No`, send Analytics Upsell email
+    1. If `No`, send Analytics Upsell
     2. If `Yes`, check if the user is in the `Subscribers to Session Replays` segment
         1. If `No`, send Replay Upsell email
         2. If `Yes`, check if the user is in the `Subscribers to Feature Flags` segment
@@ -85,10 +85,12 @@ This campaign triggers when a user completes the `user signed up` event for the 
 ### Product analytics onboarding flow
 **Campaign in Customer.io:** Product Analytics onboarding
 
-This campaign triggers when a user enters the `Subscribers to Session Replays` segment, provided they also have a valid email address. 
+This campaign triggers when a user enters the `Subscribers to Product Analytics` segment, provided they also have a valid email address. 
 
 1. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
-2. Product Analytics Onboarding email
+2. Check if user is in the `Subscribers to Group Analytics` segment
+    1. If `Yes`, send Product Onboarding Email
+    2. If `No`, send Product Onboarding + Groups Upsell email
 3. Add `productanalytics_onboarding_complete: true` to user. 
 
 ### Session replay onboarding flow

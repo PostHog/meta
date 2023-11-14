@@ -18,7 +18,7 @@ The 'full' onboarding experience is delivered across some 'sub' campaigns, below
 This campaign triggers when a user completes the `user signed up` event for the first time, on either PostHog US or PostHog EU, provided they also have a valid email address.
 
 1. Wait one hour.
-2. Send Welcome Email. 
+2. Send new Welcome Email. 
 3. Check users' role in organization, using the `role_at_organization` property.
     1. If `founder` then wait 12 hours, and send Joe's Newsletter Invite email.
         1. Check if user clicked the subscription CTA.

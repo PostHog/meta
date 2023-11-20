@@ -13,72 +13,11 @@ The onboarding email flow is managed by the marketing team, and is implemented w
 ## Onboarding for US and EU PostHog Cloud
 **Campaign in Customer.io:** Onboarding - All cloud users 
 
+[See image](/images/customerio-workflow-onboarding-4.0---all-cloud-users.png).
+
 The 'full' onboarding experience is delivered across some 'sub' campaigns, below, which trigger based on user properties. This is because we don't want to email users about how to use a feature until we've checked and taken action on whether they are subscribed to other tools.
 
 This campaign triggers when a user completes the `user signed up` event for the first time, on either PostHog US or PostHog EU, provided they also have a valid email address.
-
-1. Wait one hour.
-2. Send new Welcome Email. 
-3. Check users' role in organization, using the `role_at_organization` property.
-    1. If `founder` then wait 12 hours, and send Joe's Newsletter Invite email.
-        1. Check if user clicked the subscription CTA.
-            1. If `Yes`, add `newsletter_cta_clicked: true` to user.
-            2. If `No`, do nothing. 
-        2. Wait 12 hours
-    2. If `engineering` then wait 12 hours, and send Andy's Newsletter Invite email. 
-        1. Check if user clicked the subscription CTA.
-            1. If `Yes`, add `newsletter_cta_clicked: true` to user.
-            2. If `No`, do nothing. 
-        2. Wait 12 hours
-    3. If `product` then wait 12 hours. 
-        1. Check if the user has performed `action created`
-            1. If `Yes`, send NEW email promoting the user interview survey template
-            2. If `No`, send Advice for Product Teams email.
-        3. Wait 12 hours.
-    4. If `marketing` then wait 12 hours. 
-        1. Check if the user has performed `action created`
-            1. If `Yes`, send NEW email promoting the dashboard templates. 
-            2. If `No`, send Advice for Marketing Teams email.
-        3. Wait 12 hours.
-    5. If `sales` then wait 12 hours. 
-        1. Check if the user has performed `action created`
-            1. If `Yes`, send NEW email promoting the tutorials section.
-            2. If `No`, send Advice for Sales Teams email.
-        3. Wait 12 hours.
-    6. If not `founder` `engineering` `product` `marketing` or `sales` then wait 24 hours
-4. Wait 1 week.
-5. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-6. Check if the user is in the `Subscribers to Product Analytics` segment
-    1. If `No`, send Analytics Upsell
-    2. If `Yes`, check if the user is in the `Subscribers to Session Replays` segment
-        1. If `No`, send Replay Upsell email
-        2. If `Yes`, check if the user is in the `Subscribers to Feature Flags` segment
-            1. If `No`, send Feature Flags Upsell email.
-            2. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
-                1. If `No`, send Surveys Upsell email
-                2. If `Yes`, send email about enabling beta features
-7. Wait 1 week. 
-8. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-9. Check if the user is in the `Subscribers to Session Replays` segment
-    1. If `No`, send Replay Upsell email
-    2. If `Yes`, check if the user is in the `Subscribers to Feature Flags` segment
-        1. If `No`, send Feature Flags Upsell email.
-        2. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
-            1. If `No`, send Surveys Upsell email
-            2. If `Yes`, send email inviting user to join the PostHog community
-10. Wait 1 week. 
-11. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-12. Check if the user is in the `Subscribers to Feature Flags` segment
-    1. If `No`, send Feature Flags Upsell email.
-    2. If `Yes`, check if the user is in the `Subscribers to Surveys` segment
-        1. If `No`, send Surveys Upsell email
-        2. If `Yes`, send email email about dashboard and survey templates 
-13. Wait 1 week. 
-14. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-15. Check if the user is in the `Subscribers to Surveys` segment
-    1. If `Yes`, send an email pushing about building like PostHog
-    2. If `No`, send Survey Upsell email
-16. Add `completed_onboarding_emails: true` to user 
 
 ### Product analytics onboarding flow
 **Campaign in Customer.io:** Product Analytics onboarding

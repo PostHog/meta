@@ -13,91 +13,49 @@ The onboarding email flow is managed by the marketing team, and is implemented w
 ## Onboarding for US and EU PostHog Cloud
 **Campaign in Customer.io:** Onboarding - All cloud users 
 
+[See image](/images/customerio-workflow-onboarding-4.0---all-cloud-users.png).
+
 The 'full' onboarding experience is delivered across some 'sub' campaigns, below, which trigger based on user properties. This is because we don't want to email users about how to use a feature until we've checked and taken action on whether they are subscribed to other tools.
 
 This campaign triggers when a user completes the `user signed up` event for the first time, on either PostHog US or PostHog EU, provided they also have a valid email address.
 
-1. Wait one hour.
-2. Send Welcome Email. 
-3. Check users' role in organization, using the `role_at_organization` property.
-    1. If `founder` then wait 12 hours, and send Joe's Newsletter Invite email.
-        1. Check if user clicked the subscription CTA.
-            1. If yes, add `newsletter_cta_clicked: true` to user.
-            2. If no, do nothing. 
-        2. Wait 12 hours
-    2. If `engineering` then wait 12 hours, and send Andy's Newsletter Invite email. 
-        1. Check if user clicked the subscription CTA.
-            1. If yes, add `newsletter_cta_clicked: true` to user.
-            2. If no, do nothing. 
-        2. Wait 12 hours
-    3. If `product` then wait 12 hours. 
-        1. Check if the user has performed `action created`
-            1. If yes, do nothing.
-            2. If no, send Advice for Product Teams email.
-        3. Wait 12 hours.
-    4. If `marketing` then wait 12 hours. 
-        1. Check if the user has performed `action created`
-            1. If yes, do nothing.
-            2. If no, send Advice for Marketing Teams email.
-        3. Wait 12 hours.
-    5. If `sales` then wait 12 hours. 
-        1. Check if the user has performed `action created`
-            1. If yes, do nothing.
-            2. If no, send Advice for Sales Teams email.
-        3. Wait 12 hours.
-    6. If not `founder` `engineering` `product` `marketing` or `sales` then wait 24 hours
-4. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-5. Send AARRR intro article email
-6. Wait 1 week.
-7. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-8. Check if the user is in the `Subscribers to Session Replays` segment
-    1. If `Yes`, do nothing. (See Session replay onboarding flow)
-    2. If `No`, assign to a random cohort branch.
-        1. 50% receive Session replay upsell email
-        2. 50% recieve Experiment: Personal Invite email
-9. Wait 1 week.
-10. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-11. Check if the user is in the `Subscribers to Feature Flags` segment
-    1. If `Yes`, do nothing. (See Feature flag onboarding flow)
-    2. If `No`, assign to random cohort branch. 
-        1. 50% receive Feature Flag Upsell email 1
-        2. 50% recieve Feature Flag Upsell email 2
-12. Wait 5 days. 
-13. Wait until a weekday between 1PM and 5PM in the users' time zone (UTC fallback)
-14. Check if the user is in the `Subscribers to Surveys` segment
-    1. If `Yes`, do nothing. (See Survey onboarding flow)
-    2. If `No`, send Survey Upsell email
-15. Add `completed_onboarding_emails: true` to user. 
+### Product analytics onboarding flow
+**Campaign in Customer.io:** Product Analytics onboarding
+
+This campaign triggers when a user enters the `Subscribers to Product Analytics` segment, provided they also have a valid email address. 
+
+1. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
+2. Check if user is in the `Subscribers to Group Analytics` segment
+    1. If `Yes`, send Product Onboarding Email
+    2. If `No`, send Product Onboarding + Groups Upsell email
+3. Add `productanalytics_onboarding_complete: true` to user. 
 
 ### Session replay onboarding flow
 **Campaign in Customer.io:** Session replay onboarding
 
 This campaign triggers when a user enters the `Subscribers to Session Replays` segment, provided they also have a valid email address. 
 
-1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
-3. Send Replay Onboarding email
-4. Add `replay_onboarding_complete: true` to user. 
+1. Wait 1 day, and until a weekday between 9AM and 12PM in the users' time zone (UTC fallback)
+2. Send Replay Onboarding email
+3. Add `replay_onboarding_complete: true` to user. 
 
 ### Feature flag onboarding flow
 **Campaign in Customer.io:** Feature flag onboarding
 
 This campaign triggers when a user enters the `Subscribers to Feature Flags` segment, provided they also have a valid email address. 
 
-1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 12PM and 3PM in the users' time zone (UTC fallback)
-3. Send Welcome to Flags email
-4. Add `flag_onboarding_complete: true` to user.
+1. Wait 1 day, and until a weekday between 12PM and 3PM in the users' time zone (UTC fallback)
+2. Send Welcome to Flags email
+3. Add `flag_onboarding_complete: true` to user.
 
 ### Survey onboarding flow
 **Campaign in Customer.io:** Surveys onboarding
 
 This campaign triggers when a user enters the `Subscribers to Surveys` segment, provided they also have a valid email address. 
 
-1. Wait until `completed_onboarding_emails: true` for user. 
-2. Wait 1 day, and until a weekday between 3PM and 5PM in the users' time zone (UTC fallback)
-3. Send Welcome to Surveys email
-4. Add `surveys_onboarding_complete: true` to user.
+1. Wait 1 day, and until a weekday between 3PM and 5PM in the users' time zone (UTC fallback)
+2. Send Welcome to Surveys email
+3. Add `surveys_onboarding_complete: true` to user.
 
 ## G2 Review Request Flow
 **Campaign in Customer.io:** G2 Review Requester

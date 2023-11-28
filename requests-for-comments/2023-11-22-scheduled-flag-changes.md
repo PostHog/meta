@@ -72,7 +72,7 @@ A scheduled change can be expressed as a JSON, specifying the operation to be pe
 
 _At_ or _after_ the time specified, the change needs to be propagated onto the record.
 
-We already use Celery with a Redis queue to execute various background tasks. However, because the Redis queue is not durable, we cannot schedule tasks at the precise point in the future. A possible solution here is to have Postgres table of scheduled changes. Celery could periodically poll this table, e.g. every minute. During each poll, Celery would process any rows where the _scheduled_at_ time has already passed.
+We already use Celery with a Redis queue to execute various background tasks. However, because the Redis queue is not durable, we cannot schedule tasks at the precise point in the future. A possible solution here is to have Postgres table of scheduled changes. Celery could periodically poll this table, e.g. every minute. During each poll, Celery would process any rows where the _scheduled_at_ time has already passed and the operation hasn't been executed already.
 
 The `scheduled_changes` table would have the following schema:
 

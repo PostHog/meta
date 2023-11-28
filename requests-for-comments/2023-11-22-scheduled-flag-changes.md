@@ -110,6 +110,8 @@ Considering the above, our approach should be as follows:
 
 Every model that needs scheduled updates will implement a `scheduled_changes_dispatcher()` method. This method will receive the payload from the Celery task and update the record. After the successful update, the worker marks the row as completed by setting `executed_at`.
 
+Since this is sync and blocks the entire schedule queue, we can't have long running mutations with this system.
+
 ## Monitoring
 
 We will need to monitor the backlog of tasks and trigger an alert when the delay is causing too much degradation. For guidance, the `ingestion_lag` Celery task is a relevant example.

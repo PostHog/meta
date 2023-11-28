@@ -33,13 +33,13 @@ POST /api/projects/:project_id/schedule
 }
 ```
 
-A scheduled change can be expressed as a JSON, specifying the operation to be performed and any payload required for the operation. In the context of scheduled changes to feature flags, the operation will be a `db_update`. For other scheduling use cases in the future, the operation may be again a database update or some other side effect.
+A scheduled change can be expressed as a JSON, specifying the operation to be performed and any payload required for the operation. In the context of scheduled changes to feature flags, the operation will be `add_release_condition` or `change_status`. For other scheduling use cases in the future, the operation may be similar updates to the model but could also be side effects.
 
 **Example 1: Enable the flag**
 
 ```
 {
-    "operation": "db_update",
+    "operation": "change_status",
     "payload": {
         "field": "is_active",
         "value": "false"
@@ -51,7 +51,7 @@ A scheduled change can be expressed as a JSON, specifying the operation to be pe
 
 ```
 {
-    "operation": "db_update",
+    "operation": "add_release_condition",
     "payload": {
         "field": “filter”,
         "value": {
@@ -76,9 +76,9 @@ We already use Celery with a Redis queue to execute various background tasks. Ho
 
 The `scheduled_changes` table would have the following schema:
 
-| team_id | record_id | model       | changes (JSON) | scheduled_at (timestamp) | executed_at (timestamp, null) |
-| ------- | --------- | ----------- | -------------- | ------------------------ | ----------------------------- |
-| 1       | 57        | FeatureFlag | [ ... ]        | 2023-11-23 15:30:00      | null                          |
+| team_id (int) | record_id (string) | model (string) | changes (JSON) | scheduled_at (timestamp) | executed_at (timestamp) | failure_reason (string, null) |
+| ------------- | ------------------ | -------------- | -------------- | ------------------------ | ----------------------- | ----------------------------- |
+| 1             | 57                 | FeatureFlag    | [ ... ]        | 2023-11-23 15:30:00      | null                    | null                          |
 
 The table would be indexed on the `scheduled_at` column to efficiently retrieve the columns that have the scheduled\*at value in the past. For every row retrieved, the task would **atomically**:
 

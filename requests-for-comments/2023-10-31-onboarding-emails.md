@@ -10,8 +10,6 @@ It's not the aim of this email to describe the content of every email, but rathe
 
 The onboarding email flow is managed by the marketing team, and is implemented with Customer.io - [which does have some issues](https://github.com/PostHog/meta/issues/104).
 
-The welcome email will send from hey@ for users with ICP < 10, but for ICP > 10, a modified version of the first welcome email will send from Cameron's email directly. This will include an introduction from him as CSM, and a calendly link to book if/when they run into issues. The flow will then proceed for all users.
-
 ## Onboarding for US and EU PostHog Cloud
 **Campaign in Customer.io:** Onboarding - All cloud users 
 

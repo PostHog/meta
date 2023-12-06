@@ -19,6 +19,8 @@ The 'full' onboarding experience is delivered across some 'sub' campaigns, below
 
 This campaign triggers when a user completes the `user signed up` event for the first time, on either PostHog US or PostHog EU, provided they also have a valid email address.
 
+The first welcome email they receive will either be generic and send from hey@, or if the customer is high ICP (> 10, and an engineer/exec), a modified (more personalized, with calendly link) will send from Cameron's email. The sequence then proceeds as folows:
+
 ### Product analytics onboarding flow
 **Campaign in Customer.io:** Product Analytics onboarding
 

@@ -57,10 +57,6 @@ I compared the funnels from `Pageview -> Showed intent -> Conversion` of my cont
 
 It was good to see that my content had a higher intent and signup rate than our existing content. My takeaway from this is that the type of content I wrote is what our target audience wants to read.
 
-
-
 ![Funnels - all content vs Lior](../images/2023-12-18-lior-2023-q4-content-results/all-content-vs-lior.png)
 ![Funnel - product engineers vs Lior](../images/2023-12-18-lior-2023-q4-content-results/all-product-engineers-vs-lior.png)
 ![Funnel - tutorials vs Lior](../images/2023-12-18-lior-2023-q4-content-results/all-tutorials-vs-lior.png)
-
-  

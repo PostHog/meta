@@ -47,11 +47,12 @@ Key takeaways:
 
 I compared the funnels from `Pageview -> Showed intent -> Conversion` of my content vs all our content. Here's a table summary (or see images below):
 
-|  | Existing content – Showed Intent | Lior's content – Showed Intent | | Existing content – User Signed up | Lior's content – User Signed up* |
-| --- | -------------- | ---------- | 
-| All content    |     8.57%    |    22.24%    | 0.88%  | 2.19% |
-| Product engineers content | 9.07%  | 24.46% | 0.5% | 2.88% |
-| Tutorials | 17.14% | 22.97% | 1.8% | 2.29% |
+| Content Category | Existing content – Showed Intent | Lior's content – Showed Intent | Existing content – User Signed up | Lior's content – User Signed up* |
+| ---------------- | -------------------------------- | ------------------------------ | --------------------------------- | --------------------------------- |
+| All content      | 8.57%                            | 22.24%                         | 0.88%                             | 2.19%                             |
+| Product engineers content | 9.07%                  | 24.46%                         | 0.5%                              | 2.88%                             |
+| Tutorials        | 17.14%                           | 22.97%                         | 1.8%                              | 2.29%                             |
+
 
 * Keep in mind that for conversion rate on Lior's content the numbers are low, so they are likely to fluctuate over time.
 

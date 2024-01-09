@@ -1,6 +1,7 @@
 ---
-name: Email or customer messaging 
-about: A template to help you gather feedback and increase visibility on email campaigns and other sorts of customer messaging. 
+name: Email or customer messaging
+about: A template to help you gather feedback and increase visibility on email campaigns
+  and other sorts of customer messaging.
 title: 'Messaging:'
 labels: marketing
 assignees: ''

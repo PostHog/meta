@@ -49,6 +49,10 @@ The above must be filtered by environment at all times. In addition, there are c
 
 The "Feature flag environments" RFC brought up one key need users have: often, the test setup needs some deviations from prod. You're likely to play around with instrumentation during development, so feature flags or cohorts might deviate in dev and you probably don't want that setup to be the source of truth. It's the production setup which you want to be a stable source of truth.
 
+### Previous attempts
+
+There's been one attempt at pretty much this, a couple of years ago. It was a test mode switch, meaning essentially two environments. Unfortunately, I don't think there was a spec or RFC for that feature, and we also never rolled it out. Traces of the feature have since been removed from the code.
+
 [TODO: Research other product analytics tools]
 
 ## Design 

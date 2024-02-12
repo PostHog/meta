@@ -72,21 +72,21 @@ TLDR: Rankings mostly improved *slightly* and overall unique visitors increased 
 
 | URL | Ahrefs SERP Ranking 18 Dec 2023 | Actual Unique Visitors (30d) 18 Dec 2023 | Ahrefs SERP Ranking 12 Feb 2024 | Actual Unique Visitors (30d) 12 Feb 2024 |
 | --- | ------------------- | --------------------------- |  --------------------------- |  --------------------------- |
-| [Analyze Surveys with ChatGPT](https://posthog.com/tutorials/analyze-surveys-with-chatgpt) | 74 | 205 | ⬆️ 46 | ⬆️ 291 |
-| [Framer AB Tests](https://posthog.com/tutorials/framer-ab-tests) | 2 | 125 | ➡️ 2 | ⬇️ 91 |
+| [Analyze Surveys with ChatGPT](https://posthog.com/tutorials/analyze-surveys-with-chatgpt) | 74 | 205 | 🟢 46 | 🟢 291 |
+| [Framer AB Tests](https://posthog.com/tutorials/framer-ab-tests) | 2 | 125 | ➡️ 2 | 🔴 91 |
 | [Nextjs Surveys](https://posthog.com/tutorials/nextjs-surveys) | 1 | 117 | ➡️ 1 | ➡️ 118 |
-| [React Surveys](https://posthog.com/tutorials/react-surveys) | 4 | 112 | ➡️ 4 | ⬇️ 162 |
-| [iOS AB Tests](https://posthog.com/tutorials/ios-ab-tests) | 15 | 51 | ➡️ 13 | ⬇️ 36 |
-| [Best Mobile App AB Testing Tools](https://posthog.com/blog/best-mobile-app-ab-testing-tools) | 18 | 50 | ⬆️ 14 | ➡️ 51 |
-| [Webflow Surveys](https://posthog.com/tutorials/webflow-surveys) | 8 | 48 | ➡️ 8 | ⬆️ 26 |
-| [Nuxtjs AB Tests](https://posthog.com/tutorials/nuxtjs-ab-tests) | 3 | 47 | ➡️ 3 | ⬆️ 124 |
-| [Multivariate Testing Example](https://posthog.com/product-engineers/what-is-multivariate-testing-examples) | 20 | 45 | ⬆️ 15 | ➡️ 45 |
-| [Android AB Tests](https://posthog.com/tutorials/android-ab-tests) | 38 | 44 | ⬆️ 7 | ⬇️ 23 |
+| [React Surveys](https://posthog.com/tutorials/react-surveys) | 4 | 112 | ➡️ 4 | 🔴 162 |
+| [iOS AB Tests](https://posthog.com/tutorials/ios-ab-tests) | 15 | 51 | ➡️ 13 | 🔴 36 |
+| [Best Mobile App AB Testing Tools](https://posthog.com/blog/best-mobile-app-ab-testing-tools) | 18 | 50 | 🟢 14 | ➡️ 51 |
+| [Webflow Surveys](https://posthog.com/tutorials/webflow-surveys) | 8 | 48 | ➡️ 8 | 🟢 26 |
+| [Nuxtjs AB Tests](https://posthog.com/tutorials/nuxtjs-ab-tests) | 3 | 47 | ➡️ 3 | 🟢 124 |
+| [Multivariate Testing Example](https://posthog.com/product-engineers/what-is-multivariate-testing-examples) | 20 | 45 | 🟢 15 | ➡️ 45 |
+| [Android AB Tests](https://posthog.com/tutorials/android-ab-tests) | 38 | 44 | 🟢 7 | 🔴 23 |
 | [How to Create User Personas](https://posthog.com/product-engineers/how-to-create-user-personas) | 48 | 43 | ➡️ 49 | ➡️ 53 |
-| [Framer Surveys](https://posthog.com/tutorials/framer-surveys) | 3 | 39 | ➡️ 2 | ⬇️ 20 |
+| [Framer Surveys](https://posthog.com/tutorials/framer-surveys) | 3 | 39 | ➡️ 2 | 🔴 20 |
 | [NPS vs CSAT vs CES](https://posthog.com/tutorials/nps-vs-csat-vs-ces) | 63 | 39 | ➡️ 57 | ➡️ 40 |
-| [Vue AB Tests](https://posthog.com/tutorials/vue-ab-tests) | 3 | 30 | ➡️ 2 | ⬆️ 88 |
-| [In-depth: PostHog vs Statsig](https://posthog.com/blog/posthog-vs-statsig) | 1 | 30 | ➡️ 1 | ⬆️ 99 |
-| **TOTAL** |  | **1,025** |  | **⬆️ 1,267**
+| [Vue AB Tests](https://posthog.com/tutorials/vue-ab-tests) | 3 | 30 | ➡️ 2 | 🟢 88 |
+| [In-depth: PostHog vs Statsig](https://posthog.com/blog/posthog-vs-statsig) | 1 | 30 | ➡️ 1 | 🟢 99 |
+| **TOTAL** |  | **1,025** |  | **🟢 1,267**
 
 Also, although not shared in this update, the conversion rates from `Pageview -> Showed Intent -> User Signed Up` remained similar on 12 Feb 2024 compared to 18 Dec 2023

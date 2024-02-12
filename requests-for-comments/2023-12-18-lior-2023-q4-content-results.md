@@ -77,7 +77,7 @@ TLDR: Rankings mostly improved *slightly* and overall unique visitors increased 
 | [Nextjs Surveys](https://posthog.com/tutorials/nextjs-surveys) | 1 |  ➡️ 1 | 117 | ➡️ 118 |
 | [React Surveys](https://posthog.com/tutorials/react-surveys) | 4 | ➡️ 4 | 112 |  🟢 162 |
 | [iOS AB Tests](https://posthog.com/tutorials/ios-ab-tests) | 15 | ➡️ 13 | 51 |  🔴 36 |
-| [Best Mobile App AB Testing Tools](https://posthog.com/blog/best-mobile-app-ab-testing-tools) | 18 | 50 | 🟢 14 | ➡️ 51 |
+| [Best Mobile App AB Testing Tools](https://posthog.com/blog/best-mobile-app-ab-testing-tools) | 18|  🟢 14 || 50 |  ➡️ 51 |
 | [Webflow Surveys](https://posthog.com/tutorials/webflow-surveys) | 8 | ➡️ 8 | 48 |  🟢 26 |
 | [Nuxtjs AB Tests](https://posthog.com/tutorials/nuxtjs-ab-tests) | 3 | ➡️ 3 | 47 | 🟢 124 |
 | [Multivariate Testing Example](https://posthog.com/product-engineers/what-is-multivariate-testing-examples) | 20 | 🟢 15 | 45 | ➡️ 45 |

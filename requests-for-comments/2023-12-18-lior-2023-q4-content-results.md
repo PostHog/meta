@@ -75,7 +75,7 @@ TLDR: Rankings mostly improved *slightly* and overall unique visitors increased 
 | [Analyze Surveys with ChatGPT](https://posthog.com/tutorials/analyze-surveys-with-chatgpt) | 74 | 205 | 🟢 46 | 🟢 291 |
 | [Framer AB Tests](https://posthog.com/tutorials/framer-ab-tests) | 2 | 125 | ➡️ 2 | 🔴 91 |
 | [Nextjs Surveys](https://posthog.com/tutorials/nextjs-surveys) | 1 | 117 | ➡️ 1 | ➡️ 118 |
-| [React Surveys](https://posthog.com/tutorials/react-surveys) | 4 | 112 | ➡️ 4 | 🔴 162 |
+| [React Surveys](https://posthog.com/tutorials/react-surveys) | 4 | 112 | ➡️ 4 | 🟢 162 |
 | [iOS AB Tests](https://posthog.com/tutorials/ios-ab-tests) | 15 | 51 | ➡️ 13 | 🔴 36 |
 | [Best Mobile App AB Testing Tools](https://posthog.com/blog/best-mobile-app-ab-testing-tools) | 18 | 50 | 🟢 14 | ➡️ 51 |
 | [Webflow Surveys](https://posthog.com/tutorials/webflow-surveys) | 8 | 48 | ➡️ 8 | 🟢 26 |

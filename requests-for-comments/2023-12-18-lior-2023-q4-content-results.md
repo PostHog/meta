@@ -70,7 +70,7 @@ Below is a table comparing the results on 18 Dec 2023 (when this post was first 
 
 TLDR: Rankings mostly improved *slightly* and overall unique visitors increased ~20%.
 
-| URL | Ahrefs SERP Ranking 18 Dec 2023 | Actual Unique Visitors (30d) 18 Dec 2023 | Ahrefs SERP Ranking 12 Feb 2024 | Actual Unique Visitors (30d) 12 Feb 2024 |
+| URL | Ahrefs SERP Ranking 18 Dec 2023 | Ahrefs SERP Ranking 12 Feb 2024 | Actual Unique Visitors (30d) 18 Dec 2023 |  Actual Unique Visitors (30d) 12 Feb 2024 |
 | --- | ------------------- | --------------------------- |  --------------------------- |  --------------------------- |
 | [Analyze Surveys with ChatGPT](https://posthog.com/tutorials/analyze-surveys-with-chatgpt) | 74 | 🟢 46 | 205 | 🟢 291 |
 | [Framer AB Tests](https://posthog.com/tutorials/framer-ab-tests) | 2 |  ➡️ 2 | 125 | 🔴 91 |

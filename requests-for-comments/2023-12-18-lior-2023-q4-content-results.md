@@ -88,4 +88,5 @@ TLDR: Rankings mostly improved *slightly* and overall unique visitors increased 
 | [Vue AB Tests](https://posthog.com/tutorials/vue-ab-tests) | 3 | 30 | ➡️ 2 | ⬆️ 88
 | [In-depth: PostHog vs Statsig](https://posthog.com/blog/posthog-vs-statsig) | 1 | 30 | ➡️ 1 | ⬆️ 99
 | **TOTAL** |  | **1,025** |  | **⬆️ 1,267**
+
 Also, although not shared in this update, the conversion rates from `Pageview -> Showed Intent -> User Signed Up` remained similar on 12 Feb 2024 compared to 18 Dec 2023

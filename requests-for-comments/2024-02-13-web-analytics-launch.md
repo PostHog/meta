@@ -61,3 +61,4 @@ Ideas for other, weirder things go here.
 - [ ] Video tutorial about how to use web analytics
 - [ ] Give Theo information as to how we built Web Analytics for a video 
 - [ ] Announce via newsletter sponsorships 
+- [ ] Approach Jason Packer about contributing to the newsletter/blog

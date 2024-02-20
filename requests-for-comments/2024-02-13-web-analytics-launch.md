@@ -49,6 +49,7 @@ Basic things we always do.
 - [ ] Pylon announcement to all current paying users - @joethreepwood
 - [ ] New key art for use in blogs, emails, etc - @lottiecoxon
 - [ ] New web analytics ads run by Hey Digital 
+- [ ] Invite YC teams who don't use us on our marketing site to try us out
 
 ## Bigger ideas
 

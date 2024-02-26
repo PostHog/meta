@@ -84,7 +84,9 @@ I see two ways to go about making the distinction between environments on the Cl
 
 Unfortunately without rewriting the events table for a new sorting key that'd include the environment column, only the second option stands. That's because, when aiming to isolate data, we must ensure the isolating column is included in the MergeTree partitioning key and/or sorting key. Ignoring that is a surefire way to slow down queries within the whole project and consequently, for all users of the PostHog instance.
 
-Because our data is already sorted in a `team_id`-first way, by reusing `team_id` we get performance for free. In this scenario, for each new environment we just increment the `posthog_team.id` counter without creating a `posthog_team` row. We do, however, create a `posthog_environment` row storing the `team_id` and other metadata, such as environment name.
+Can we rewrite the events table? It would be a major effort, but may be worth it if there are other tweaks in its definition we could make at the same time.
+
+Let's assume we don't rewrite the events table: Because our data is already sorted in a `team_id`-first way, by reusing `team_id` we get performance for free. In this scenario, for each new environment we just increment the `posthog_team.id` counter without creating a `posthog_team` row. We do, however, create a `posthog_environment` row storing the `team_id` and other metadata, such as environment name.
 
 #### What does this mean in terms of ingestion and SDKs?
 
@@ -102,15 +104,27 @@ The current environment will then be selectable from the project selector, rough
 
 ### Scope of work
 
-1. In the backend:
-	1. We add an `Environment` model (`posthog_environment` table, fields `id`, `team` and `data_team_id`, `name`, `token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we increment the counter of the `Team.id` field and use the obtained value as the environment's `data_team_id`.
-	2. We add environments to the project serializer.
-	3. We add `current_environment` to the `User` model.
-	4. In all querying endpoints, we add support for operations via the environment-specific team ID.
-2. In the frontend, behind a feature flag:
-	1. To facilitate this inclusion of environment in breadcrumbs with the UI being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domains favicon. Otherwise we show a lettermark (no image uploading for now).
-	2. We add environment availability and selection logic to `teamLogic`. Subsequently, we 
-	3. Then we add the environment as a breadcrumb item with a dropdown.
-	4. We add an "Environments" section to project settings (similar to group types).
-3. In the plugin server: We allow ingestion using environment tokens.
+1. Backend: We add an `Environment` model (`posthog_environment` table, fields `id`, `team`, `data_team_id`, `name`, `api_token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we increment the counter of the `Team.id` field and use the obtained value as the environment's `data_team_id`.
+1. Backend: For every existing project (`Team`) we create a matching default `Environment`, reusing the project's `id` (for `data_team_id`) and `api_token` (for `api_token`). Any time a new project is created, it also gets a default environment based on the same logic.
+  > A transition period begins at this step. For some time we'll have to ensure `api_token` stays synced between the `Team` (legacy scheme) and its default `Environment` (future scheme). This just means updating the token reset function to update both.
+1. Backend: We add environments to `TeamSerializer`.
+1. Backend: We add `current_environment` to the `User` model.
+1. Plugin server: We switch to `posthog_environment` as the source of truth for tokens.
+  > The transition period ends at this step. We should no longer be using `posthog_team.api_token` anywhere anymore.
+1. Frontend, behind a flag: We add logic for environment availability and selection to `teamLogic`.
+1. Frontend, behind a flag: We add the environment as a breadcrumb item with a dropdown.
+1. Backend: In all endpoints that query ClickHouse, we add support specifying the environment-specific team ID for querying:
+  - `InsightViewSet`
+  - `QueryViewSet`
+  - `ClickhouseGroupsView`
+  - `ClickhouseExperimentsViewSet`
+  - `PersonViewSet`
+  - `SessionRecordingViewSet`
+  - `DashboardsViewSet` (only by passing the `data_team_id` to `InsightSerializer`s)
+  We must ensure cache keys use the environment-specific team ID, but besides that no caching changes should be needed.
+
+1. Frontend, behind a flag: We add an "Environments" section to project settings (similar to group types).
+1. Frontend, behind a flag: To prevent the UI from being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domains favicon. Otherwise we show a lettermark (no image uploading for now).
+1. Backend + frontend behind a flag: We make environment choice explicit in insight & dashboard sharing (`SharingConfiguration` & `SharingViewerPageViewSet`).
+1. We unflag environments.
 

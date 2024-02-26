@@ -1,64 +1,116 @@
 # Request for comments: Project environments, by Michael Matloka
-
-## Problem statement
-
-I will simply copy this bit from the [December 2022 "Feature flag environments" RFC](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#221115---rfc-feature-flag-environments):
-
-> Customers use environments, such as staging and production, so that they can test features before they are released to production. Multiple customers have asked us for an easier way to manage feature flags across multiple environments. At the moment, customers use separate PostHog projects for their multiple environments. To set up a feature flag in a new environment, it has to be set up from scratch, including key, variables and release conditions. This is time-consuming and can lead to errors.
-> Furthermore, it's easy to make mistakes while changing flag definitions to test things, and having the flag exposed to a limited number of people reduces the chances of things going very wrong. By giving customers an easier way to move feature flags and/or flag settings across projects/environments, we are enabling them to release new features more successfully.
-
-We solved this with a feature to copy feature flags between projects. That was the right call, because it's a relatively simple solution and users of feature flags rejoiced.
-
-We've always had signals that the same problem applies to Product Analytics, but this is becoming more and more apparent. [TODO: Zendesk tickets here.] Users want to make sure their analytics instrumentation makes sense in dev/staging before they start using the data from production to make decisions. Setting up insights and dashboards in particular is a pain, because you need to duplicate a lot of work – projects are _entirely_ separate after all.
-
-## Success criteria
-
-[TODO]
-
 ## Context
 
-The selling point of environments is that they keep the _data_ separate, while sharing _product setup_. There's some nuance to what counts as what, but that's the outline.
 
-### What has to be separate
+Our users commonly operate multiple environments of their product. The two common types of split by environment are:
 
-- events
-- persons
-- groups
-- session recordings
-- annotations
-- toolbar sites
-- pipeline destinations
+1. By stage, driven by the engineering workflow, e.g. dev/staging/production.
+2. By region, driven by data protection requirements, e.g. country A/country B.
 
-The above must be filtered by environment at all times. In addition, there are caching mechanisms which have to account for environments:
-- insight result
-- cohort people
+When doing that, customers typically want to share setup between environments, while ensuring *data* from one environment doesn't pollute the others.
 
-### What has to be shared
+The multiple environments use case is one of the reasons why projects are a feature of PostHog, and projects are great for tracking separate products, but not ideal for tracking multiple instances of the same product: whatever you set up for one project, you have to manually replicate in all others.
 
-- insights
-- dashboards
-- feature flags
-- experiments
-- surveys
-- early access features
-- group _types_
-- event/property definitions
-- actions
-- cohorts
-- pipeline filters and transformations
+We currently solve this in Feature flags with a feature for syncing flags between projects, based on the flag key. Feature flags make this uniquely easy thanks to the feature flag key being an effective organization-wide identifier. No other entity – dashboards, insights, etc. – has this advantage though.
 
-The "Feature flag environments" RFC brought up one key need users have: often, the test setup needs some deviations from prod. You're likely to play around with instrumentation during development, so feature flags or cohorts might deviate in dev and you probably don't want that setup to be the source of truth. It's the production setup which you want to be a stable source of truth.
+Because feature flags use cohorts and actions in their definitions, these are also synced in the current solution –but only based on the cohort/action name, so if the name is changed in one environment, the link is silently broken.
 
-### Previous attempts
 
-There's been one attempt at pretty much this, a couple of years ago. It was a test mode switch, meaning essentially two environments. Unfortunately, I don't think there was a spec or RFC for that feature, and we also never rolled it out. Traces of the feature have since been removed from the code.
+Previous context on this topic: [the December 2022 "Feature flag environments" RFC](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/2022-12-08-feature-flag-environments.md#221115---rfc-feature-flag-environments)
 
-[TODO: Research other product analytics tools]
+## Expectations
 
-## Design 
+### Isolated
 
-[TODO: Probably an environment selector somewhere in the navigation, but needs to spec out the mechanics]
+The key feature is separation of all of *data*:
 
-## Sprints
+- Events
+- People
+- Groups
+- Recordings
 
-[TODO]
+Pipeline setup should probably be separate too:
+
+- Apps
+- Batch exports
+
+Domain-specific configuration is also going to differ between environments likely:
+
+- Toolbar authorized URLs
+
+### Shared
+
+Sharing of these entities is commonly requested:
+
+- Dashboards
+- Insights
+- Actions
+- Cohorts
+- Feature flags
+
+Not mentioned typically, but logically also shared should be:
+
+- Event and property definitions
+- Group types
+- Annotations
+- Playlists
+- Experiments
+- Surveys
+- Early access features
+- Project settings
+
+The needs are unclear for:
+
+- Data warehouse tables
+
+## Rejected solution: Cross-project copying
+
+This is what some users have asked for verbatim. What it would probably mean is a feature flags-style "Projects" view on the item level, allowing an item to be copied/synced across projects. The reliability of syncing is key though, and the problem mentioned before is that there's no inherent cross-project ID for this. Just basing on the entity name would be extremely fragile – there needs to be an underlying link better than that.
+
+This means we'd need to maintain such underlying links (e.g. a cross-project ID, adjacent to the primary key ID) for all entities we'd like to work cross-project. In one way, this could be nice if you'd like to develop, say, a dashboard in the test environment and only copy it to the production environment when final. Divergence becomes easy. But there would be an act of manual syncing, making the experience cumbersome for users at scale. This would work, but it wouldn't be turnkey.
+
+[insert metric for how often flags differ within org]
+
+## Proposed solution: Environments
+
+I believe to solve this problem once and for all, we need environments to be a first-class feature, specifically: subdivisions of a project.
+
+#### What does this mean in terms of data storage?
+
+I see two ways to go about making the distinction between environments on the ClickHouse level :
+
+1. Based on an event/person/group property, e.g. `$environment`
+2. Based on the `team_id`
+
+Unfortunately without rewriting the events table for a new sorting key that'd include the environment column, only the second option stands. That's because, when aiming to isolate data, we must ensure the isolating column is included in the MergeTree partitioning key and/or sorting key. Ignoring that is a surefire way to slow down queries within the whole project and consequently, for all users of the PostHog instance.
+
+Because our data is already sorted in a `team_id`-first way, by reusing `team_id` we get performance for free. In this scenario, for each new environment we just increment the `posthog_team.id` counter without creating a `posthog_team` row. We do, however, create a `posthog_environment` row storing the `team_id` and other metadata, such as environment name.
+
+#### What does this mean in terms of ingestion and SDKs?
+
+We can't rely just on a property for storing the data, but… maybe we could still use it in ingestion and therefore in our SDKs? It doesn't look like we can: the final `team_id` must be known in the plugin server during event processing, and at the same time async operations during event processing are banned – so environments have to be defined manually in the UI beforehand. How would we then handle events with an `$environment` value not matching an already-defined environment? We could force there always being a default catch-all environment, but that feels dangerous. Otherwise such events would be swalled by a black hole.
+
+A safer path is creating a project API key for each environment. We will use all of the existing API key caching mechanisms already present in the plugin server, the only difference being that the `posthog_environment` table becomes the source of truth instead of `posthog_team`. And as a customer, it's much harder to accidentally go off the trail.
+
+#### What does this mean in terms of the UI?
+
+By default, a project will only have one environment implicitly named "Production". A "New environment" button will allow adding a new one, with the environments feature explained in the modal.
+
+The current environment will then be selectable from the project selector, roughly looking like this:
+
+<img>
+
+### Scope of work
+
+1. In the backend:
+	1. We add an `Environment` model (`posthog_environment` table, fields `id`, `team` and `data_team_id`, `name`, `token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we increment the counter of the `Team.id` field and use the obtained value as the environment's `data_team_id`.
+	2. We add environments to the project serializer.
+	3. We add `current_environment` to the `User` model.
+	4. In all querying endpoints, we add support for operations via the environment-specific team ID.
+2. In the frontend, behind a feature flag:
+	1. To facilitate this inclusion of environment in breadcrumbs with the UI being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domains favicon. Otherwise we show a lettermark (no image uploading for now).
+	2. We add environment availability and selection logic to `teamLogic`. Subsequently, we 
+	3. Then we add the environment as a breadcrumb item with a dropdown.
+	4. We add an "Environments" section to project settings (similar to group types).
+3. In the plugin server: We allow ingestion using environment tokens.
+

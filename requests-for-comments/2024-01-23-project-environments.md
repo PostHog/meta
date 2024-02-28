@@ -127,7 +127,7 @@ The UX would still be a little clunky, with a need to manually set up multiple f
 
 ## Proposed solution: Environments
 
-We can make environments a first-class entity in PostHog. Each project would be subdivided into one or more environments. The *data* would be isolated between projects, but the *taxonomy* and *analysis setup* would be shared (see "Summarizing needs" for what should be isolated and what should be shared exactly).
+We can make environments a first-class entity in PostHog – each project would be subdivided into one or more environments. The *data* would be isolated between projects, but the *taxonomy* and *analysis setup* would be shared (see "Summarizing needs" for what should be isolated and what should be shared exactly).
 
 To support the most common workflow of drafting dashboards/etc. in dev/staging and then "promoting" to production, entities such as dashboards would be environment-specific by default, but could be rolled out to the whole project with two clicks. When rolled out, the entity's dependencies would be made project-wide as well (e.g. for a cohort, all actions and other cohorts used in the definition). This would involve no copying though, so there would be no effort needed to sync things.
 
@@ -138,6 +138,8 @@ To support the common feature flags workflow of rollout conditions being differe
 To ensure straightforward yet complete separation of data at the ingestion level (incl. persons), *as well as* steady querying performance, each environment would have its own `team_id`. Due to this requirement, environments would have to be predefined by users and not created at ingestion time, thus each environment would also have its own SDK key (aka "project API key" currently). That seems like a safe choice in terms of the UX.
 
 By default, a project would only have one environment implicitly named "Production". A "New environment" button would allow adding a new one, with the environments feature explained in the modal. The current environment would then be selectable from the project selector, roughly looking like this (courtesy of Cory):
+
+<img width="939" alt="image" src="https://github.com/PostHog/meta/assets/4550621/ec966c6b-0a1c-4cb0-a593-0234f4807ab1">
 
 ### Downsides
 

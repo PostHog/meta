@@ -133,6 +133,8 @@ To support the most common workflow of drafting dashboards/etc. in dev/staging a
 
 To support large customers with access control needs, we'd need to add environment-specific project membership to the existing project access control system.
 
+To support the common feature flags workflow of rollout conditions being different between dev and production, we'd make flag rollout groups always environment-specific.
+
 To ensure straightforward yet complete separation of data at the ingestion level (incl. persons), *as well as* steady querying performance, each environment would have its own `team_id`. Due to this requirement, environments would have to be predefined by users and not created at ingestion time, thus each environment would also have its own SDK key (aka "project API key" currently). That seems like a safe choice in terms of the UX.
 
 By default, a project would only have one environment implicitly named "Production". A "New environment" button would allow adding a new one, with the environments feature explained in the modal. The current environment would then be selectable from the project selector, roughly looking like this (courtesy of Cory):
@@ -175,5 +177,7 @@ Of course, nothing comes for free: adding evironments has its own downsides. Her
 
   > The transition period ends at this step. We should no longer be using `posthog_team.api_token` anywhere anymore.
 
+1. Backend + frontend, behind a flag: [UX to be specified] We allow feature flag rollout groups to be environment-specific.
 1. Frontend, behind a flag: To prevent the UI from being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domains favicon. Otherwise we show a lettermark (no image uploading for now).
-1. Backend: + frontend, behind a flag: [Underspecified] We add environment-level permissions to the `ExplicitTeamMembership` system.
+  > At this point we can likely release the feature and unflag it.
+1. Backend + frontend: [UX to be specified] We add environment-level permissions to the `ExplicitTeamMembership` system.

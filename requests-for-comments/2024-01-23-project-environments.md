@@ -143,6 +143,10 @@ By default, a project would only have one environment implicitly named "Producti
 
 Of course, nothing comes for free: adding evironments has its own downsides. Here, it's the amount of effort required – this feature would touch every part of the app, plus ingestion. It would realistically be a few person-sprints of work (as always, it's hard to estimate accurately).
 
+### Pricing
+
+Environments should start out as a paid feature, since they're key for professional users, and more of a nice-to-have for hobbyists. I would suggest it falling under the same restrictions as multiple projects, i.e. multiple environments being available after putting in a card.
+
 ### Rough scope of work
 
 1. Backend: We add an `Environment` model (`posthog_environment` table, fields `id`, `team`, `data_team_id`, `name`, `api_token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we increment the counter of the `Team.id` field and use the obtained value as the environment's `data_team_id`.

@@ -1,5 +1,11 @@
 # Request for comments: User Agent Parsing & Paul D'Ambra
 
+## Decision
+
+Option 3 - extend the user agent parser so it matches (or betters) the JS SDKs behaviour, enable it for everyone, and deprecate from the SDKs
+
+(doing nothing is a fine holding position so this isn't urgent)
+
 ## Problem statement
 
 _Who are we building for, what are their needs (include example cases), why is this important?_

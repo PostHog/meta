@@ -97,15 +97,19 @@ Because feature flags use cohorts and actions in their definitions, these are al
 
 	They run development and staging, same as customers above they find manual replication tedious and error-prone.
 
-### Summarizing needs
+### Summarizing requirements
 
-It looks like **users always need to keep the data isolated** between environments – features: *events*, *people*, *groups*, *recordings*. *Toolbar authorized URLs* should also likely be different, due to separate domains.
+It looks like **users always need to keep the _data_ isolated** between environments – features: *events*, *people*, *groups*, *recordings*. Data sources and destinations should be environment-specific as well: *data warehouse tables*, *apps*, and *batch exports*.
 
-**Analysis setup should be shared** – crucially features: *dashboards*, *insights*, *actions*, and *cohorts*. Often also: *event and property definitions*, and *group types*. Shared *feature flags* are also a common ask, with *experiments* sometimes mentioned.
+**Analysis setup should be shareable** – crucially features: *dashboards*, *insights*, *actions*, and *cohorts*. Often also: *event and property definitions*, and *group types*. *Playlists* don't seem to have come up, but should act analoguously to dashboards.
+Shareable means that by default all of these entities would be environment-specific by default, but could easily be made synced between environments.
 
-I've never heard of the following features mentioned in terms of environments: *playlists*, *surveys*, *early access features*, *annotations*, *data warehouse tables*, *apps*, or *batch exports*. Playlists seem similar enough to dashboards that they should also be shared. As for the rest, it's hard to say.
+**Shared *feature flags* are also a common ask**, with *experiments* sometimes mentioned. *Early access features* or *surveys* are self-serve feature flags, so should be shareable as well.
+Flags are a bit special, because they control your end users' experience. It's typical to want different rollout conditions in dev and different ones in prod, although there is sometimes a common base. To support this workflow, flags must still be able to diverge between environments.
 
-Additionally, some projects settings could be shared, but others should not be – I'll skip analyzing this here, as it's not a key problem. For now we can assume all to be separate.
+*Annotations* could possibly be scoped by environment _or_ project, but to reduce the scope of work, we can stay at just project scoping for now.
+
+Additionally, select projects settings should be moved into a new environment level of settings – certainly *Toolbar authorized URLs* and *Authorized Domains for Replay* due to varying domains.
 
 Let me know if I missed any other customer context.
 
@@ -139,6 +143,8 @@ To ensure straightforward yet complete separation of data at the ingestion level
 
 By default, a project would only have one environment implicitly named "Production". A "New environment" button would allow adding a new one, with the environments feature explained in the modal. The current environment would then be selectable from the project selector, roughly looking like this (courtesy of Cory):
 
+Extra internal requirement: Because Team Pipeline plans to implement multiple SDK keys per project, it would be simplest to move SDK keys to their own model, rather than moving to the environment model.
+
 <img width="939" alt="image" src="https://github.com/PostHog/meta/assets/4550621/ec966c6b-0a1c-4cb0-a593-0234f4807ab1">
 
 ### Downsides
@@ -151,16 +157,16 @@ Environments should start out as a paid feature, since they're key for professio
 
 ### Rough scope of work
 
-1. Backend: We add an `Environment` model (`posthog_environment` table, fields `id`, `team`, `data_team_id`, `name`, `api_token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we increment the counter of the `Team.id` field and use the obtained value as the environment's `data_team_id`.
-1. Backend: For every existing project (`Team`) we create a matching default `Environment`, reusing the project's `id` (for `data_team_id`) and `api_token` (for `api_token`). Any time a new project is created, it also gets a default environment based on the same logic.
-
-  > 	A transition period begins at this step. For some time we'll have to ensure `api_token` stays synced between the `Team` (legacy scheme) and its default `Environment` (future scheme). This only means updating the token reset function to update both.
-
+1. Backend: We add an `Environment` model (`posthog_environment` table, columns int `id`, `team_id`, `name`, `api_token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we determine its `id` by incrementing the counter of the `posthog_team.id` column and using that value as the environment's `id`.
+1. Backend: For every project existing currently we create a matching default `Environment`, reusing the project's `id` the environment's `id`. Any time a new project is created, it also gets a default environment based on the same logic.
+1. Backend: We add an `SDKKey` model (columns UUID `id`, `environment_id`, `value`, `created_by`, `created_at`) and populate it with current `api_token` values from `posthog_team` (for each project using the project ID as `environment_id`).
+    > Until we replace the project API key in project settings with environments, we'll have to sync the project API key being reset with its `posthog_sdkkey` equivalent.
 1. Backend: We add environments to `TeamSerializer`.
 1. Backend: We add `current_environment` to the `User` model.
-1. Plugin server: We switch to `posthog_environment` as the source of truth for tokens and team IDs. The only thing we continue processing at the project level is event/property definitions.
+1. Plugin server: We switch to `posthog_environment` as the source of truth for tokens and event/person `team_id` (which from now on will mean "environment ID" in ClickHouse). The only thing we continue processing at the project level is event/property definitions.
 1. Frontend, behind a flag: We add logic for environment availability and selection to `teamLogic`.
-1. Frontend, behind a flag: We add the environment as a breadcrumb item with a dropdown.
+1. Frontend, behind a flag: We add the environment as a breadcrumb item with a dropdown + creation modal.
+    > We must make it crystal clear for customers splitting by region that cross-environment analytics isn't possible – environments are designed specifically to solve cross-contamination.
 1. Backend: To models of all optionally project-wide entities, we add boolean fields `environment_id` and `is_project_wide`:
 	- `Dashboard`
 	- `Insight`
@@ -168,21 +174,18 @@ Environments should start out as a paid feature, since they're key for professio
 	- `Cohort`
 	- `FeatureFlag`
 	- `SessionRecordingPlaylist`
-1. Backend: In all endpoints that query ClickHouse, we add support specifying the environment-specific team ID for querying:
+1. Backend: In all endpoints that query ClickHouse, we add support for filtering by environment ID instead of project ID for querying:
 	- `InsightViewSet`
 	- `QueryViewSet`
 	- `ClickhouseGroupsView`
 	- `ClickhouseExperimentsViewSet`
 	- `PersonViewSet`
 	- `SessionRecordingViewSet`
-	- `DashboardsViewSet` (only by passing the `data_team_id` to `InsightSerializer`s)
+	- `DashboardsViewSet`
 
-	We must ensure cache keys use the environment-specific team ID, but besides that no caching changes should be needed.
+	We must ensure cache keys use the environment ID, but besides that no caching changes should be needed.
 
 1. Frontend, behind a flag: We add an "Environments" section to project settings (similar to group types).
-
-  > The transition period ends at this step. We should no longer be using `posthog_team.api_token` anywhere anymore.
-
 1. Backend + frontend, behind a flag: [UX to be specified] We allow feature flag rollout groups to be environment-specific.
 1. Frontend, behind a flag: To prevent the UI from being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domains favicon. Otherwise we show a lettermark (no image uploading for now).
   > At this point we can likely release the feature and unflag it.

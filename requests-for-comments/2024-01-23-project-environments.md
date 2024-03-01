@@ -133,7 +133,7 @@ The UX would still be a little clunky, with a need to manually set up multiple f
 
 We can make environments a first-class entity in PostHog – each project would be subdivided into one or more environments. The *data* would be isolated between projects, but the *taxonomy* and *analysis setup* would be shared (see "Summarizing needs" for what should be isolated and what should be shared exactly).
 
-To support the most common workflow of drafting dashboards/etc. in dev/staging and then "promoting" to production, entities such as dashboards would be environment-specific by default, but could be rolled out to the whole project with two clicks. When rolled out, the entity's dependencies would be made project-wide as well (e.g. for a cohort, all actions and other cohorts used in the definition). This would involve no copying though, so there would be no effort needed to sync things.
+To support the most common workflow of drafting dashboards/etc. in dev/staging and then "promoting" to production, entities such as dashboards would be environment-specific by default, but could be rolled out to the whole project with two clicks. When rolled out, the entity's dependencies would be made project-wide as well (e.g. for a cohort, all actions and other cohorts used in the definition would be instantly made project-wide as well). We'd introduce checks to make sure you can't make an entity environment-specific if it's currently being used project-wide. Sharing in this way would involve no copying though, so there would be no effort needed to sync things.
 
 To support large customers with access control needs, we'd need to add environment-specific project membership to the existing project access control system.
 

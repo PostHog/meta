@@ -157,13 +157,13 @@ Environments should start out as a paid feature, since they're key for professio
 
 ### Rough scope of work
 
-1. Backend: We add an `Environment` model (`posthog_environment` table, columns int `id`, `team_id`, `name`, `api_token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we determine its `id` by incrementing the counter of the `posthog_team.id` column and using that value as the environment's `id`.
-1. Backend: For every project existing currently we create a matching default `Environment`, reusing the project's `id` the environment's `id`. Any time a new project is created, it also gets a default environment based on the same logic.
+1. Backend: We add an `Environment` model (`posthog_environment` table, columns int `id`, `team_id`, `data_id` `name`, `api_token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we determine its `id` by incrementing the counter of the `posthog_team.id` column and using that value as the environment's `data_id`.
+1. Backend: For every project existing currently we create a matching default `Environment`, reusing the project's `id` the environment's `data_id`. Any time a new project is created, it also gets a default environment based on the same logic.
 1. Backend: We add an `SDKKey` model (columns UUID `id`, `environment_id`, `value`, `created_by`, `created_at`) and populate it with current `api_token` values from `posthog_team` (for each project using the project ID as `environment_id`).
     > Until we replace the project API key in project settings with environments, we'll have to sync the project API key being reset with its `posthog_sdkkey` equivalent.
 1. Backend: We add environments to `TeamSerializer`.
 1. Backend: We add `current_environment` to the `User` model.
-1. Plugin server: We switch to `posthog_environment` as the source of truth for tokens and event/person `team_id` (which from now on will mean "environment ID" in ClickHouse). The only thing we continue processing at the project level is event/property definitions.
+1. Plugin server: We switch to `posthog_environment` as the source of truth for tokens and event/person `team_id`. From now on, `team_id` in ClickHouse will mean `posthog_environment.data_id`. The only thing we continue processing at the project level is event/property definitions.
 1. Frontend, behind a flag: We add logic for environment availability and selection to `teamLogic`.
 1. Frontend, behind a flag: We add the environment as a breadcrumb item with a dropdown + creation modal.
     > We must make it crystal clear for customers splitting by region that cross-environment analytics isn't possible – environments are designed specifically to solve cross-contamination.

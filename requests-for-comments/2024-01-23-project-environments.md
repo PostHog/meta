@@ -153,7 +153,7 @@ Of course, nothing comes for free: adding evironments has its own downsides. Her
 
 ### Pricing
 
-Environments should start out as a paid feature, since they're key for professional users, and more of a nice-to-have for hobbyists. I would suggest it falling under the same restrictions as multiple projects, i.e. multiple environments being available after putting in a card.
+Having multiple environments should start out as a Teams/Enterprise feature.
 
 ### Rough scope of work
 

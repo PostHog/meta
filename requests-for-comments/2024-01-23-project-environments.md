@@ -157,7 +157,7 @@ Having multiple environments should start out as a Teams/Enterprise feature.
 
 ### Rough scope of work
 
-1. Backend: We add an `Environment` model (`posthog_environment` table, columns int `id`, `team_id`, `data_id` `name`, `api_token`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we determine its `id` by incrementing the counter of the `posthog_team.id` column and using that value as the environment's `data_id`.
+1. Backend: We add an `Environment` model (`posthog_environment` table, columns int `id`, `team_id`, `data_id` `name`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we determine its `id` by incrementing the counter of the `posthog_team.id` column and using that value as the environment's `data_id`.
 1. Backend: For every project existing currently we create a matching default `Environment`, reusing the project's `id` the environment's `data_id`. Any time a new project is created, it also gets a default environment based on the same logic.
 1. Backend: We add an `SDKKey` model (columns UUID `id`, `environment_id`, `value`, `created_by`, `created_at`) and populate it with current `api_token` values from `posthog_team` (for each project using the project ID as `environment_id`).
     > Until we replace the project API key in project settings with environments, we'll have to sync the project API key being reset with its `posthog_sdkkey` equivalent.

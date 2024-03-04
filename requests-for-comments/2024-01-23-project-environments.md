@@ -77,9 +77,9 @@ Because feature flags use cohorts and actions in their definitions, these are al
 
   Wanted to copy flags from dev to production.
 
-- [Feature flag copying - K ZEN-10652](https://posthoghelp.zendesk.com/agent/tickets/10652)
+- [Feature flag copying - K ZEN-10652](https://posthoghelp.zendesk.com/agent/tickets/10652) and [ZEN-10995](https://posthoghelp.zendesk.com/agent/tickets/10995) (two from one org)
 
-  Same as above.
+  Also wanted to copy flags from dev to production. After using feature flag copying, they asked about the ability to keep the flags in sync automatically without copying being a manual step.
 
 #### Issues
 
@@ -180,6 +180,7 @@ Let's do the same as above with one tweak: we turn `posthog_team` into environme
     - `EarlyAccessFeature`
     - `Survey`
     - `SessionRecordingPlaylist`
+   
     For each of these models, we update its endpoint's `get_queryset()` to include entities from other environments that qualify due to `is_project_wide`.
     > At this point we can make Environments an early access feature, as we keep adding support for project-wide entities to each of the features listed above. Early adopters start creating environments.
 1. Frontend, behind a flag: We move the current "Project settings" to a new "Environment settings" section, and add the new-style project name to "Project setting".

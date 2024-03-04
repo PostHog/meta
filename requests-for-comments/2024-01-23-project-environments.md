@@ -131,15 +131,15 @@ The UX would still be a little clunky, with a need to manually set up multiple f
 
 ## Proposed solution: Environments
 
-We can make environments a first-class entity in PostHog – each project would be subdivided into one or more environments. The *data* would be isolated between projects, but the *taxonomy* and *analysis setup* would be shared (see "Summarizing needs" for what should be isolated and what should be shared exactly).
+From a user perspective that is what we will call them as it is clear and understandable. From an implementation perspective we would extend the `Team|Project` concept to allow any Project to have a parent Project indicating that it's meta configuration should happen there (dashboards, insights etc.).
 
 To support the most common workflow of drafting dashboards/etc. in dev/staging and then "promoting" to production, entities such as dashboards would be environment-specific by default, but could be rolled out to the whole project with two clicks. When rolled out, the entity's dependencies would be made project-wide as well (e.g. for a cohort, all actions and other cohorts used in the definition would be instantly made project-wide as well). We'd introduce checks to make sure you can't make an entity environment-specific if it's currently being used project-wide. Sharing in this way would involve no copying though, so there would be no effort needed to sync things.
 
-To support large customers with access control needs, we'd need to add environment-specific project membership to the existing project access control system.
+To support large customers with access control needs, we'd need to update existing project access control system to indicate which projects are actually "environments" (i.e. sub projects).
 
 To support the common feature flags workflow of rollout conditions being different between dev and production, we'd make flag rollout groups always environment-specific.
 
-To ensure straightforward yet complete separation of data at the ingestion level (incl. persons), *as well as* steady querying performance, each environment would have its own `team_id`. Due to this requirement, environments would have to be predefined by users and not created at ingestion time, thus each environment would also have its own SDK key (aka "project API key" currently). That seems like a safe choice in terms of the UX.
+To ensure straightforward yet complete separation of data at the ingestion level (incl. persons), *as well as* steady querying performance we would continue as normal with projects. As environments are simply projects under-the-hood, there would be no changes needed to ingestion in general.
 
 By default, a project would only have one environment implicitly named "Production". A "New environment" button would allow adding a new one, with the environments feature explained in the modal. The current environment would then be selectable from the project selector, roughly looking like this (courtesy of Cory):
 
@@ -149,7 +149,7 @@ Extra internal requirement: Because Team Pipeline plans to implement multiple SD
 
 ### Downsides
 
-Of course, nothing comes for free: adding evironments has its own downsides. Here, it's the amount of effort required – this feature would touch every part of the app, plus ingestion. It would realistically be a few person-sprints of work (as always, it's hard to estimate accurately).
+Of course, nothing comes for free: adding environments has its own downsides. Here, it's the amount of effort required – this feature would touch every part of the app, plus ingestion. It would realistically be a few person-sprints of work (as always, it's hard to estimate accurately).
 
 ### Pricing
 
@@ -157,35 +157,28 @@ Having multiple environments should start out as a Teams/Enterprise feature.
 
 ### Rough scope of work
 
-1. Backend: We add an `Environment` model (`posthog_environment` table, columns int `id`, `team_id`, `data_id` `name`) and hook it up to a new project-scoped viewset (`/api/projects/:id/environments/`). Every time a new environment is created, we determine its `id` by incrementing the counter of the `posthog_team.id` column and using that value as the environment's `data_id`.
-1. Backend: For every project existing currently we create a matching default `Environment`, reusing the project's `id` the environment's `data_id`. Any time a new project is created, it also gets a default environment based on the same logic.
-1. Backend: We add an `SDKKey` model (columns UUID `id`, `environment_id`, `value`, `created_by`, `created_at`) and populate it with current `api_token` values from `posthog_team` (for each project using the project ID as `environment_id`).
-    > Until we replace the project API key in project settings with environments, we'll have to sync the project API key being reset with its `posthog_sdkkey` equivalent.
-1. Backend: We add environments to `TeamSerializer`.
-1. Backend: We add `current_environment` to the `User` model.
-1. Plugin server: We switch to `posthog_environment` as the source of truth for tokens and event/person `team_id`. From now on, `team_id` in ClickHouse will mean `posthog_environment.data_id`. The only thing we continue processing at the project level is event/property definitions.
+1. Backend: We add an `parent_team_id` property to the `Team` model. When specified this would essentially cause the UI to delegate certain things to that ID instead.
+1. Backend: We add `child_projects` to `TeamSerializer` and vice versa to make it clear.
+1. Backend: We enable creating or updating a `Team` with a `parent_team_id` ensuring that there is only one parent in the chain. This is essentially how from a user perspective environments would be created.
+1. Plugin server: When ingesting for a `Team` almost nothing changes. The only thing we do change is to check the `parent_team_id` and if set we use that for processing event/property definitions.
 1. Frontend, behind a flag: We add logic for environment availability and selection to `teamLogic`.
 1. Frontend, behind a flag: We add the environment as a breadcrumb item with a dropdown + creation modal.
+    > The frontend will need to understand that when a `parent_team_id` is set, most configuration queries will go to that team's endpoints with only data-level queries going to it's own endpoints.
     > We must make it crystal clear for customers splitting by region that cross-environment analytics isn't possible – environments are designed specifically to solve cross-contamination.
-1. Backend: To models of all optionally project-wide entities, we add boolean fields `environment_id` and `is_project_wide`:
+	> We must make it clear that moving a project to a parent, essentially removes all of it's meta resources (for people migrating projects).
+1. Backend: To enable optional project-scoping we may want to add `child_project_id` to models of all things that may want to be scoped down.
 	- `Dashboard`
 	- `Insight`
 	- `Action`
 	- `Cohort`
 	- `FeatureFlag`
 	- `SessionRecordingPlaylist`
-1. Backend: In all endpoints that query ClickHouse, we add support for filtering by environment ID instead of project ID for querying:
-	- `InsightViewSet`
-	- `QueryViewSet`
-	- `ClickhouseGroupsView`
-	- `ClickhouseExperimentsViewSet`
-	- `PersonViewSet`
-	- `SessionRecordingViewSet`
-	- `DashboardsViewSet`
-
-	We must ensure cache keys use the environment ID, but besides that no caching changes should be needed.
+1. Backend: In the `TeamViewSet` we may want to consider automatically selecting the parent team ID for things such as Actions/Insights etc. as this would simplify the API greatly.
+1. Backend: For all query endpoints we change nothing as they just respect the `:project_id`
+	> We must ensure cache keys use the environment ID, but besides that no caching changes should be needed.
 1. Zapier integration: Migrate to environment selection.
-1. Frontend, behind a flag: We add an "Environments" section to project settings (similar to group types).
+1. Frontend, behind a flag: We make a distinction between Project and Environment settings so that it is clear what is being modified
+    > For example: Internal user filters - project setting. Record sessions - environment setting.
 1. Backend + frontend, behind a flag: [UX to be specified] We allow feature flag rollout groups to be environment-specific.
 1. Frontend, behind a flag: To prevent the UI from being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domains favicon. Otherwise we show a lettermark (no image uploading for now).
   > At this point we can likely release the feature and unflag it.

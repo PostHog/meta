@@ -165,8 +165,8 @@ To optimize the implementation phase, we can cut opt-in project-wideness out of 
 1. Backend: We add a `Project` model (`posthog_project` table, initially integer column `id` + string column `name`). Meanwhile, `posthog_team` gets one new nullable column: `project_id`.
   From now on `posthog_team` means "environment" internally. For ease of transition, the first environment in a project always has the same ID as the project.  
   At this point in implementation, new-style projects are created automatically for every new environment (i.e. old-style project), but cannot be created manually.
-1. Backend: For every Team which isn't under a Project yet, we create a matching default Project. After this, every single environment has a parent project, thus we make `project_id` non-nullable.
-1. Backend: For all project-scoped viewsets, we change the queryset filtering from `team_id=self.team_id` to `team__project_id=self.team_id`. See list below for models associated with such endpoints:
+2. Backend: For every Team which isn't under a Project yet, we create a matching default Project. After this, every single environment has a parent project, thus we make `project_id` non-nullable.
+3. Backend: For all project-scoped viewsets, we change the queryset filtering from `team_id=self.team_id` to `team__project_id=self.team_id`. See list below for models associated with such endpoints:
     - `Dashboard`
     - `Insight`
     - `Action`
@@ -178,20 +178,21 @@ To optimize the implementation phase, we can cut opt-in project-wideness out of 
     - `SessionRecordingPlaylist`
    
     This way we're able to postpone denormalizing `project_id`.
-1. We move `TeamViewSet` from `/api/projects/` to `/api/environments/`. At `/api/projects/` we instead put a new `ProjectViewSet`, which is based on the `Project` model BUT behaves exactly like `TeamViewSet`. This makes the transition invisible to existing API consumers, and we can do it thanks to the first environment's ID always being the same as the project's ID. As for settings, they stay at the `posthog_team` level, but we can work around this by still returning and updating settings at `/api/projects/`, just always using the first environment. This ensures backward compatibility, even if it's sneaky.  
+4. We move `TeamViewSet` from `/api/projects/` to `/api/environments/`. At `/api/projects/` we instead put a new `ProjectViewSet`, which is based on the `Project` model BUT behaves exactly like `TeamViewSet`. This makes the transition invisible to existing API consumers, and we can do it thanks to the first environment's ID always being the same as the project's ID. As for settings, they stay at the `posthog_team` level, but we can work around this by still returning and updating settings at `/api/projects/`, just always using the first environment. This ensures backward compatibility, even if it's sneaky.  
   For environment creation specifically, we add `/api/projects/:project_id/environments/`.
-1. Frontend, behind a flag: We turn the project selector into the environment selector. This means sectioning the selector by project, renaming "New project" to "New environment" and scoping that flow by project, and finally adding a "New project" button to allow *real Project* creation
+5. Frontend, behind a flag: We turn the project selector into the environment selector. This means sectioning the selector by project, renaming "New project" to "New environment" and scoping that flow by project, and finally adding a "New project" button to allow *real Project* creation
     > During project creation, we must make it crystal clear for customers splitting by region that cross-environment analytics isn't possible – environments are designed specifically to solve data cross-contamination.
-1. Backend + frontend, behind a flag: We add nullable field `project_id` to the `GroupTypeMapping` (along with a constraint to ensure a group type index is not reused within a `posthog_project`), backfill the field in the same migration, and then make it non-nullable. We reuse `ClickhouseGroupsTypesView` for `/api/v2/projects/:project_id/group_types/` and – in the flagged UI – switch to this endpoint from the environment-level version. (Zero real impact currently, as no user has multiple environments within a project *yet*.)
-1. Plugin server: We add the `posthog_team.project_id` field to `TeamManager` and subsequently update `GroupTypeManager` to map group types per `project_id` rather than `team_id`.
-1. Backend + frontend, behind a flag: We add nullable field `project_id` to the `EventDefinition` & `PropertyDefinition`, backfill the field in the same migration, and then make it non-nullable. We reuse `EventDefinitionViewSet` & `PropertyDefinitionViewSet` for `/api/v2/projects/:project_id/{event,property}_definitions/` and – in the flagged UI – switch to these endpoints from the environment-level versions.
-1. Plugin server: We update `PropertyDefinitionsManager` to map group types per `project_id` rather than `team_id`.environments.
-1. Frontend, behind a flag: We move the current "Project settings" to a new "Environment settings" section, and add the new-style project name to "Project setting".
-1. Backend + frontend, behind a flag: [UX to be specified] We allow feature flag rollout groups to be either project-wide or environment-specific.
-1. Frontend, behind a flag: To prevent the UI from being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domain's favicon. Otherwise, we show a lettermark (no image uploading for now).
+6. Backend + frontend, behind a flag: We add nullable field `project_id` to the `GroupTypeMapping` (along with a constraint to ensure a group type index is not reused within a `posthog_project`), backfill the field in the same migration, and then make it non-nullable. We reuse `ClickhouseGroupsTypesView` for `/api/v2/projects/:project_id/group_types/` and – in the flagged UI – switch to this endpoint from the environment-level version. (Zero real impact currently, as no user has multiple environments within a project *yet*.)
+7. Plugin server: We add the `posthog_team.project_id` field to `TeamManager` and subsequently update `GroupTypeManager` to map group types per `project_id` rather than `team_id`.
+8. Backend + frontend, behind a flag: We add nullable field `project_id` to the `EventDefinition` & `PropertyDefinition`, backfill the field in the same migration, and then make it non-nullable. We reuse `EventDefinitionViewSet` & `PropertyDefinitionViewSet` for `/api/v2/projects/:project_id/{event,property}_definitions/` and – in the flagged UI – switch to these endpoints from the environment-level versions.
+9. Plugin server: We update `PropertyDefinitionsManager` to map group types per `project_id` rather than `team_id`.environments.
+10. Frontend, behind a flag: We move the current "Project settings" to a new "Environment settings" section, and add the new-style project name to "Project setting".
+11. Backend + frontend, behind a flag: [UX to be specified] We allow feature flag rollout groups to be either project-wide or environment-specific.
+12. Frontend, behind a flag: To prevent the UI from being overwhelming, we turn the organization name into just an icon. If the organization owner has an email address from a non-email-provider domain, we use that domain's favicon. Otherwise, we show a lettermark (no image uploading for now).
     > At this point we can likely release the feature and unflag it.
-1. Backend: We mark the `team_id` field as deprecated on `GroupTypeMapping`, `EventDefinition` and `PropertyDefinition` - should not be used anymore with `project_id` serving as the replacement.
-1. Zapier integration: Rename project selection to environment selection.
+13. Backend: We mark the `team_id` field as deprecated on `GroupTypeMapping`, `EventDefinition` and `PropertyDefinition` - should not be used anymore with `project_id` serving as the replacement.
+14. We denormalize `project_id` on models from point 3 by adding the field directly to those modules. Then we make viewsets filtering by `team__project_id` filter by `project_id`.
+15. Zapier integration: Rename project selection to environment selection.
 
 ### Migration path for existing customers
 

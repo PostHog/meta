@@ -16,7 +16,7 @@ Basic stuff across the site that'll need to be done.
 
 - [ ] Update documentation - @andyvan https://github.com/PostHog/posthog.com/issues/7736
 - [ ] Create a product page - @corywaitlo https://github.com/PostHog/posthog.com/pull/8001
-- [ ] Web analytics case study - @joethreepwood
+- [x] Web analytics case study - @joethreepwood
 - [ ] Remove beta tags from homepage slider, docs, etc - @joethreepwood
 - [ ] Add Web analytics links to footer - @joethreepwood
 - [ ] Update `/blog/ga4-alternatives` with a CTA

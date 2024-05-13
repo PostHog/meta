@@ -32,6 +32,10 @@ Our current workarounds of `just repeat the survey manually` might get them to r
 1. [Pendo's custom NPS survey type](https://support.pendo.io/hc/en-us/articles/360033527151-Set-up-an-NPS-survey#h_01HGD0SKYSRB6SNKXBFJ1QG7M7)
 2. [Surveymonkey's multiple responses](https://help.surveymonkey.com/en/surveymonkey/send/allowing-multiple-responses/)
 
+This is how UserPilot shows NPS scores changing over time 
+
+<img width="1115" alt="image" src="https://github.com/PostHog/meta/assets/82819/3fbaa08d-aa79-4781-b0f4-07b56242486f">
+
 
 ## Design
 _What are the key user experience and technical design decisions / trade-offs?_
@@ -60,9 +64,29 @@ These two properties are nullable and we need to make our work backwards compati
 
 #### UI changes. 
 1. Show the user an interface to pick the repeat interval of the survey, this can be relative (every 4 months) or absolute (pick specific dates). 
-4. Show the user an interface to pick the iteration count, how many times should this survey repeat? 
-5. If a survey has an iteration count of more than 1, change the existing UI to run custom clickhouse queries to account for a survey with multiple response sets, one for each iteration. 
+2. Show the user an interface to pick the iteration count, how many times should this survey repeat? 
+3. If a survey has an iteration count of more than 1, change the existing UI to run custom clickhouse queries to account for a survey with multiple response sets, one for each iteration.
+4. Depending on survey type, introduce a section to show historic results:
+   
+   4.1. NPS : Display NPS scores bucketed by detractors, passives, promoters, over time. Here's an example.
+<img width="1115" alt="image" src="https://github.com/PostHog/meta/assets/82819/3fbaa08d-aa79-4781-b0f4-07b56242486f">
+   4.2. CSAT: Display cumulative CSAT over time. Here's an example from https://theacsi.org/
+   <img width="489" alt="image" src="https://github.com/PostHog/meta/assets/82819/ff9d9928-862b-4fb3-a718-225922efce4a">
 
+5. Along with historic results, allow users to pick a time period/iteration and show the following information over that time period.
+   
+   5.1. Users viewed/submitted/dismissed
+   
+   5.2. for NPS, responses segmented into detractors,passives & promoters.
+   
+   5.3. for CSAT, responses segmented into dissatisfied, satisfied & very satisfied.
+
+7. Custom new sections to show:
+
+   6.1. Survey response rate over time, i.e., if the number of people responding to a survey increases/decreases over time.
+   
+   6.2. Survey user base changing over time, i.e., if users who submitted the survey once do it again. 
+   
 #### posthog-js changes.
 1. To decide when to show a survey, see if a user has a survey response submitted for the current survey start date, and show the survey if they haven't.
 3. When a survey is submitted, add properties for survey iteration count and survey start date in the current iteration  to the person properties. So this person is accounted as having submitted the survey for this iteration/start date.

@@ -52,28 +52,30 @@ Here's what we need to do to solve this :
 
 | Column name | type | description | nullable |
 |:----|:----|:----|:----|
-| `survey_frequency` | &lt;some cron indicator, could be varchar&gt; |  Frequency at which the survey should be repeated | Yes | 
-| `survey_max_iteration_count` | integer | max number of times the survey should be repeated |  Yes |
+| `iteration_frequency_days` | integer |  Frequency, in days, at which the survey should be repeated | Yes | 
+| `iteration_count` | integer | max number of times the survey should be repeated |  Yes |
+| `iteration_start_dates` | []date | Start dates of all iterations for this survey. |  Yes |
 
 This design allows our users to setup such surveys:
 
-1. `repeat this survey 4 times, once every 3 months`.
-2. They can also just leave the `survey_max_iteration_count` as zero to have an infinitely repeating survey `repeat this survey, once every 3 months`
+1. `repeat this survey 4 times, once every 90 days`.
+2. They can also just leave the `iteration_count` as zero to have an infinitely repeating survey `repeat this survey, once every 90 days`
 
-These two properties are nullable and we need to make our work backwards compatible to make existing survey responses function without issues to show NPS scores etc. 
+These three properties are nullable and we need to make our work backwards compatible to make existing survey responses function without issues to show NPS scores etc. 
 
 #### UI changes. 
-1. Show the user an interface to pick the repeat interval of the survey, this can be relative (every 4 months) or absolute (pick specific dates). 
-2. Show the user an interface to pick the iteration count, how many times should this survey repeat? 
-3. If a survey has an iteration count of more than 1, change the existing UI to run custom clickhouse queries to account for a survey with multiple response sets, one for each iteration.
-4. Depending on survey type, introduce a section to show historic results:
+1. Show the user an interface to pick the repeat interval of the survey, this will be a frequency in Days.
+2. Show the user an interface to pick the iteration count, how many times should this survey repeat?
+3. Once both values are collected, on the server, use `[Recurrence Rule](https://dateutil.readthedocs.io/en/stable/rrule.html)` to save the `iteration_start_dates` of the Survey. 
+4. If a survey has an iteration count of more than 1, change the existing UI to run custom clickhouse queries to account for a survey with multiple response sets, one for each iteration.
+5. Depending on survey type, introduce a section to show historic results:
    
    4.1. NPS : Display NPS scores bucketed by detractors, passives, promoters, over time. Here's an example.
 <img width="1115" alt="image" src="https://github.com/PostHog/meta/assets/82819/3fbaa08d-aa79-4781-b0f4-07b56242486f">
    4.2. CSAT: Display cumulative CSAT over time. Here's an example from https://theacsi.org/
    <img width="489" alt="image" src="https://github.com/PostHog/meta/assets/82819/ff9d9928-862b-4fb3-a718-225922efce4a">
 
-5. Along with historic results, allow users to pick a time period/iteration and show the following information over that time period.
+6. Along with historic results, allow users to pick a time period/iteration and show the following information over that time period.
    
    5.1. Users viewed/submitted/dismissed
    

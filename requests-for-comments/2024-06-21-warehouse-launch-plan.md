@@ -20,6 +20,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 - [ ] Share blogpost to HackerNews - Marketing
 - [ ] Email announcement to all users - @joethreepwood
 - [ ] Social push, changelog, Pylon announcement - @joethreepwood
+- [ ] Bookface launch to the YC community - @jamesefhawkins 
 
 ### Follow-on activity
 

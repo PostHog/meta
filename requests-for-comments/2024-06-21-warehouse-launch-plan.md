@@ -7,6 +7,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 - [ ] Publish a Stripe data warehouse tutorial - Marketing
 - [ ] Publish a Hubspot data warehouse tutorial - Marketing
 - [ ] Publish a Postgres data warehouse tutorial - Marketing
+- [ ] Create dashboard templates for 2x common usecases - @ivanagas
 - [ ] Update docs as needed - Marketing
 - [ ] Add Data Warehouse to in-app 'Explore the docs' menu - https://github.com/PostHog/posthog/pull/22715
 - [x] Key art - @lottiecoxon (we have some already, open to new though)
@@ -26,6 +27,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 
 - [ ] Source a data warehouse customer story - @joethreepwood
 - [ ] Update onboarding email flow with data warehouse options - @joethreepwood
+- [ ] Invite Theo/Danny to try the warehouse and give what they need for a video on it - @ivanagas
 
 ### Bigger ideas
 
@@ -36,10 +38,7 @@ Is it possible to create dashboard templates that integrate with our integrated 
 We could offer discounted pricing for the first year to all users who have connected a source during the beta. Easy way to get good will and retain these users - and, if announced early, encourage some early adopters. 
 
 **Data warehouse as a newsletter theme**
-I've learned not to suggest anything too specific here. But talking about data warehouses in the newsletter is a way to get attention. 
-
-**Invite Theo to try it**
-We could invite Theo to try the data warehouse and talk about his thoughts. He could have someone to interview, etc., if he wants. 
+I've learned not to suggest anything too specific here. But talking about data warehouses in the newsletter is a way to get attention.  
 
 **Sponsorships**
 There are some newsletter sponsorships we've looked at before, such as DataElixir, which may be a good match for this audience. We could draw up a list of podcasts and newsletters to reach to ahead of time. (Suggestions welcome)

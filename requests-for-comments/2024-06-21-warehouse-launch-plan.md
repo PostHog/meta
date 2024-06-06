@@ -8,7 +8,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 - [ ] Publish a Hubspot data warehouse tutorial - Marketing
 - [ ] Publish a Postgres data warehouse tutorial - Marketing
 - [ ] Update docs as needed - Marketing
-- [ ] Add Data Warehouse to in-app 'Explore the docs' menu - @joethreepwood
+- [ ] Add Data Warehouse to in-app 'Explore the docs' menu - https://github.com/PostHog/posthog/pull/22715
 - [x] Key art - @lottiecoxon (we have some already, open to new though)
 
 

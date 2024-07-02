@@ -15,7 +15,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 
 ### Launch day activity
 
-- [ ] Publish a launch blog piece about why data warehouse is important - 
+- [ ] Publish a launch blog piece about why data warehouse is important - @joethreepwood 
 - [ ] Update pricing page with data warehouse pricing
 - [ ] Update in-app onboarding with data warehouse option
 - [ ] Share blogpost to HackerNews - Marketing

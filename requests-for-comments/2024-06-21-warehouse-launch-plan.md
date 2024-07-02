@@ -4,8 +4,8 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 
 ### Ahead of launch
 
-- [ ] Publish a [Stripe data warehouse tutorial](https://github.com/PostHog/posthog.com/issues/8662) - Marketing
-- [ ] Publish a [Hubspot data warehouse tutorial](https://github.com/PostHog/posthog.com/issues/8664) - Marketing
+- [x] Publish a [Stripe data warehouse tutorial](https://github.com/PostHog/posthog.com/issues/8662) - Marketing
+- [x] Publish a [Hubspot data warehouse tutorial](https://github.com/PostHog/posthog.com/issues/8664) - Marketing
 - [ ] Publish a [Zendesk data warehouse tutorial](https://github.com/PostHog/posthog.com/issues/8663) - Marketing
 - [ ] Create dashboard templates for 2x common usecases - @ivanagas
 - [ ] Update docs as needed - Marketing

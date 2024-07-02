@@ -8,7 +8,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 - [x] Publish a [Hubspot data warehouse tutorial](https://github.com/PostHog/posthog.com/issues/8664) - Marketing
 - [ ] Publish a [Zendesk data warehouse tutorial](https://github.com/PostHog/posthog.com/issues/8663) - Marketing
 - [ ] Create dashboard templates for 2x common usecases - @ivanagas
-- [ ] Update docs as needed - Marketing
+- [x] Update docs as needed - Marketing
 - [ ] Add Data Warehouse to in-app 'Explore the docs' menu - https://github.com/PostHog/posthog/pull/22715
 - [x] Key art - @lottiecoxon (we have some already, open to new though)
 

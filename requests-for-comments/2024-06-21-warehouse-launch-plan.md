@@ -19,6 +19,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 - [ ] Update pricing page with data warehouse pricing - Growth
 - [ ] Update in-app onboarding with data warehouse option - Growth
 - [ ] Share blogpost to HackerNews - Marketing
+- [ ] https://github.com/PostHog/posthog.com/pull/8875 - @joethreepwood 
 - [ ] https://github.com/PostHog/meta/issues/213 - @joethreepwood
 - [ ] Social push, changelog, Pylon announcement - @joethreepwood
 

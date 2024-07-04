@@ -15,7 +15,7 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 
 ### Launch day activity
 
-- [ ] Publish a launch blog piece about why data warehouse is important - @joethreepwood 
+- [ ] https://github.com/PostHog/posthog.com/pull/8887 - @joethreepwood 
 - [ ] Update pricing page with data warehouse pricing - Growth
 - [x] Update in-app onboarding with data warehouse option - Growth
 - [ ] Share blogpost to HackerNews - Marketing

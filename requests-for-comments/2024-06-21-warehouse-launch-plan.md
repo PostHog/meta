@@ -21,7 +21,6 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 - [ ] Share blogpost to HackerNews - Marketing
 - [ ] https://github.com/PostHog/posthog.com/pull/8875 - @joethreepwood 
 - [ ] https://github.com/PostHog/meta/issues/213 - @joethreepwood
-- [ ] Social push, changelog, Pylon announcement - @joethreepwood
 
 ### Follow-on activity
 

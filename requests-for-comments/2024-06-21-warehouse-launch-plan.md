@@ -27,7 +27,6 @@ The data warehouse has been in an opt-in beta for a while, and has now been open
 
 - [ ] Case study: https://github.com/PostHog/posthog.com/issues/8684 - @joethreepwood
 - [ ] Update onboarding email flow with data warehouse options - @joethreepwood
-- [ ] Invite Theo/Danny to try the warehouse and give what they need for a video on it - @ivanagas
 
 ### Bigger ideas
 

@@ -55,7 +55,6 @@ Basic things we always do.
 
 Ideas for other, weirder things go here. 
 
-- [ ] Web Analytics launch on Product Hunt
 - [ ] Article comparing performance impact of PostHog vs other web analytics tools
 - [ ] Web analytics comparison content for: Plausible, Fathom
 - [ ] Announce via newsletter sponsorships 

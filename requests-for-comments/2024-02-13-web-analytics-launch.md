@@ -59,3 +59,4 @@ Ideas for other, weirder things go here.
 - [ ] Web analytics comparison content for: Plausible, Fathom
 - [ ] Announce via newsletter sponsorships 
 - [ ] Approach Jason Packer about contributing to the newsletter/blog
+- [ ] Unique hedgehog mode skin design and implementation - @lottiecoxon & @robbie-c 

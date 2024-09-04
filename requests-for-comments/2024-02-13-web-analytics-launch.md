@@ -55,7 +55,6 @@ Basic things we always do.
 
 Ideas for other, weirder things go here. 
 
-- [ ] Limited edition merch drop for users in the beta: "I was in PostHog's beta and all I got was this awesome t-shirt!"
 - [ ] Web Analytics launch on Product Hunt
 - [ ] Article comparing performance impact of PostHog vs other web analytics tools
 - [ ] Web analytics comparison content for: Plausible, Fathom

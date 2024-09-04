@@ -58,7 +58,5 @@ Ideas for other, weirder things go here.
 - [ ] Web Analytics launch on Product Hunt
 - [ ] Article comparing performance impact of PostHog vs other web analytics tools
 - [ ] Web analytics comparison content for: Plausible, Fathom
-- [ ] Video tutorial about how to use web analytics
-- [ ] Give Theo information as to how we built Web Analytics for a video 
 - [ ] Announce via newsletter sponsorships 
 - [ ] Approach Jason Packer about contributing to the newsletter/blog

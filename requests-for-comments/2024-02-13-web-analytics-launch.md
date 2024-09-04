@@ -47,8 +47,8 @@ Basic things we always do.
 - [ ] Blog + Changelog announcement at launch - @joethreepwood
 - [ ] Social announcements on Twitter + LinkedIn - @joethreepwood
 - [ ] Pylon announcement to all current paying users - @joethreepwood
-- [ ] New key art for use in blogs, emails, etc - @lottiecoxon
-- [ ] New web analytics ads run by Hey Digital 
+- [x] New key art for use in blogs, emails, etc - @lottiecoxon
+- [ ] New web analytics ads run by Hey Digital - @andyvan-ph 
 - [ ] Invite YC teams who don't use us on our marketing site to try us out
 
 ## Bigger ideas

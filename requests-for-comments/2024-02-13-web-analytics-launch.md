@@ -25,6 +25,7 @@ Basic stuff across the site that'll need to be done.
 - [ ] Update `https://posthog.com/blog/posthog-vs-ga4` with a CTA
 - [x] Create a Web Analytics section for `/questions`
 - [ ] Add a Frequently Asked Questions post to community - @joethreepwood
+- [x] Migration guide: GA > PostHog - Ian
 
 ## Other updates
 

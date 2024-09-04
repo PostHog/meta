@@ -14,16 +14,16 @@ Pricing is TBC, but web analytics will have usage-based pricing.
 
 Basic stuff across the site that'll need to be done. 
 
-- [ ] Update documentation - @andyvan https://github.com/PostHog/posthog.com/issues/7736
-- [ ] Create a product page - @corywaitlo https://github.com/PostHog/posthog.com/pull/8001
+- [x] Update documentation - @andyvan https://github.com/PostHog/posthog.com/issues/7736
+- [x] Create a product page - @corywaitlo https://github.com/PostHog/posthog.com/pull/8001
 - [x] Web analytics case study - @joethreepwood
-- [ ] Remove beta tags from homepage slider, docs, etc - @joethreepwood
-- [ ] Add Web analytics links to footer - @joethreepwood
+- [x] Remove beta tags from homepage slider, docs, etc - @joethreepwood
+- [x] Add Web analytics links to footer - @joethreepwood
 - [ ] Update `/blog/ga4-alternatives` with a CTA
 - [ ] Update `/blog/track-your-website-with-posthog` with a CTA
 - [ ] Update `/blog/google-analytics-to-posthog` with a CTA
 - [ ] Update `https://posthog.com/blog/posthog-vs-ga4` with a CTA
-- [ ] Create a Web Analytics section for `/questions`
+- [x] Create a Web Analytics section for `/questions`
 - [ ] Add a Frequently Asked Questions post to community - @joethreepwood
 
 ## Other updates

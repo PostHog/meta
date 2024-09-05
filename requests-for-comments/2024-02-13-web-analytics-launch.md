@@ -36,7 +36,7 @@ Basic stuff outside the website that we'll need to update.
 - [x] Add Web Analytics to G2 - @joethreepwood
 - [x] Add Web Analytics to Bookface - @joethreepwood
 - [x] Add Web Analytics to LinkedIn profile - @joethreepwood
-- [ ] Update PostHog README.md with information - @joethreepwood
+- [x] Update PostHog README.md with information - @joethreepwood
 - [x] Add PostHog to any relevant new G2 categories
 
 ## Default launch activities

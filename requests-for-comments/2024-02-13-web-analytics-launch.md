@@ -19,10 +19,10 @@ Basic stuff across the site that'll need to be done.
 - [x] Web analytics case study - @joethreepwood
 - [x] Remove beta tags from homepage slider, docs, etc - @joethreepwood
 - [x] Add Web analytics links to footer - @joethreepwood
-- [ ] Update `/blog/ga4-alternatives` with a CTA
-- [ ] Update `/blog/track-your-website-with-posthog` with a CTA
-- [ ] Update `/blog/google-analytics-to-posthog` with a CTA
-- [ ] Update `https://posthog.com/blog/posthog-vs-ga4` with a CTA
+- [x] Update `/blog/ga4-alternatives` with a CTA - @joethreepwood
+- [x] Update `/blog/track-your-website-with-posthog` with a CTA - @joethreepwood
+- [x] Update `/blog/google-analytics-to-posthog` with a CTA - @joethreepwood
+- [x] Update `https://posthog.com/blog/posthog-vs-ga4` with a CTA - @joethreepwood
 - [x] Create a Web Analytics section for `/questions`
 - [ ] Add a Frequently Asked Questions post to community - @joethreepwood
 - [x] Migration guide: GA > PostHog - Ian

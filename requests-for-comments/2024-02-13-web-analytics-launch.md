@@ -45,7 +45,7 @@ Basic things we always do.
 
 - [ ] Run a relevant Product for Engineers newsletter: `How we built Web Analytics` / `Learning from the mistakes of GA4` maybe?
 - [ ] In-app announcement using surveys/notifications for all users - @joethreepwood
-- [ ] Email announcement to beta users _ahead of launch_ - @joethreepwood (preferential pricing?)
+- [ ] Email announcement to beta users at launch with special reward - @joethreepwood 
 - [ ] Email announcement to all remaining users _at launch_ - @joethreepwood
 - [ ] Blog + Changelog announcement at launch - @joethreepwood
 - [ ] Social announcements on Twitter + LinkedIn - @joethreepwood

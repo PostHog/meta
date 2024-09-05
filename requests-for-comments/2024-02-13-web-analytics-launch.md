@@ -33,7 +33,9 @@ Basic stuff outside the website that we'll need to update.
 
 - [ ] Add Web Analytics as an option in in-app onboarding - GROWTH
 - [x] Add Web Analytics path as an email onboarding option - @joethreepwood
-- [ ] Add Web Analytics to G2, Bookface, etc - @joethreepwood
+- [x] Add Web Analytics to G2 - @joethreepwood
+- [x] Add Web Analytics to Bookface - @joethreepwood
+- [x] Add Web Analytics to LinkedIn profile - @joethreepwood
 - [ ] Update PostHog README.md with information - @joethreepwood
 - [ ] Add PostHog to any relevant new G2 categories
 

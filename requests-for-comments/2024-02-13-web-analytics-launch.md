@@ -47,7 +47,7 @@ Basic things we always do.
 - [ ] In-app announcement using surveys/notifications for all users - @joethreepwood
 - [ ] Email announcement to beta users at launch with special reward - @joethreepwood 
 - [ ] Email announcement to all remaining users _at launch_ - @joethreepwood
-- [ ] Blog + Changelog announcement at launch - @joethreepwood
+- [ ] Blog / Changelog announcement at launch - @joethreepwood
 - [ ] Social announcements on Twitter + LinkedIn - @joethreepwood
 - [ ] Pylon announcement to all current paying users - @joethreepwood
 - [x] New key art for use in blogs, emails, etc - @lottiecoxon

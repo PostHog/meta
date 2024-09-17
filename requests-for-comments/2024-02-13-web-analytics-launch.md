@@ -43,16 +43,15 @@ Basic stuff outside the website that we'll need to update.
 
 Basic things we always do. 
 
-- [ ] Run a relevant Product for Engineers newsletter: `How we built Web Analytics` / `Learning from the mistakes of GA4` maybe?
-- [ ] In-app announcement using surveys/notifications for all users - @joethreepwood
-- [ ] Email announcement to beta users at launch with special reward - @joethreepwood 
-- [ ] Email announcement to all remaining users _at launch_ - @joethreepwood
-- [ ] Blog / Changelog announcement at launch - @joethreepwood
-- [ ] Social announcements on Twitter + LinkedIn - @joethreepwood
-- [ ] Pylon announcement to all current paying users - @joethreepwood
+- [x] In-app announcement using surveys/notifications for all users - @joethreepwood
+- [x] Email announcement to beta users at launch with special reward - @joethreepwood 
+- [x] Email announcement to all remaining users _at launch_ - @joethreepwood
+- [x] Blog / Changelog announcement at launch - @joethreepwood
+- [x] Social announcements on Twitter + LinkedIn - @joethreepwood
+- [x] Pylon announcement to all current paying users - @joethreepwood
 - [x] New key art for use in blogs, emails, etc - @lottiecoxon
 - [ ] New web analytics ads run by Hey Digital - @andyvan-ph 
-- [ ] Invite YC teams who don't use us on our marketing site to try us out
+- [x] Invite YC teams who don't use us on our marketing site to try us out
 
 ## Bigger ideas
 

@@ -57,7 +57,7 @@ For context, we set out to produce a podcast as part of our Q1 marketing goals. 
   - Edit aggressively, but don't overdo it. We tried episodes with minimal editing (with Cory and James) and the feedback was that it was too long and not fast paced enough. We tried episodes where we edited every "uh" and "um" and the video became too "jumpy." The takeaway is we need to edit aggressively between sentences and segments, but not strip out mid-sentence pauses.
   - Split episodes into segments. See [Dalton & Michael](https://www.youtube.com/playlist?list=PLQ-uHSnFig5Nd98Sc9I-kkc0ZWe8peRMC) for good examples of this.
 - Variables
-  - When testing new ideas, it's best to isolate variables. We may have been better off recording a single episode topic three times to
+  - When testing new ideas, it's best to isolate variables. We may have been better off recording a single episode topic three times and then releasing the last, best version instead of recording several different topics and varying several different things for each episode.
 
 ## Raw collected feedback
 

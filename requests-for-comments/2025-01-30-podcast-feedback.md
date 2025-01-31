@@ -11,43 +11,45 @@ For context, we set out to produce a podcast as part of our Q1 marketing goals. 
 
 ### Should we release any of the content we have so far?
 
-- Recommendation: Aggressively edit the content from the episodes with Cory and Raquel. We have about 50 minutes for each episode, but we can cut out content that didn't land and try to aim for tighter episodes closer to 20 minutes in length that are made up of the best content we recorded.
+**Recommendation:** Aggressively edit the content from the episodes with Cory and Raquel. We have about 50 minutes for each episode, but we can cut out content that didn't land and try to aim for tighter episodes closer to 20 minutes in length that are made up of the best content we recorded.
 
 ### Should we do audio and video? Or consider starting with audio only?
 
-Recommendation: Starting with both audio and video was likely a mistake since we ended up with too many variables to worry about. Having said that, my recommendation is that we stick with both. Part of the original goals for the podcast were to open the door to video content and work towards improving our ability to produce video content internally.
+**Recommendation:** Starting with both audio and video was likely a mistake since we ended up with too many variables to worry about. Having said that, my recommendation is that we stick with both. Part of the original goals for the podcast were to open the door to video content and work towards improving our ability to produce video content internally.
 
 ### Should we have separate edits for audio and video?
 
-Recommendation: Long term, definitely. But in the short term, we should focus on aggressively editing content and keeping it tight even if the video versions end up feeling a bit janky.
+**Recommendation:** Long term, definitely. But in the short term, we should focus on aggressively editing content and keeping it tight even if the video versions end up feeling a bit janky.
 
 ### How long should each episode be?
 
-Recommendation: The shorter the better. We should aim for 10-20 minutes, with a maximum of 30 minutes only if we have a ton of great content.
+**Recommendation:** The shorter the better. We should aim for 10-20 minutes, with a maximum of 30 minutes only if we have a ton of great content.
 
 ### What should we name the show? Something obvious like Product Engineering?
 
-Recommendation: I prefer "The Product Engineering Podcast" since it's obvious in terms of the value proposition. But a lot of people liked "Quick Calls with Jimmy Hawkins" and I don't feel strongly either way.
+**Recommendation:** I prefer "The Product Engineering Podcast" since it's obvious in terms of the value proposition. But a lot of people liked "Quick Calls with Jimmy Hawkins" and I don't feel strongly either way.
 
 ### Should the content lean towards boring/valuable or entertaining? Should we try to make it personal? I've tried to find a fun segment to ask "name something weird" or a recommend a book or show. Should we just stay on topic?
 
-Recommendation: This sounds obvious that we want content that's clearly valuable to listeners. But the answer here will dictate a lot of the episode content. Do we want to get to know the people behind the product? Do we want to share stories about how PostHog and the products have come together? Or should we script a topic and try to stay on it as much as possible? I generally lean towards us creating a podcast that follows the success of our newsletter with a clear value proposition. "Here's how to do X topic based on our lived experience and lessons learned at PostHog." The drawback is that the conversations could get visibly boring if we try to stick to a script too tightly.
+**Recommendation:** This sounds obvious that we want content that's clearly valuable to listeners. But the answer here will dictate a lot of the episode content. Do we want to get to know the people behind the product? Do we want to share stories about how PostHog and the products have come together? Or should we script a topic and try to stay on it as much as possible? 
+
+I generally lean towards us creating a podcast that follows the success of our newsletter with a clear value proposition. "Here's how to do X topic based on our lived experience and lessons learned at PostHog." The drawback is that the conversations could get visibly boring if we try to stick to a script too tightly.
 
 ### How do we balance the quirky, fun tone with serious content?
 
-Recommendation: We have an over-the-top jingle and potentially a puppet in the branding for the show. But the conversations are "fundamentally a business talk". We can potentially balance the two, but it can admittedly come across as awkward and make the content seem dull when the fast-paced intro segues into a conversation.
+**Recommendation:** We have an over-the-top jingle and potentially a puppet in the branding for the show. But the conversations are "fundamentally a business talk". We can potentially balance the two, but it can admittedly come across as awkward and make the content seem dull when the fast-paced intro segues into a conversation.
 
 ### How long should we schedule for recording?
 
-Recommendation: Our existing 60 minute block works well for now. If we have external guests, we should try to get more content by extending to 90 minutes, where the first ~20 minutes is a pre-interview.
+**Recommendation:** Our existing 60 minute block works well for now. If we have external guests, we should try to get more content by extending to 90 minutes, where the first ~20 minutes is a pre-interview.
 
 ### Should Bijan host the show?
 
-Recommendation: We likely have a lot of people internally at PostHog that would be better at hosting. If Bijan continues to host, he'll have to rapidly improve at asking questions and directing the conversations.
+**Recommendation:** We likely have a lot of people internally at PostHog that would be better at hosting. If Bijan continues to host, he'll have to rapidly improve at asking questions and directing the conversations.
 
 ### Should we continue with the podcast as a goal?
 
-Recommendation: This is a meta question, but it's worth asking. We have excellent written and social content. But it seems like we've struggled with audio and video content. Part of the reason for the podcast was to make an intentional effort to improve in this area. But it's conceivable that we're not currently well-suited to creating this kind of content. And if that's the case, it's worth considering pivoting away from the goal before sinking additional resources into it.
+**Recommendation:** This is a meta question, but it's worth asking. We have excellent written and social content. But it seems like we've struggled with audio and video content. Part of the reason for the podcast was to make an intentional effort to improve in this area. But it's conceivable that we're not currently well-suited to creating this kind of content. And if that's the case, it's worth considering pivoting away from the goal before sinking additional resources into it.
 
 ## Lessons learned and actionable takeaways
 

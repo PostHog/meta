@@ -9,55 +9,83 @@ For context, we set out to produce a podcast as part of our Q1 marketing goals. 
 
 ## Decisions
 
-- Should we release any of the content we have so far?
-  - Recommendation: Aggressively edit the content from the episodes with Cory and Raquel. We have about 50 minutes for each episode, but we can cut out content that didn't land and try to aim for tighter episodes closer to 20 minutes in length that are made up of the best content we recorded.
-- Should we do audio and video? Or consider starting with audio only?
-  - Recommendation: Starting with both audio and video was likely a mistake since we ended up with too many variables to worry about. Having said that, my recommendation is that we stick with both. Part of the original goals for the podcast were to open the door to video content and work towards improving our ability to produce video content internally.
-- Should we have separate edits for audio and video?
-  - Recommendation: Long term, definitely. But in the short term, we should focus on aggressively editing content and keeping it tight even if the video versions end up feeling a bit janky.
-- How long should each episode be?
-  - Recommendation: The shorter the better. We should aim for 10-20 minutes, with a maximum of 30 minutes only if we have a ton of great content.
-- What should we name the show? Something obvious like Product Engineering?
-  - Recommendation: I prefer "The Product Engineering Podcast" since it's obvious in terms of the value proposition. But a lot of people liked "Quick Calls with Jimmy Hawkins" and I don't feel strongly either way.
-- Should the content lean towards boring/valuable or entertaining? Should we try to make it personal? I've tried to find a fun segment to ask "name something weird" or a recommend a book or show. Should we just stay on topic?
-  - Recommendation: This sounds obvious that we want content that's clearly valuable to listeners. But the answer here will dictate a lot of the episode content. Do we want to get to know the people behind the product? Do we want to share stories about how PostHog and the products have come together? Or should we script a topic and try to stay on it as much as possible? I generally lean towards us creating a podcast that follows the success of our newsletter with a clear value proposition. "Here's how to do X topic based on our lived experience and lessons learned at PostHog." The drawback is that the conversations could get visibly boring if we try to stick to a script too tightly.
-- How do we balance the quirky, fun tone with serious content?
-  - Recommendation: We have an over-the-top jingle and potentially a puppet in the branding for the show. But the conversations are "fundamentally a business talk". We can potentially balance the two, but it can admittedly come across as awkward and make the content seem dull when the fast-paced intro segues into a conversation.
-- How long should we schedule for recording?
-  - Recommendation: Our existing 60 minute block works well for now. If we have external guests, we should try to get more content by extending to 90 minutes, where the first ~20 minutes is a pre-interview.
-- Should Bijan host the show?
-  - Recommendation: We likely have a lot of people internally at PostHog that would be better at hosting. If Bijan continues to host, he'll have to rapidly improve at asking questions and directing the conversations.
-- Should we continue with the podcast as a goal?
-  - Recommendation: This is a meta question, but it's worth asking. We have excellent written and social content. But it seems like we've struggled with audio and video content. Part of the reason for the podcast was to make an intentional effort to improve in this area. But it's conceivable that we're not currently well-suited to creating this kind of content. And if that's the case, it's worth considering pivoting away from the goal before sinking additional resources into it.
+### Should we release any of the content we have so far?
+
+- Recommendation: Aggressively edit the content from the episodes with Cory and Raquel. We have about 50 minutes for each episode, but we can cut out content that didn't land and try to aim for tighter episodes closer to 20 minutes in length that are made up of the best content we recorded.
+
+### Should we do audio and video? Or consider starting with audio only?
+
+Recommendation: Starting with both audio and video was likely a mistake since we ended up with too many variables to worry about. Having said that, my recommendation is that we stick with both. Part of the original goals for the podcast were to open the door to video content and work towards improving our ability to produce video content internally.
+
+### Should we have separate edits for audio and video?
+
+Recommendation: Long term, definitely. But in the short term, we should focus on aggressively editing content and keeping it tight even if the video versions end up feeling a bit janky.
+
+### How long should each episode be?
+
+Recommendation: The shorter the better. We should aim for 10-20 minutes, with a maximum of 30 minutes only if we have a ton of great content.
+
+### What should we name the show? Something obvious like Product Engineering?
+
+Recommendation: I prefer "The Product Engineering Podcast" since it's obvious in terms of the value proposition. But a lot of people liked "Quick Calls with Jimmy Hawkins" and I don't feel strongly either way.
+
+### Should the content lean towards boring/valuable or entertaining? Should we try to make it personal? I've tried to find a fun segment to ask "name something weird" or a recommend a book or show. Should we just stay on topic?
+
+Recommendation: This sounds obvious that we want content that's clearly valuable to listeners. But the answer here will dictate a lot of the episode content. Do we want to get to know the people behind the product? Do we want to share stories about how PostHog and the products have come together? Or should we script a topic and try to stay on it as much as possible? I generally lean towards us creating a podcast that follows the success of our newsletter with a clear value proposition. "Here's how to do X topic based on our lived experience and lessons learned at PostHog." The drawback is that the conversations could get visibly boring if we try to stick to a script too tightly.
+
+### How do we balance the quirky, fun tone with serious content?
+
+Recommendation: We have an over-the-top jingle and potentially a puppet in the branding for the show. But the conversations are "fundamentally a business talk". We can potentially balance the two, but it can admittedly come across as awkward and make the content seem dull when the fast-paced intro segues into a conversation.
+
+### How long should we schedule for recording?
+
+Recommendation: Our existing 60 minute block works well for now. If we have external guests, we should try to get more content by extending to 90 minutes, where the first ~20 minutes is a pre-interview.
+
+### Should Bijan host the show?
+
+Recommendation: We likely have a lot of people internally at PostHog that would be better at hosting. If Bijan continues to host, he'll have to rapidly improve at asking questions and directing the conversations.
+
+### Should we continue with the podcast as a goal?
+
+Recommendation: This is a meta question, but it's worth asking. We have excellent written and social content. But it seems like we've struggled with audio and video content. Part of the reason for the podcast was to make an intentional effort to improve in this area. But it's conceivable that we're not currently well-suited to creating this kind of content. And if that's the case, it's worth considering pivoting away from the goal before sinking additional resources into it.
 
 ## Lessons learned and actionable takeaways
 
-- Intros
+### Intros
   - Start each episode with 1-2 highlights. What is the most counterintuitive thing anyone said?
   - Intros are critical. The host should rehearse the intro until it sounds smooth. If you make a mistake, start over instead of continuing past it.
   - Introduce the show, the topic, and the guests. We tried long intros, short intros, and no intro. There definitely _needs_ to be an intro, but it should be as concise as possible.
-- Cadence
+
+### Cadence
   - Release one episode every other week, alternating with the newsletter release.
-- Hosting and interviewing
+
+### Hosting and interviewing
   - Ask short, direct questions. Long questions lead to long, verbose answers.
   - Ask one question at a time. If you ask multiple questions, guests will have to figure out which to respond to.
   - If there are multiple guests, ask questions to a specific guest. Otherwise there will be an awkward pause about who should respond.
   - It needs to be clear and obvious who is hosting.
   - Ask follow up questions to dive deeper, rather than just moving on to the next topic.
-- Content
+
+### Content
   - Avoid "this is what we did at PostHog" content. Instead, content should follow this format: "We did this... and this is how you should think about the problem more broadly."
-- Tone
+
+### Tone
   - Avoid coming across as salesy. If you notice the word "PostHog" is coming up 100x in an episode, you did something wrong.
-- Audio
+
+### Audio
   - Check audio levels _before_ recording. Using postprocessing tools can mangle the audio.
-- Video
+
+### Video
   - Show the person actively speaking, not everyone at the same time.
   - Video shouldn't be an afterthought. If we're releasing both audio and video versions of the podcast, the video version should take advantage of the format and include things like showing visuals when relevant. For example, if Cory is talking about the PostHog website, we should show it.
-- Editing
+
+### Editing
   - Edit aggressively, but don't overdo it. We tried episodes with minimal editing (with Cory and James) and the feedback was that it was too long and not fast paced enough. We tried episodes where we edited every "uh" and "um" and the video became too "jumpy." The takeaway is we need to edit aggressively between sentences and segments, but not strip out mid-sentence pauses.
   - Split episodes into segments. See [Dalton & Michael](https://www.youtube.com/playlist?list=PLQ-uHSnFig5Nd98Sc9I-kkc0ZWe8peRMC) for good examples of this.
-- Variables
-  - When testing new ideas, it's best to isolate variables. We may have been better off recording a single episode topic three times and then releasing the last, best version instead of recording several different topics and varying several different things for each episode.
+
+### Variables
+
+When testing new ideas, it's best to isolate variables. We may have been better off recording a single episode topic three times and then releasing the last, best version instead of recording several different topics and varying several different things for each episode.
 
 ## Raw collected feedback
 
@@ -66,21 +94,29 @@ This is a giant list of all the feedback we received bucketed into categories.
 ### Launch
 
 - we can big bang launch or launch iteratively. newsletter worked -  we just iterated. the latter works every time for us and the quality comes with time. I propose we launch with [episode 3]. I propose this is a soft launch so we don't go nuts marketing it. Maybe put it in the next newsletter and as a blog post for example, just go from there. (James)
+  
 - Having listened to the episode now, I 100% think we shouldn’t launch with this one. I left my feedback on the specific thread, but the topic is probably the weakest one so far. (Andy)
+  
 - we should launch it as audio only and do video later. There’s no reason to launch WITH video and it makes editing way harder. With audio only, we can cut up stuff as we please and not have to worry about continuity + camera setups etc. Once we “get good” at the audio version, we can do a big launch with a video version. (Andy)
+  
 - Doing a quick prototype with internal people and the full intent not to release it at all is often the quickest way to get opinions on this stuff. (Joe)
 
 ### Segmentation
 
 - Split episodes into segments with breaks in between (Cory)
+
 - some kind of interstitial sequence for youtube but not for spotify etc. could just be a slide or something with the audio playing behind it (like the 2 sec posthog jingle). this would call out the topics and then in the description we can link like 10:12 to "why we didn't copy Linear" for example + it would give it more energy. we could play with Bijan "announcing" each topic inbetween for the audio for spotify (James)
 
 ### Editing
 
 - the editing vibe is crisp and quick, though sometimes feels a tad jumpy (Kevan)
+
 - Doing video and having a highly edited experience seem a bit at odds with each other. Watching in a video just makes the number of cuts really obvious. Feel like we either have a tightly edited audio podcast with no video, or a looser more conversational experience but with video. (Andy)
+
 - Edits are less obvious / obtrusive than before, which is cool. This works as a video now. (Andy)
+
 - We should use something like descript to remove filler words. I personally have far less patience for slowness when listening to audio - yes I can increase the speed but that speeds it all up, it doesn't just speed through the fillers. (Raquel)
+
 - We should cut aggressively, no fades or anything. Tiktok/youtube style is what people will expect and doing anything else feels dated. (Raquel)
 
 ### Intros
@@ -105,7 +141,7 @@ This is a giant list of all the feedback we received bucketed into categories.
 
 ### Jingle
 
-- I really, really hate that jingle. It’s abrupt, and far too...much. It doesn’t match to the tone of the chat and what is fundamentally a business talk. (Joe)
+- I really, really hate that jingle. It’s abrupt, and far too... much. It doesn’t match to the tone of the chat and what is fundamentally a business talk. (Joe)
 
 ### Entertainment
 

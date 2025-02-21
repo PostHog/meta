@@ -40,6 +40,14 @@ The sqlite database will live in a persistent volume on the capture pod - this w
 
 In the capture pod's shutdown handler we can have it flush the database and if it successfully flushes all the events it will update its volumes reclaim policy to **DELETE**, so we don't have hundreds of volumes lying around in normal circumstances.
 
+## Optional reordering step
+
+One thing we could do to improve ordering is to add a reordering step - this would sit between the capture topic and the rest of ingestion and buffer some duration of events (say, 20 seconds) and re-order events by capture time during this buffer, ensuring that as long as events are within a 10 second window (buffer/2) they are guaranteed to be in the correct order.
+
+The trade off is that of course we add 20 seconds of end to end lag to the pipeline.
+
+![Reordering step](./images/capture-to-disk-reordering.png)
+
 ## Alternatives considered
 
 We recently implemented a "fallback to S3" failure mode for capture - the idea being that if an event fails to write to Kafka we write it to S3 instead

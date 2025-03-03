@@ -1,5 +1,7 @@
 # Request for comments: Capture acknowledgements to disk
 
+> **Decision:** For now, we will continue capturing to MSK, but replicate to warpstream and run ingestion off warpstream. More improvements to follow.
+
 ## Problem
 
 We have a couple of potential issues with our capture service:

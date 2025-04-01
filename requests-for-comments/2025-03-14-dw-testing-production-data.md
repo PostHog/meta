@@ -47,6 +47,9 @@ syncing gets regressed. These sources are still important and should be incorpor
 
 ## Steps
 
+> Note: For now I'm going to mark this as out of scope in favor of the lean variant, due to several concerns around both
+> how maintainable this would be and how much time it would take to implement as well as compliance concerns (GDPR,CCPA).
+
 1. The first step would be to transfer data from a configurable list of sub-buckets under
    `posthog-s3-datawarehouse-us-east-1` into an ephemeral s3 bucket from a list of deltalake tables from prod → dev
    environment. Using this approach we can avoid looking at credentials and our Postgres instance. This also means that
@@ -76,6 +79,16 @@ syncing gets regressed. These sources are still important and should be incorpor
 
 [Data Warehouse Testing Production Flow](./images/dw-testing-production-flo.png)
 
+## Steps (Lean/Lite Variant)
+
+1. Tag a PR with a `dw-integration-engine-all` or `dw-integration-engine-${engine_name}` label which shall trigger a
+   GitHub action sync for either all or a subset of our sources within a shared organization in our dev environment.
+2. Attempt to programmatically sync our own within our `dev` environment for the source(s) that has been tagged, or all
+   sources if the `*-all` label has been used. These sources should already be available already as hand crafted test
+   sources As a second step, we could sync some sources from our posthog (team 2 production) environment parquet file to
+   a variety of stateful instances. (BigQuery, Postgres, Snowflake, etc...)
+3. Ensure that corresponding row counts are correct along with the time that the data was synced.
+
 ## Out of Scope
 
 - Temporal Scheduling Logic - We want to ensure that sync works, not that temporal invokes a schedule at the correct
@@ -88,8 +101,6 @@ syncing gets regressed. These sources are still important and should be incorpor
 - ArgoCd
     - Source containers (Postgres, MySql, Snowflake)
     - Source destinations (Postgres, MySql, Snowflake)
-    - Clickhouse (Reuse in dev environment as query layer)
-    - Temporal Runner(Reuse in dev environment as query layer)
 - S3
 - GitHub Actions (Invoke when changing subset of our directories, triggering agent)
 

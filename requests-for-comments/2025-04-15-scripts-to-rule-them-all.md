@@ -47,6 +47,13 @@ sense to stick to it. For example, [posthog/posthog-dotnet](https://github.com/P
 * `bin/test` - Run tests (Ex. `npm test`, `bundle exec rspec`, etc.). Also includes linting, formatting, etc.
 * `bin/fmt` - Optional: Format/lint code. This can be called by `test`.
 
+## Alternative Ideas Considered
+
+I've noticed a lot of our repos have a `make` file. This is especially common for mobile development. An alternate proposal would be to standardize on `make` rather than these `bin` scripts.
+
+My recommendation is to still standardize on `bin` scripts so that it's consistent across the board. Some of the bin scripts are pretty complicated and it'll be hard to port to `make`.
+If some repos have `make` files, that's fine. The bin scripts can call the `make` commands.
+
 ## Feedback Requested
 
 * What other scripts do we need?

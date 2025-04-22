@@ -2,13 +2,9 @@
 
 ## Problem statement
 
-_Who are we building for, what are their needs (include example cases), why is this important?_
-
 We'd like to evolve the [query schema](https://github.com/PostHog/posthog/blob/master/frontend/src/queries/schema/index.ts) while keeping backwards compatibility for existing queries.
 
 ## Context
-
-_What are our competitors doing, what are the technical constraints, what are customers asking for, what does the data tell us, are there external motivations (e.g. launch week, enterprise contract)?_
 
 Queries are persisted in various places:
 
@@ -26,8 +22,6 @@ This makes it difficult to migrate a query with a not backwards compatibly chang
 Any errors in a query cause Pydantic to fail the validation and thus insights with the error will fail to compute.
 
 ## Design
-
-_What are the key user experience and technical design decisions / trade-offs?_
 
 Migrating the schema from one version to the next should be as easy as a database migration for developers.
 

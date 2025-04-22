@@ -14,10 +14,11 @@ Queries are persisted in various places:
 4. Notebook nodes (and canvas element).
 5. The activity log, when changing a query.
 6. Queries that are converted from `filters` e.g. when users create an insight by directly calling the api.
+7. ...? _(let me know)_
 
-Some of these places are available frontend-side (queries from a url) and some are available backend-side (queries from an insight model).
+Some of these places are available frontend-side (e.g. queries in a url) and some are available backend-side (e.g. queries in an insight model).
 
-This makes it difficult to migrate a query with a not backwards compatibly change e.g. converting a boolean to an enum. Backward compatible changes i.e. adding an optional field can still be done.
+This makes it difficult to migrate a query with a non-backwards compatibly change e.g. converting a boolean to an enum. Backward compatible changes e.g. adding an optional field are no problem.
 
 Any errors in a query cause Pydantic to fail the validation and thus insights with the error will fail to compute.
 
@@ -65,11 +66,15 @@ We could add only a backend side migration and let the frontend call a `/query/v
 
 I'm favoring option a, where we add a backend side migration and call that from the frontend, as it seems to be the easiest (and as such, most scalable) solution for future developers adding query migrations.
 
+### Option d) Something easy I'm not seeing right now?
+
+- Let me know.
+
 ## Implementation
 
 -   Get in touch with customers to deprecate `filters` based insights (already happening). Remove all remaining `filters` conversions.
+-   Implement the above.
 
-tbd:
-
+To be discusssed:
 -   Should we add a version field to the queries, so that we know which migrations to run
 -   Should we keep migrations forever or should we have a system in place that discards frontend side queries that are older than a certain time

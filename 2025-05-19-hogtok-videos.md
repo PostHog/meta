@@ -35,12 +35,13 @@ Maybe the biggest advantage of the 30-60s length format is how much faster and e
 
 Each HogTok video:
 - Has a light, humorous tone with music
-- Is 9:16 vertical format
+- Is 16:9 wide format (better for video reuse)
 - Is under 60 seconds (ideal target: 30 seconds)
 - Uses CapCut for editing
   - Can reuse their massive library of editing templates, auto captions, transitions, music, etc.
 - Uses screen.studio for screen recording
 - Uses RoboNilo AI voiceover from [ElevenLabs](https://www.elevenlabs.io) (I'm so sorry @daniloc)
+  - **We still might use HumanNilo to record the VOs** 
 - Has a video thumbnail that grabs attention (e.g. bold text, faces, UI highlights)
 
 The HogTok video player:
@@ -81,18 +82,23 @@ Images:
 - Video engagement (watches, clicks, shares)
 - Increase in feature awareness 
 - Increase in feature adoption
+- Good feedback
 
 ## Open Questions
 - Is the short-form format only effective for UI-level or high-level product overviews? 
     - Can we meaningfully show and explain code in 30s-60s?
 - Should the goal be conversion (i.e. getting users to sign up) or feature adoption (i.e. getting existing users to try new features)?
     - IMO we should focus on feature adoption / awareness
+    - **We've decided to focus on feature adoption / awareness**
 - What other topics could HogTok videos be great for?
     - Behind-the-scenes or "Founderfluence" videos (e.g., James or Tim sharing roadmap vision)
     - Adapted customer stories
     - Community spotlights
 
 ## Proposed next steps
-- Ship hackathon MVP under feature flag (this week May 19-23) @jabahamondes
-- Create an overview HogTok video for each PostHog top-line product like error tracking, LLM observability, data warehouse, surveys etc. (next week May 26-30)
-- Create a few more feature tutorial Hogtok videos (?)
+- Ship internal feature flag of hackathon version of HogTok (week May 26-30) @jabahamondes
+- We get input and feedback from Cory and rest of PostHog team (week of June 2-6)
+- @andyvan-ph @edwinyjlim decide on additional features, topics, and categories for v1 HogTok videos + write scripts (weeks of June 2-6 and June 9-13)
+- @jabahamondes updates HogTok code + UI with feedback from Cory and PostHog team (weeks of June 2-6 and June 9-13)
+- @edwinyjlim records and edits v1 HogTok videos (weeks of June 2-6/onboarding and June 9-13)
+- We go live with v1 HogTok in front of users (week of June 16-20)

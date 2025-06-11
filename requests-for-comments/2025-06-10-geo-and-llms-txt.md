@@ -27,7 +27,7 @@ The name of the game is to influence what information LLMs retrieve, especially 
 *Spoiler*: It's a lot of channels.
 - Our own web pages
 - Traditional SERP, top 20 results on Google
-- Press announcements and PR articles like techcrunch and forbes
+- Press, PR articles, and journalistic outlets like techcrunch and forbes
 - Organic discussions on Reddit or other community boards 
 - Third-party blogs
 - Crappy syndicated posts like "Top 5 tools for X" on sites like dev.to
@@ -61,7 +61,7 @@ This also implies more third-party content. Think:
 
 Our content can appear in AI responses through either pathway: by being part of the model's training data or by being dynamically retrieved during a web search operation or other RAG methods. 
 
-GEO focuses on the second path, where LLMs act more like reasoning engines, pulling from the web, distilling a bunch of information, and providing a structured answer with citations.
+GEO focuses on the second path, by influencing the LLM's diet instead of its training. In web retrieval, LLMs act more like reasoning engines, pulling from the web, distilling a bunch of information, and providing a structured answer with citations.
 
 ## Some good reads
 - https://a16z.com/geo-over-seo/

@@ -77,6 +77,9 @@ It's a [new standard](https://llmstxt.org/) that's been adopted by [Anthropic](h
 
 It basically turns all our public-facing content (docs, blog, and newsletters) into LLM-friendly sitemaps and markdown pages for AI crawling.
 
+### Targeting cited sources
+Tools like Gauge can show us the most cited sources for specific prompts. That gives us a clear target list, to either reach out and get mentioned or to create content on those same platforms.
+
 ### Content distribution
 
 Open ended. Food for thought for content marketing.

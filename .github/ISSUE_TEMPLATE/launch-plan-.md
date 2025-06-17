@@ -34,11 +34,16 @@ _Keep this list updated with current plans. Add linked PRs and issues, and assig
 
 #### (Optional) Product
 
+<!-- Remove this section if you are not launching an entirely new product. -->
+
 -   [In-app onboarding]() ([example](https://github.com/PostHog/posthog/pull/30071)) - _team lead_
+-   [Product intents]() ([example](https://github.com/PostHog/posthog/pull/30099)) - _team lead_
 -   [Website product page]() ([example](https://github.com/PostHog/posthog.com/pull/10988)) - @joethreepwood or @corywatilo
 -   [Homepage]() ([example](https://github.com/PostHog/posthog.com/pull/11215)) - @joethreepwood
 
 #### (Optional) Pricing
+
+<!-- Remove this section if you are not charging for the product. -->
 
 -   [ ] [Write a pricing RFC]() [example](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/contents/2025-03-20-error-tracking-pricing-launch.md) - _team lead_
     -   Model plans ([template](https://docs.google.com/spreadsheets/d/1Ue4qlfGyEz8EmwDIgB4ro2e9LLRoxM40lXTFA8ZLFXg))

@@ -247,25 +247,25 @@ https://github.com/user-attachments/assets/52bcbc4e-7a3d-48e0-8453-15e196b6fb0f
 
 #### SDK ref docs headers
 Contains SDK versions, link to the raw references, and a copy as markdown button.
-![](images/2025-06-18-sdk-specs/i1.png)
+![](../images/2025-06-18-sdk-specs/i1.png)
 
 For us, SDK pages will be centered around the PostHog class.
 
 #### Class methods
 Each method will have a description parsed from the **doc comment**, a more details section from the `@remarks` block, examples from the `@example` blocks, table of parameters parsed from language type definition, augmented by `@parameter` blocks.
-![](images/2025-06-18-sdk-specs/i2.png)
+![](../images/2025-06-18-sdk-specs/i2.png)
 
 #### Markdown descriptions
 Each will have both a description and additional collapsible notes. There will be formatted and rendered as markdown.
-![](images/2025-06-18-sdk-specs/i3.png)
+![](../images/2025-06-18-sdk-specs/i3.png)
 
 #### Full interface references
 Each parameter or return type interface, where possible, include a reference page
-![](images/2025-06-18-sdk-specs/i4.png)
+![](../images/2025-06-18-sdk-specs/i4.png)
 
 #### Deprecations
 Using `@deprecated` we can indicate when methods become deprecated.
-![](images/2025-06-18-sdk-specs/i5.png)
+![](../images/2025-06-18-sdk-specs/i5.png)
 
 #### Support for multiple examples and generated usage example
 Using inline `@example` comments, we can indicate key use cases. In cases where this is not available, fall back to a templated usage example.

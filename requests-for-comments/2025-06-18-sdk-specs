@@ -292,4 +292,7 @@ We will automate generation, but manually version pin known-good versions to pre
 Where possible, for each SDK doc, hand-write usage guides for set up and key use cases only. This replaces the potentially giant pages currently used to document SDKs.
 
 ## Ownership
-If you update the SDK, you're expected to update the doc comment.
+If you update the SDK, you're expected to update the doc comment. 
+
+## Help wanted!
+Help wanted with updating doc comments: Please see the [posthog-js PR](https://github.com/PostHog/posthog-js/pull/2029) and update doc comments for your project.

@@ -4,6 +4,8 @@ Decider: Ian
 
 Decision date: April 25
 
+Decision: Yes! Daniel Z is leading :)
+
 ## Problem
 
 We know we want to do events at PostHog.

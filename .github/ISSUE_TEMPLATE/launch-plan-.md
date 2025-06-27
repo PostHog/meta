@@ -3,7 +3,9 @@ name: 'Launch Plan'
 about: For planning marketing launches and product announcements.
 title: 'Launch Plan: [Product Name]'
 labels: marketing
-assignees: @joethreepwood, @PostHog/team-billing
+assignees:
+    - joethreepwood
+    - PostHog/team-billing
 ---
 
 _Start by saying what is launching, when and who is involved._

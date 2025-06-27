@@ -29,7 +29,7 @@ _Keep this list updated with current plans. Add linked PRs and issues, and assig
     -   Add @PostHog/{team-name} @joethreepwood, @PostHog/team-billing and the relevant exec
 -   [ ] Find a case study customer for @joethreepwood - _team lead_
 -   [ ] Ensure docs are up to snuff - @ivanagas
--   [ ] (Optional) Decide a reward for beta users - @joethreepwood and _team lead_
+-   [ ] (Optional) Decide a reward for beta users - @joethreepwood, @PostHog/team-billing and _team lead_
     -   Note: one month free usage is plenty generous
 
 #### (Optional) Product
@@ -41,11 +41,11 @@ _Keep this list updated with current plans. Add linked PRs and issues, and assig
 -   [Website product page]() ([example](https://github.com/PostHog/posthog.com/pull/10988)) - @joethreepwood or @corywatilo
 -   [Homepage]() ([example](https://github.com/PostHog/posthog.com/pull/11215)) - @joethreepwood
 
-#### (Optional) Pricing
+#### Pricing
 
 <!-- Remove this section if you are not charging for the product. -->
 
--   [ ] [Write a pricing RFC]() [example](https://github.com/PostHog/product-internal/blob/main/requests-for-comments/contents/2025-03-20-error-tracking-pricing-launch.md) - _team lead_
+-   [ ] [Write a pricing RFC]() [template](https://github.com/PostHog/billing/blob/main/notes/pricing-rfc.md) - _team lead_
     -   Model plans ([template](https://docs.google.com/spreadsheets/d/1Ue4qlfGyEz8EmwDIgB4ro2e9LLRoxM40lXTFA8ZLFXg))
 -   [ ] Setup plans in Stripe - @PostHog/team-billing
 -   [ ] Create plans in billing ([example](https://github.com/PostHog/billing/pull/1186)) - _team lead_
@@ -65,6 +65,7 @@ _Keep this list updated with current plans. Add linked PRs and issues, and assig
 
 -   [ ] Delete early access feature (& flag) - _team lead_
 -   [ ] Move everyone over and delete the beta plans - @PostHog/team-billing
+-   [ ] Reach out to #team-support to get them involved in triaging tickets - _team lead_
 
 ## Feedback and other ideas
 

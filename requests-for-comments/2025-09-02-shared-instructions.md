@@ -1,8 +1,8 @@
-# Request for comments: Shared instructions between onboarding, wizard, and docs, Vincent Ge
+# Request for comments: Shared installation instructions between onboarding, wizard, and docs, Vincent Ge
 
 ## Problem statement
 
-### Maintaining accurate instructions
+### Maintaining accurate installation instructions
 
 We have similar content used by our onboarding, wizard, and docs. It's hard to keep three different places in sync and up to date. 
 

@@ -2,13 +2,34 @@
 
 ## Problem statement
 
-In app onboarding, docs, and the installation wizard share a similar set of instructions. This means we need to maintain 3 different places.
+### Maintaining accurate instructions
 
-Onboarding (in app) instructions are frequently out of date compared to docs. These instructions are now important for the new installation wizards owned by the growth team.
+We have similar content used by our onboarding, wizard, and docs. It's hard to keep three different places in sync and up to date. 
 
-We need a way to reduce work needed to maintain common instructions needed in three places, as well as to ensure good continuity between them.
+These resources are critical for early stage customers, and we need to ensure they are up to date and easy to understand.
 
-See [contexts section](#context) to get an overview on the state of the wizard, in-app onboarding, and documentation.
+We frequently find the in-app onboarding instructions are [out of date compared to docs](https://posthog.slack.com/archives/C011L071P8U/p1738364865046909). 
+
+It's also confusing when instructions are slightly different between the onboarding instructions and docs. We'd ideally like to see a user be able to jump between the two seamlessly.
+
+These instructions are now important for the new installation wizards owned by the growth team. The wizard should generally try to follow the instructions in the onboarding/docs, so that a user trying PostHog can jump between all three seamlessly.
+
+### Better troubleshooting workflow
+
+Another part of the problem is that only the in-app onboarding instructions have real-time feedback on if the user's on the right track. They do this by showing if a event has been received by PostHog.
+
+We can take this concept further by adding clear checkpoints and troubleshooting instructions to the wizard, docs, and in-app onboarding. 
+
+These instructions will be slightly different between the docs, in-app onboarding, and wizard because they're displayed in different contexts. 
+
+## Proposed solution
+
+For maintainability, we'll store the instructions in a single source of truth in the docs repo. We'll then use this file to generate the instructions for the onboarding, wizard, and docs. 
+
+The onboarding instructions are composed of instruction steps and checkpoints. Onboarding, wizard, and docs will share these instruction steps, but will differ mostly in their checkpoints.
+
+We're looking for a stricter, machine-readable format that we can build linting and tooling around so they can be reliably shared between the onboarding, wizard, and docs. 
+
 
 ## Success criteria
 
@@ -18,53 +39,19 @@ See [contexts section](#context) to get an overview on the state of the wizard, 
 - Warnings should be given when someone tries to update instructions in the wrong place (not at the source).
 - Instructions should be rendered properly by onboarding, docs, and wizard. This should include minor differences, especially at checkpoints.
 
-## Definitions
+## Proposed format
 
-To share instructions between the wizard, in-app onboarding, and documentation, we need a **common source of truth**. 
+We need a markup format that's strict enough to be machine-readable (which means markdown is generally hard to parse), but still readable by humans (XML/JSONs break next lines, yamls break indentation). 
 
-1. For brevity, we define that common source of truth as the **"reference"** or **"ref"** for short in the below sections. 
-2. For brevity, the in-app onboarding, docs, and wizard are referred to as **"consumers of the reference"** or **"consumers"**
+We also need it to be reasonably transportable between different platforms, keep in mind that the website and in-app onboarding will likely continue to use very different components. This means MDX with component extensions are not a good fit.
 
-## Design 
+The exact format is not important, some examples are asciidoc, rst, and toml with structured arrays.
 
-The problem can be broken down into these parts:
-1. What format, structure, and information is stored in the ref?
-2. Where is the ref stored, updated, and how are changes propagated between the wizard, in-app onboarding, and documentation?
-3. How will the wizard, in-app onboarding, and documentation consume/render the ref?
+For examples below, we'll use toml with structured arrays as examples, but we can discuss exact formats.
 
-### 1. Ref specifications
+### Example with toml
 
-For all three consumers, the getting started instructions share these common features:
-
-- Front matter (title, description)
-- Stepped sections as instructions
-- Each section contains a combination of text and a fixed set of components like codeblocks, images, callouts, etc.
-- Checkpoints between steps
-
-For example, in app onboarding may look like this:
-
-![](../images/2025-09-02-shared-instructions/in-app-wizard.png)
-
-And in docs.
-![](../images/2025-09-02-shared-instructions/docs-steps.png)
-
-And they differ in these areas:
-
-- Different set of components available
-    - Website uses an extended set of MDX + React components
-    - In app, instructions are written directly with HTML.
-- Check points instructions will be different between docs, in-app, and wizard
-
-We can represent the instruction information as a structured reference using a markup language like TOML.
-
-> **Why not just MDX?**
-> TOML can be strictly structured and easily linted (with our own added tooling). Using more structure in the ref reduces accidental breakage. Markdown comes in many flavors, with differently implemented components across docs and app. It's easier to accidentally break things with less guardrails, and you only find out after building both docs and app.
->
-> MDX snippets with react components mixed in is also much harded to read and parse for LLMs, which is important for wizards.
->
-> Polluting MDX with unrendered information that's only needed in the in-app onboarding or wizard is also confusing.
-
-We can fulfill all of these needs by describing the flow as a [toml array table](https://toml.io/en/v1.0.0#array-of-tables). You can preserve indentation of simple markdown in toml:
+We can transport our instructions as a structured array of tables.
 
 ``````toml
 # Front matter
@@ -85,6 +72,18 @@ content = """
 ```sh
 npm install --save posthog-js
 ```
+
+See how I can just write plain markdown here?
+
+It:
+- remains readable
+- preserves next lines
+- preserves indentation
+- preserves code blocks
+- preserves links
+- preserves images
+- preserves lists
+- preserves headers
 """
 
 [[steps]]
@@ -103,7 +102,7 @@ This is the equivalent of the following JSON (much less readable):
       "title": "Install PostHog web SDK",
       "content": [
         {
-          "content": "## Option 1: Add the JavaScript snippet to your HTML Recommended\n\n```sh\nnpm install --save posthog-js\n```\n",
+          "content": "## Option 1: Add the JavaScript snippet to your HTML Recommended\n\n```sh\nnpm install --save posthog-js\n``` ... \n",
           "type": "markdown"
         }
       ]
@@ -115,14 +114,9 @@ This is the equivalent of the following JSON (much less readable):
 }
 ```
 
-> The majority of content will be these markdown blocks. This helps retain readability, and keeps th
+### How will we handle custom components?
 
-We can define a strict set of content blocks available. The rendering logic is similar to markdown:
-
-- MDX in the docs consists of a series of linearly rendered blocks separated by nextlines, extended by special blocks of react components.
-- Our TOML spec can also be a series content blocks, which are a mix of standard markdown and components.
-
-#### Custom components
+With structured data + clean/plain markdown blocks for prose, we can easily render them either as markdown or as components.
 
 ``````toml
 [[steps]]
@@ -163,7 +157,23 @@ You should never run `rm -rf ~/`, it will blow up your computer.
 </CalloutBox>
 ``````
 
-#### Render different content for each consumer
+### K, but why we can't use MDX
+
+MDX has a few issues:
+
+- MDX is really meant for SSG, which is annoying to make work in the docs and in-app. 
+  - Since it's literally using and importing JSX, we'd be maintaining some components in two places.
+  - Since we'll also have in-app only and docs-only versions of the components, especially checkpoints, this can be come very painful.
+- MDX is whitespace sensitive and forgiving.
+  - This means what you type may not exactly work but it won’t crash. It's very hard to confidently say if it'll work in both docs and in-app without building both. This is a non-starter since we're trying to avoid having to update/check multiple places.
+  - This also means indented code does not work in MDX, which adds all kinds of annoyance.
+  - It also means it's painful to lint. (we can add what ever we want to markdown, it just might not render in one place or another )
+
+We _could_ use MDX, but we'd have to rely on humans being humans being careful instead of enforcing a stricter format.
+
+### How do we render different content for docs/in-app/wizard?
+
+With structured data, we can specify platform specific versions of the content, and have defaults. 
 
 ```toml
 [[steps]]
@@ -198,90 +208,26 @@ Before proceeding, confirm that you can capture events with PostHog using `posth
 """
 ```
 
-See [rendering the ref](#3-consuming-the-ref) for more on how these blocks are rendered
+### Who will own these?
 
-### 2. How is the ref stored and updated
+I think it makes sense for docs to largely own these instructions.
 
-The ref will be stored as a structured markup language in the **docs repo**. We will update it in the docs repo as the sole source of truth. Ownership would also be clearer here.
+- We already regularly update the docs.
+- It'll be in the docs repo.
+- A single clear owner will be better than multiple owners.
 
-TOML is a great choice, fitting the criteria below:
+### How will updates make it to the onboarding, wizard, and docs?
 
-- Distinct, nestable structure that's easy to build tooling and linting around.
-- Does not rely on excessive closures with `{}` `()` `[]` that make it hard to read
-- Preserves next lines (`\n`) and indentations.
-- Allows definitions of _props_, like those commonly found on a component. Think `<tag prop1="some value" prop2="some value"/>`. These are needed to represent components like `<CodeBlock>`, `<CalloutBox>`, `<Steps>` that are implemented differently across consumers.
+After updating the shared reference instructions in docs, we'll need to propagate the changes to the onboarding, wizard, and docs.
 
-> 🤔 Point of discussion: When should app, docs, wizard pull in updated instructions?
-> 
-> - Before build through GitHub Actions and automated PRs triggered when any of the refs are updated. Requires most manual work, but safe and lets us catch problems.
-> - During build by fetching from `posthog/posthog.com/master`. Less manual, requires redeploy to update, could break/block people's builds
-> - At run time. Always up to date. Could break without us knowing.
+There are options:
 
-We can set up checks/warnings in the PostHog monorepo and wizard repos to warn contributors if they update directly in those repos.
+- Before build through GitHub Actions and automated PRs triggered when any of the refs are updated. 
+- During build by fetching/caching from `posthog/posthog.com/master`. Less manual, requires redeploy to update, could break/block people's builds. (This is how the website builds API docs right now.)
+- At run time. Always up to date. Could break without us knowing.
 
-
-### 3. Consuming the ref
-
-The ref can be loaded into code as an object and conditionally rendered on the website and docs.
-
-Both app and website suport `ReactMarkdown` (in app it's `LemonMarkdown`). This means `markdown` blocks can be rendered directly. 
-
-Extended blocks can be rendered using their respective components.
-
-For example:
-
-```jsx
- {blocks.map((block, index) => {
-    switch (block.type) {
-        case 'markdown': {
-            const processedMarkdown = renderPostHogComponents(block.inner_md)
-            return (
-                <div key={index} className="prose max-w-none">
-                    <ReactMarkdown>
-                        {block.content}
-                    </ReactMarkdown>
-            )
-        }
-        case '...': 
-    ...
-```
-
-And when consumed by the wizard, each block's content can be fed in as a prompt.
-
-> 🤔 Point of discussion: Should we turn refs into jsx/mdx files at build time for docs and app?
-> 
-> - Option 1: Syncing with automated PRs after the refs are updated. Safest, lets us review, but needs multiple PR reviews and redeploys.
-> - Option 2: Building mdx/jsx using SSG (server side generation) during app/website build. Is simple/safe, but requires redeploys
-> - Option 3: Fetch/cache the ref to render at run time. Requires no reployment/PR reviews to propagate changes, but can break prod. 
-
-Alternatively, we could go from ref -> mdx/jsx files directly using some simple tooling. This is potentially confusing because people will try to update the generated mdx/jsx files directly.
+I lean towards fetching and caching the latest known version in each repo and building the page from the reference material. We can minimize the chance of a bad change in docs breaking/blocking people's builds by enforcing reasonably strict linting.
 
 ## Sprints
 
 TBD. Likely planned as a goal for Q4.
-
-## Context
-
-Here's some context on existing sources that could consume these shared instructions.
-
-### Existing stepped installation
-
-We moved to strongly structured, stepped, linear [installation instructions](https://posthog.com/docs/error-tracking/installation/web) in docs. These instructions have clear steps and checkpoint concepts to check if each step is successful.
-
-This offers readers clear checkpoints, sense of "quick wins", and clear goals during the most uncertain stages of their onboarding.
-
-These concepts happen to also be important for the wizard, and allow future features like real-time feedback (like if events have been received). 
-
-### In-app onboarding
-
-When you sign up to PostHog, you're show in-app onboarding instructions. These are critical to smooth onboarding for self-serve customers.
-
-In-app onboarding in theory should be able to map to docs 1:1, you should be able to pick up where you left off in-app and follow in docs. The instructions should also be non-conflicting.
-
-The instructions in-app don't have clear ownership, and are often out of date. Their upside is real-time feedback on if events have been received.
-
-### Wizard
-
-PostHog has LLM-powered wizards to help you integrate with PostHog SDKs. These need some accurate source of truth to know how to integrate correctly. They also need more structured checkpoints, to self-check for integration correctness.
-
-Their current challenges are occassional hallucinations, staying up to date with latest changes, and lack of self-checking mechanisms to see if changes made are working currectly.

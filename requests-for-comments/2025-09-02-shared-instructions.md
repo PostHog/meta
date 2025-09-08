@@ -2,11 +2,11 @@
 
 ## Problem statement
 
+It's hard to maintain installation instructions in three different places.
+
 ### Maintaining accurate installation instructions
 
-We have similar content used by our onboarding, wizard, and docs. It's hard to keep three different places in sync and up to date. 
-
-These resources are critical for early stage customers, and we need to ensure they are up to date and easy to understand.
+We have similar content used by our onboarding, wizard, and docs for installation instructions. It's hard to keep three different places in sync and up to date. These resources are critical for early stage customers, and we need to ensure they are up to date and easy to understand.
 
 We frequently find the in-app onboarding instructions are [out of date compared to docs](https://posthog.slack.com/archives/C011L071P8U/p1738364865046909). 
 
@@ -14,13 +14,15 @@ It's also confusing when instructions are slightly different between the onboard
 
 These instructions are now important for the new installation wizards owned by the growth team. The wizard should generally try to follow the instructions in the onboarding/docs, so that a user trying PostHog can jump between all three seamlessly.
 
+In the future, we may also find other key workflows that could benefit from shared instructions. Contents of this RFC will still apply.
+ 
 ### Better troubleshooting workflow
 
 Another part of the problem is that only the in-app onboarding instructions have real-time feedback on if the user's on the right track. They do this by showing if a event has been received by PostHog.
 
 We can take this concept further by adding clear checkpoints and troubleshooting instructions to the wizard, docs, and in-app onboarding. 
 
-These instructions will be slightly different between the docs, in-app onboarding, and wizard because they're displayed in different contexts. 
+These instructions will be slightly different between the docs, in-app onboarding, and wizard because they're displayed in different contexts. Some of these checkpoints could be API calls, prompts for the wizard, or instructions for the user to follow.
 
 ## Proposed solution
 
@@ -28,30 +30,30 @@ For maintainability, we'll store the instructions in a single source of truth in
 
 The onboarding instructions are composed of instruction steps and checkpoints. Onboarding, wizard, and docs will share these instruction steps, but will differ mostly in their checkpoints.
 
-We're looking for a stricter, machine-readable format that we can build linting and tooling around so they can be reliably shared between the onboarding, wizard, and docs. 
+We're looking for a stricter, machine-readable format that we can build linting and tooling around so they can be reliably shared between the onboarding, wizard, and docs. This will also make it easier to incorporate our other ideas in sourcing tested code from demo projects (there will be another RFC for that).
 
 
 ## Success criteria
 
 - Single source of truth to update getting started instructions for in-app onboarding, docs, and wizard.
-- The shared instructions should be stored in a **highly readable by humans** that's also easily parsable.
+- The shared instructions should be stored in a **highly readable by humans** that's also easily parsable by machines.
 - Updating instruction once should trigger updates everywhere.
 - Warnings should be given when someone tries to update instructions in the wrong place (not at the source).
-- Instructions should be rendered properly by onboarding, docs, and wizard. This should include minor differences, especially at checkpoints.
+- You should be confident in your updates without needing to build docs, app, and wizard locally through tooling, linting, etc.
 
 ## Proposed format
 
-We need a markup format that's strict enough to be machine-readable (which means markdown is generally hard to parse), but still readable by humans (XML/JSONs break next lines, yamls break indentation). 
+We need a markup format that's strict enough to be machine-readable (which means not markdown, which is generally hard to parse), but still readable by humans (XML/JSONs break next lines, yamls break indentation). 
 
-We also need it to be reasonably transportable between different platforms, keep in mind that the website and in-app onboarding will likely continue to use very different components. This means MDX with component extensions are not a good fit.
+We also need it to be reasonably transportable between different platforms, keep in mind that the website and in-app onboarding will likely continue to use very different components. This means MDX with component dependencies at build time is not a good fit.
 
-The exact format is not important, some examples are asciidoc, rst, and toml with structured arrays.
+The exact format is not important, some example formats that could work are asciidoc, rst, and toml with structured arrays.
 
-For examples below, we'll use toml with structured arrays as examples, but we can discuss exact formats.
+For examples below, we'll use toml with structured arrays as examples, but we can discuss exact formats separately. It's ultimately the content that matters first, format depends more on tooling available.
 
 ### Example with toml
 
-We can transport our instructions as a structured array of tables.
+We can transport our instructions as a structured array of tables. This can be parsed with clearn delimiters and lets us retain next lines and indentation.
 
 ``````toml
 # Front matter
@@ -73,24 +75,25 @@ content = """
 npm install --save posthog-js
 ```
 
-See how I can just write plain markdown here?
+See how I can just write plain markdown here? It retains my next lines.
+I can read this pretty easily.
 
-It:
-- remains readable
-- preserves next lines
-- preserves indentation
-- preserves code blocks
-- preserves links
-- preserves images
-- preserves lists
-- preserves headers
+It will:
+- remain readable
+- preserve next lines
+- preserve indentation
+- preserve code blocks
+- preserve links
+- preserve images
+- preserve lists
+- preserve headers
 """
 
 [[steps]]
 # ... more steps
 ``````
 
-This is the equivalent of the following JSON (much less readable):
+This is the equivalent of the following JSON (much less readable, but the same content):
 
 ```json
 {
@@ -157,19 +160,21 @@ You should never run `rm -rf ~/`, it will blow up your computer.
 </CalloutBox>
 ``````
 
+We can render this with SSR templating, or generate the pages at build time, or with tooling pre-build. All are valid options.
+
 ### K, but why we can't use MDX
 
 MDX has a few issues:
 
-- MDX is really meant for SSG, which is annoying to make work in the docs and in-app. 
-  - Since it's literally using and importing JSX, we'd be maintaining some components in two places.
-  - Since we'll also have in-app only and docs-only versions of the components, especially checkpoints, this can be come very painful.
+- MDX is really meant for build time rendering, which is annoying to make work in the docs and in-app. 
+  - Since it's literally importing JSX, we'd be forced to maintain the same components in two places that have the same import path, etc.
+  - Since we'll also have in-app only and docs-only versions of the components, especially checkpoints. This is hard to express in MDX.
 - MDX is whitespace sensitive and forgiving.
-  - This means what you type may not exactly work but it won’t crash. It's very hard to confidently say if it'll work in both docs and in-app without building both. This is a non-starter since we're trying to avoid having to update/check multiple places.
+  - This means what you type may not work but it won’t crash. It's very hard to confidently say if it'll work in both docs and in-app without building both. This is a non-starter since we're trying to avoid having to update/check multiple places.
   - This also means indented code does not work in MDX, which adds all kinds of annoyance.
   - It also means it's painful to lint. (we can add what ever we want to markdown, it just might not render in one place or another )
 
-We _could_ use MDX, but we'd have to rely on humans being humans being careful instead of enforcing a stricter format.
+We _could_ use MDX, but we'd have to rely on humans being very careful instead of enforcing a stricter format with code. Anytime we can enforce something with code, we should.
 
 ### How do we render different content for docs/in-app/wizard?
 

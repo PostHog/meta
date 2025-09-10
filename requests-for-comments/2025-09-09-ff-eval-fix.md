@@ -34,7 +34,7 @@ However, please review your affected feature flags if:
 3. Your analytics or A/B tests depend on specific variant distributions
 
 ## Fix Release Timeline
-- **PostHog Servers**: Fix deployment [2025-09-15]
+- **PostHog Servers**: Fix deployment [2025-09-12]
 - **Server SDKs if you are using [local-evaluation](https://posthog.com/docs/feature-flags/local-evaluation) (Python, Go, Node, PHP, Ruby, .NET)**: Please check the changelog for the specific version and release date
 
 ## Questions or Concerns?

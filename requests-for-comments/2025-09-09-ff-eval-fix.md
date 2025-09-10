@@ -31,7 +31,6 @@ Previously, Condition 2 would incorrectly be evaluated first. Now conditions are
 However, please review your affected feature flags if:
 1. You noticed unexpected variant assignments in the past and worked around them
 2. You have complex flags with multiple conditions mixing variant overrides
-3. Your analytics or A/B tests depend on specific variant distributions
 
 ## Fix Release Timeline
 - **PostHog Servers**: Fix deployment [2025-09-12]

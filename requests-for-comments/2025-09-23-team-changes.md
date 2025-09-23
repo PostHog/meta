@@ -6,7 +6,7 @@
 
 Our ability to make team changes quickly is a powerful advantage, but we've slipped into (I think) some not great habits here that will make us less successful in the long run.
 
-This was less of an issue when we were 50 people, but I don't think this behavior isn't scaling well as we grow. 
+This was less of an issue when we were 50 people, but this behavior isn't scaling well as we grow. 
 
 This RFC proposes some changes that will maintain our ability to move quickly, but in a slightly healthier way.
 

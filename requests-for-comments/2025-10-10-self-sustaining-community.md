@@ -102,3 +102,9 @@ Unified auth isn’t the solution in and of itself, but the more we know about t
 Even though this sounds like a big endeavor, most of the pieces are already built. It really comes down to a UI play, along with a strategy to make sure it stays fresh, unlike the existing `/community` page.
 
 But by combining so much content into a single place, I’m not too worried we won’t be able to make it interesting.
+
+## Old wireframe
+
+I put this together a long time ago (before we launched the new site), so I can envision the social network/community being an entire "app", maybe something along these lines:
+
+<img width="2208" height="2388" alt="image" src="https://github.com/user-attachments/assets/6f29be81-95da-4ef9-90ed-bc973bf799b8" />

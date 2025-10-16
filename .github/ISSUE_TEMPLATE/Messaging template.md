@@ -11,7 +11,7 @@ assignees: ''
 # Messaging
 
 ### Context
-_What are we sending and why? _
+_What are we sending and why?_
 
 ### Format
 _Is this a broadcast, or campaign? From Workflows, or Customer.io?_

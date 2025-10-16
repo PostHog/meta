@@ -11,22 +11,16 @@ assignees: ''
 # Messaging
 
 ### Context
-_A short statement explaining what has led to this campaign or customer messaging. Is it a service message, an upsell, an experiment, an onboarding flow? Put that here. _
-
-### Goal
-_What is the primary goal or metric you are trying to leverage? If there isn't one, will you track clicks, UTMs, open rates?_
+_What are we sending and why? _
 
 ### Format
-_What mediums is this campaign or messaging going to span? Which platforms will you use to deliver the messaging?_
+_Is this a broadcast, or campaign? From Workflows, or Customer.io?_
 
 ### Audience / Targeting
-_Where are we rolling this experiment and who will see it?_
+_Who will see it?_
 
-### Resources, timeline, responsibilities
-_Is this a single message, or a longer campaign? Are multiple people working on it? Who's doing what, when? A checklist solves everything._
+### Boring organization bit
+- [ ] Yes, I confirm I have added this to [The Messaging Calendar](https://calendar.google.com/calendar/embed?src=c_7ed0dfed00c9a18dbf04d93e633a974f2f2e5172f00673aba3fdb2957baff521%40group.calendar.google.com&ctz=Europe%2FLondon)
 
-### Requested input
-_Are there any outstanding questions, potential blockers, or feedback you need? Spell it out._
-
-### Previews
-_Got previews of the copy, the emails, the content? Shove them here._
+### Requested input and previews
+_Dump screenshots here and tag for feedback if needed._

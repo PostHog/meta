@@ -20,7 +20,7 @@ _Is this a broadcast, or campaign? From Workflows, or Customer.io?_
 _Who will see it?_
 
 ### Boring organization bit
-- [ ] Yes, I confirm I have added this to [The Messaging Calendar](https://calendar.google.com/calendar/embed?src=c_7ed0dfed00c9a18dbf04d93e633a974f2f2e5172f00673aba3fdb2957baff521%40group.calendar.google.com&ctz=Europe%2FLondon)
+- [ ] I've added this to [The Messaging Calendar](https://calendar.google.com/calendar/embed?src=c_7ed0dfed00c9a18dbf04d93e633a974f2f2e5172f00673aba3fdb2957baff521%40group.calendar.google.com&ctz=Europe%2FLondon) with a link to this issue
 
 ### Requested input and previews
 _Dump screenshots here and tag for feedback if needed._
